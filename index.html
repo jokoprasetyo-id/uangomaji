@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,321 +8,30 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #f4f4f0;
-  --card: #ffffff;
-  --border: #e8e6e0;
-  --text: #1a1a18;
-  --muted: #888;
-  --green: #1D9E75;
-  --red: #D85A30;
-  --blue: #185FA5;
-  --purple: #534AB7;
-  --gold: #BA7517;
-  --radius: 12px;
+  --bg: #f4f4f0; --card: #ffffff; --border: #e8e6e0; --text: #1a1a18;
+  --muted: #888; --green: #1D9E75; --red: #D85A30; --blue: #185FA5;
+  --purple: #534AB7; --gold: #BA7517; --radius: 12px;
 }
 body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; min-height: 100vh; }
 
-/* HEADER */
-.header {
-  background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 100%);
-  color: #fff;
-  padding: 16px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-}
+.header { background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 100%); color: #fff; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.18); }
 .header-left { display: flex; align-items: center; gap: 14px; }
-.logo { font-size: 22px; font-weight: 800; letter-spacing: 3px; background: linear-gradient(135deg, #fff 0%, #aaa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.logo { font-size: 22px; font-weight: 800; letter-spacing: 3px; background: linear-gradient(135deg, #fff 0%, #bbb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .header-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 12px; font-size: 11px; color: #ccc; }
 .btn-export { padding: 8px 16px; background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 .btn-export:hover { background: rgba(255,255,255,0.22); }
+.sync-status { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
+.sync-ok { background: rgba(29,158,117,0.2); color: #2dd4a0; }
+.sync-load { background: rgba(255,255,255,0.1); color: #aaa; }
+.sync-err { background: rgba(216,90,48,0.2); color: #f08060; }
 
-/* NAV */
 .nav { background: var(--card); border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
-.nav button { padding: 14px 18px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; border-radius: 0; }
+.nav button { padding: 14px 18px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
 .nav button.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
 .nav button:hover:not(.active) { color: var(--text); background: #f9f9f7; }
 
 .container { max-width: 1140px; margin: 0 auto; padding: 24px 20px; }
 
-/* METRICS */
-.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.metric {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.metric:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
-.metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: var(--radius) var(--radius) 0 0; }
-.metric.green::before { background: linear-gradient(90deg, var(--green), #2dd4a0); }
-.metric.red::before { background: linear-gradient(90deg, var(--red), #f08060); }
-.metric.blue::before { background: linear-gradient(90deg, var(--blue), #4a90d9); }
-.metric.dark::before { background: linear-gradient(90deg, #555, #888); }
-.metric .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; font-weight: 500; }
-.metric .val { font-size: 22px; font-weight: 800; line-height: 1; }
-.metric .sub { font-size: 12px; color: #aaa; margin-top: 6px; }
-.g { color: var(--green); } .r { color: var(--red); } .b { color: var(--blue); }
-
-/* CHART GRID */
-.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-@media (max-width: 700px) { .chart-grid { grid-template-columns: 1fr; } }
-
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 20px;
-  transition: box-shadow 0.2s;
-}
-.card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
-.card h3 { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
-.card.full { grid-column: 1/-1; }
-
-/* TOOLBAR */
-.toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-.toolbar select, .toolbar input[type=text] { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: var(--card); color: var(--text); outline: none; transition: border-color 0.2s; }
-.toolbar select:focus, .toolbar input:focus { border-color: var(--text); }
-.btn-add { margin-left: auto; padding: 9px 18px; background: var(--text); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-.btn-add:hover { background: #333; }
-
-/* TABLE */
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; padding: 10px 12px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); font-weight: 600; background: #fafaf8; }
-th:first-child { border-radius: 8px 0 0 0; }
-th:last-child { border-radius: 0 8px 0 0; }
-td { padding: 10px 12px; border-bottom: 1px solid #f5f5f0; vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #fafaf8; }
-
-/* BADGES */
-.badge { display: inline-block; padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 600; }
-.bl { background: #EAF3DE; color: #3B6D11; }
-.bb { background: #FCEBEB; color: #A32D2D; }
-.bt { background: #E6F1FB; color: #185FA5; }
-.bq { background: #EEEDFE; color: #534AB7; }
-.btr { background: #FAEEDA; color: #854F0B; }
-.bsf { background: #FAECE7; color: #993C1D; }
-.bk { background: #f0efe8; color: #555; }
-
-.act-btn { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); font-size: 11px; cursor: pointer; margin-right: 3px; transition: all 0.15s; font-weight: 500; }
-.act-btn.edit { color: var(--blue); border-color: #b5d4f4; }
-.act-btn.edit:hover { background: #e6f1fb; }
-.act-btn.del { color: var(--red); border-color: #f0997b; }
-.act-btn.del:hover { background: #faece7; }
-
-/* PAGINATION */
-.pagination { display: flex; gap: 5px; justify-content: center; margin-top: 16px; align-items: center; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
-.pagination button { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); cursor: pointer; font-size: 12px; transition: all 0.15s; }
-.pagination button.active { background: var(--text); color: #fff; border-color: var(--text); }
-.pagination button:hover:not(.active) { background: var(--bg); }
-
-/* MODAL */
-.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-.overlay.open { display: flex; }
-.modal { background: var(--card); border-radius: 16px; padding: 28px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; margin: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-.modal h2 { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
-.form-row { margin-bottom: 14px; }
-.form-row label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: 9px; font-size: 14px; font-family: inherit; outline: none; background: var(--card); color: var(--text); transition: border-color 0.2s; }
-.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(26,26,24,0.06); }
-.form-row textarea { height: 70px; resize: vertical; }
-.modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 22px; }
-.btn-cancel { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); border-radius: 9px; font-size: 14px; cursor: pointer; font-weight: 500; }
-.btn-save { padding: 10px 22px; background: var(--text); color: #fff; border: none; border-radius: 9px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-.btn-save:hover { background: #333; }
-
-/* CONFIRM */
-.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-.confirm-overlay.open { display: flex; }
-.confirm-box { background: var(--card); border-radius: 16px; padding: 28px; max-width: 340px; width: 100%; margin: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-.confirm-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.confirm-box p { font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.5; }
-.confirm-btns { display: flex; gap: 8px; justify-content: flex-end; }
-.btn-del-ok { padding: 10px 20px; background: var(--red); color: #fff; border: none; border-radius: 9px; font-size: 14px; cursor: pointer; font-weight: 700; }
-
-/* PAGE */
-.page { display: none; }
-.page.active { display: block; }
-
-/* LABA RUGI */
-.laba-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f5f5f0; }
-.laba-sec { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; padding: 14px 0 5px; }
-.laba-tot { font-weight: 700; border-top: 2px solid var(--border); padding-top: 10px; font-size: 15px; }
-.laba-bersih { background: linear-gradient(135deg, #f0f9f5, #e8f5f0); border: 1px solid #c8e8dc; border-radius: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
-.laba-bersih span:first-child { font-weight: 700; font-size: 15px; }
-.laba-bersih span:last-child { font-weight: 800; font-size: 20px; }
-
-/* BAR CHART */
-.mb-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
-.bar-out { flex: 1; background: #f0efe8; border-radius: 6px; height: 8px; overflow: hidden; }
-.bar-in { height: 100%; border-radius: 6px; transition: width 0.5s ease; }
-.bar-amt { min-width: 120px; text-align: right; font-size: 12px; color: #555; font-weight: 500; }
-
-/* ===== ALOKASI PAGE ===== */
-.alloc-header { margin-bottom: 24px; }
-.alloc-hero {
-  background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 100%);
-  border-radius: var(--radius);
-  padding: 28px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.alloc-hero-left h2 { font-size: 13px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
-.alloc-hero-left .big-num { font-size: 36px; font-weight: 800; color: #fff; }
-.alloc-hero-right { text-align: right; }
-.alloc-hero-right .sub-txt { font-size: 12px; color: #888; margin-bottom: 4px; }
-.alloc-hero-right .margin-txt { font-size: 15px; font-weight: 600; color: #2dd4a0; }
-
-.alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
-@media (max-width: 700px) { .alloc-grid { grid-template-columns: 1fr; } }
-
-.alloc-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.alloc-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.alloc-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  border-radius: var(--radius) var(--radius) 0 0;
-}
-.alloc-card.ac-omaji::before { background: linear-gradient(90deg, #185FA5, #4a90d9); }
-.alloc-card.ac-belanja::before { background: linear-gradient(90deg, #BA7517, #e8a030); }
-.alloc-card.ac-gaji::before { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
-
-.alloc-card .ac-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
-.ac-omaji .ac-icon { background: #e6f1fb; }
-.ac-belanja .ac-icon { background: #faeeda; }
-.ac-gaji .ac-icon { background: #eaf3de; }
-
-.alloc-card .ac-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
-.alloc-card .ac-pct { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-.ac-omaji .ac-pct { color: var(--blue); }
-.ac-belanja .ac-pct { color: var(--gold); }
-.ac-gaji .ac-pct { color: var(--green); }
-
-.alloc-card .ac-amount { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
-.alloc-card .ac-bar-out { background: #f0efe8; border-radius: 6px; height: 6px; overflow: hidden; }
-.alloc-card .ac-bar-in { height: 100%; border-radius: 6px; }
-.ac-omaji .ac-bar-in { background: linear-gradient(90deg, #185FA5, #4a90d9); }
-.ac-belanja .ac-bar-in { background: linear-gradient(90deg, #BA7517, #e8a030); }
-.ac-gaji .ac-bar-in { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
-
-/* Sub alokasi gaji */
-.sub-alloc-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 22px;
-  margin-bottom: 16px;
-}
-.sub-alloc-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.sub-alloc-card .sub-desc { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
-
-.sub-alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
-@media (max-width: 700px) { .sub-alloc-grid { grid-template-columns: 1fr; } }
-
-.sub-item {
-  background: #fafaf8;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  position: relative;
-}
-.sub-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.sub-item-name { font-size: 13px; font-weight: 600; }
-.sub-item-pct-badge {
-  font-size: 11px; font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 20px;
-}
-.sub-item:nth-child(1) .sub-item-pct-badge { background: #EEEDFE; color: var(--purple); }
-.sub-item:nth-child(2) .sub-item-pct-badge { background: #FCEBEB; color: #A32D2D; }
-.sub-item:nth-child(3) .sub-item-pct-badge { background: #FAEEDA; color: #854F0B; }
-
-.sub-item-amount { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
-.sub-item:nth-child(1) .sub-item-amount { color: var(--purple); }
-.sub-item:nth-child(2) .sub-item-amount { color: var(--red); }
-.sub-item:nth-child(3) .sub-item-amount { color: var(--gold); }
-
-.sub-item-bar-out { background: #ebebeb; border-radius: 4px; height: 5px; overflow: hidden; }
-.sub-item-bar-in { height: 100%; border-radius: 4px; }
-.sub-item:nth-child(1) .sub-item-bar-in { background: var(--purple); }
-.sub-item:nth-child(2) .sub-item-bar-in { background: var(--red); }
-.sub-item:nth-child(3) .sub-item-bar-in { background: var(--gold); }
-
-/* Edit sub alokasi */
-.sub-edit-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #f5f5f0;
-}
-.sub-edit-row:last-child { border-bottom: none; }
-.sub-edit-label { flex: 1; }
-.sub-edit-label input[type=text] {
-  width: 100%; padding: 7px 10px;
-  border: 1px solid var(--border); border-radius: 7px;
-  font-size: 13px; font-weight: 600;
-  background: #fff; color: var(--text); outline: none;
-}
-.sub-edit-label input[type=text]:focus { border-color: var(--text); }
-.sub-edit-pct { display: flex; align-items: center; gap: 6px; }
-.sub-edit-pct input[type=number] {
-  width: 64px; padding: 7px 10px;
-  border: 1px solid var(--border); border-radius: 7px;
-  font-size: 13px; font-weight: 700;
-  text-align: center; outline: none;
-  background: #fff; color: var(--text);
-}
-.sub-edit-pct input[type=number]:focus { border-color: var(--text); }
-.sub-edit-pct span { font-size: 13px; color: var(--muted); }
-
-.pct-warning { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
-.pct-ok { font-size: 12px; color: var(--green); margin-top: 8px; display: none; }
-
-.btn-apply {
-  padding: 9px 20px; background: var(--text); color: #fff;
-  border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
-  cursor: pointer; transition: background 0.2s; margin-top: 14px;
-}
-.btn-apply:hover { background: #333; }
-
-/* Donut alokasi */
-.alloc-chart-wrap {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
-}
-@media (max-width: 700px) { .alloc-chart-wrap { grid-template-columns: 1fr; } }
-
-.alloc-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
-.alloc-summary-table td { padding: 7px 0; border-bottom: 1px solid #f5f5f0; }
-.alloc-summary-table tr:last-child td { border-bottom: none; }
-.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 7px; vertical-align: middle; }
-
-/* Metric cards */
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
 .metric { background: var(--card); border-radius: var(--radius); padding: 18px 20px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
 .metric:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
@@ -413,7 +121,7 @@ tr:hover td { background: #fafaf8; }
 .bar-in { height: 100%; border-radius: 6px; transition: width 0.5s ease; }
 .bar-amt { min-width: 120px; text-align: right; font-size: 12px; color: #555; font-weight: 500; }
 
-/* ===== ALOKASI PAGE ===== */
+/* ALOKASI */
 .alloc-hero { background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 100%); border-radius: var(--radius); padding: 28px; color: #fff; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
 .alloc-hero-left h2 { font-size: 13px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
 .alloc-hero-left .big-num { font-size: 36px; font-weight: 800; color: #fff; }
@@ -421,92 +129,95 @@ tr:hover td { background: #fafaf8; }
 .alloc-hero-right .sub-txt { font-size: 12px; color: #888; margin-bottom: 4px; }
 .alloc-hero-right .margin-txt { font-size: 15px; font-weight: 600; color: #2dd4a0; }
 
-.alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
-@media (max-width: 700px) { .alloc-grid { grid-template-columns: 1fr; } }
-
+.alloc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
+@media (max-width:700px) { .alloc-grid { grid-template-columns: 1fr; } }
 .alloc-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
 .alloc-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.alloc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: var(--radius) var(--radius) 0 0; }
-.alloc-card.ac-omaji::before { background: linear-gradient(90deg, #185FA5, #4a90d9); }
-.alloc-card.ac-belanja::before { background: linear-gradient(90deg, #BA7517, #e8a030); }
-.alloc-card.ac-gaji::before { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
-.alloc-card .ac-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
-.ac-omaji .ac-icon { background: #e6f1fb; }
-.ac-belanja .ac-icon { background: #faeeda; }
-.ac-gaji .ac-icon { background: #eaf3de; }
-.alloc-card .ac-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
-.alloc-card .ac-pct { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-.ac-omaji .ac-pct { color: var(--blue); }
-.ac-belanja .ac-pct { color: var(--gold); }
-.ac-gaji .ac-pct { color: var(--green); }
-.alloc-card .ac-amount { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
-.alloc-card .ac-bar-out { background: #f0efe8; border-radius: 6px; height: 6px; overflow: hidden; }
-.alloc-card .ac-bar-in { height: 100%; border-radius: 6px; }
-.ac-omaji .ac-bar-in { background: linear-gradient(90deg, #185FA5, #4a90d9); }
-.ac-belanja .ac-bar-in { background: linear-gradient(90deg, #BA7517, #e8a030); }
-.ac-gaji .ac-bar-in { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
+.alloc-card::before { content:''; position: absolute; top:0; left:0; right:0; height:4px; border-radius: var(--radius) var(--radius) 0 0; }
+.alloc-card.ac-omaji::before { background: linear-gradient(90deg,#185FA5,#4a90d9); }
+.alloc-card.ac-belanja::before { background: linear-gradient(90deg,#BA7517,#e8a030); }
+.alloc-card.ac-gaji::before { background: linear-gradient(90deg,#1D9E75,#2dd4a0); }
+.alloc-card .ac-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:12px; }
+.ac-omaji .ac-icon { background:#e6f1fb; }
+.ac-belanja .ac-icon { background:#faeeda; }
+.ac-gaji .ac-icon { background:#eaf3de; }
+.alloc-card .ac-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; margin-bottom:4px; }
+.alloc-card .ac-pct { font-size:13px; font-weight:600; margin-bottom:8px; }
+.ac-omaji .ac-pct { color:var(--blue); }
+.ac-belanja .ac-pct { color:var(--gold); }
+.ac-gaji .ac-pct { color:var(--green); }
+.alloc-card .ac-amount { font-size:22px; font-weight:800; color:var(--text); margin-bottom:10px; }
+.alloc-card .ac-bar-out { background:#f0efe8; border-radius:6px; height:6px; overflow:hidden; }
+.alloc-card .ac-bar-in { height:100%; border-radius:6px; }
+.ac-omaji .ac-bar-in { background: linear-gradient(90deg,#185FA5,#4a90d9); }
+.ac-belanja .ac-bar-in { background: linear-gradient(90deg,#BA7517,#e8a030); }
+.ac-gaji .ac-bar-in { background: linear-gradient(90deg,#1D9E75,#2dd4a0); }
 
-.sub-alloc-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 22px; margin-bottom: 16px; }
-.sub-alloc-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.sub-alloc-card .sub-desc { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+.sub-alloc-card { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); padding:22px; margin-bottom:16px; }
+.sub-alloc-card h3 { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.sub-alloc-card .sub-desc { font-size:12px; color:var(--muted); margin-bottom:18px; }
+.sub-alloc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px; }
+@media (max-width:700px) { .sub-alloc-grid { grid-template-columns:1fr; } }
+.sub-item { background:#fafaf8; border:1px solid var(--border); border-radius:10px; padding:16px; }
+.sub-item-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.sub-item-name { font-size:13px; font-weight:600; }
+.sub-item-pct-badge { font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
+.sub-item:nth-child(1) .sub-item-pct-badge { background:#EEEDFE; color:var(--purple); }
+.sub-item:nth-child(2) .sub-item-pct-badge { background:#FCEBEB; color:#A32D2D; }
+.sub-item:nth-child(3) .sub-item-pct-badge { background:#FAEEDA; color:#854F0B; }
+.sub-item-amount { font-size:18px; font-weight:800; margin-bottom:10px; }
+.sub-item:nth-child(1) .sub-item-amount { color:var(--purple); }
+.sub-item:nth-child(2) .sub-item-amount { color:var(--red); }
+.sub-item:nth-child(3) .sub-item-amount { color:var(--gold); }
+.sub-item-bar-out { background:#ebebeb; border-radius:4px; height:5px; overflow:hidden; }
+.sub-item-bar-in { height:100%; border-radius:4px; }
+.sub-item:nth-child(1) .sub-item-bar-in { background:var(--purple); }
+.sub-item:nth-child(2) .sub-item-bar-in { background:var(--red); }
+.sub-item:nth-child(3) .sub-item-bar-in { background:var(--gold); }
 
-.sub-alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
-@media (max-width: 700px) { .sub-alloc-grid { grid-template-columns: 1fr; } }
+.sub-edit-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f5f5f0; }
+.sub-edit-row:last-child { border-bottom:none; }
+.sub-edit-label { flex:1; }
+.sub-edit-label input[type=text] { width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:7px; font-size:13px; font-weight:600; background:#fff; color:var(--text); outline:none; }
+.sub-edit-label input[type=text]:focus { border-color:var(--text); }
+.sub-edit-pct { display:flex; align-items:center; gap:6px; }
+.sub-edit-pct input[type=number] { width:64px; padding:7px 10px; border:1px solid var(--border); border-radius:7px; font-size:13px; font-weight:700; text-align:center; outline:none; background:#fff; color:var(--text); }
+.sub-edit-pct input[type=number]:focus { border-color:var(--text); }
+.sub-edit-pct span { font-size:13px; color:var(--muted); }
+.pct-warning { font-size:12px; color:var(--red); margin-top:8px; display:none; }
+.pct-ok { font-size:12px; color:var(--green); margin-top:8px; display:none; }
+.btn-apply { padding:9px 20px; background:var(--text); color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; transition:background 0.2s; margin-top:14px; }
+.btn-apply:hover { background:#333; }
+.alloc-chart-wrap { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+@media (max-width:700px) { .alloc-chart-wrap { grid-template-columns:1fr; } }
+.alloc-summary-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:4px; }
+.alloc-summary-table td { padding:7px 0; border-bottom:1px solid #f5f5f0; }
+.alloc-summary-table tr:last-child td { border-bottom:none; }
+.dot { width:10px; height:10px; border-radius:3px; display:inline-block; margin-right:7px; vertical-align:middle; }
 
-.sub-item { background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-.sub-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.sub-item-name { font-size: 13px; font-weight: 600; }
-.sub-item-pct-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
-.sub-item:nth-child(1) .sub-item-pct-badge { background: #EEEDFE; color: var(--purple); }
-.sub-item:nth-child(2) .sub-item-pct-badge { background: #FCEBEB; color: #A32D2D; }
-.sub-item:nth-child(3) .sub-item-pct-badge { background: #FAEEDA; color: #854F0B; }
-.sub-item-amount { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
-.sub-item:nth-child(1) .sub-item-amount { color: var(--purple); }
-.sub-item:nth-child(2) .sub-item-amount { color: var(--red); }
-.sub-item:nth-child(3) .sub-item-amount { color: var(--gold); }
-.sub-item-bar-out { background: #ebebeb; border-radius: 4px; height: 5px; overflow: hidden; }
-.sub-item-bar-in { height: 100%; border-radius: 4px; }
-.sub-item:nth-child(1) .sub-item-bar-in { background: var(--purple); }
-.sub-item:nth-child(2) .sub-item-bar-in { background: var(--red); }
-.sub-item:nth-child(3) .sub-item-bar-in { background: var(--gold); }
-
-.sub-edit-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f5f5f0; }
-.sub-edit-row:last-child { border-bottom: none; }
-.sub-edit-label { flex: 1; }
-.sub-edit-label input[type=text] { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; font-weight: 600; background: #fff; color: var(--text); outline: none; }
-.sub-edit-label input[type=text]:focus { border-color: var(--text); }
-.sub-edit-pct { display: flex; align-items: center; gap: 6px; }
-.sub-edit-pct input[type=number] { width: 64px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; font-weight: 700; text-align: center; outline: none; background: #fff; color: var(--text); }
-.sub-edit-pct input[type=number]:focus { border-color: var(--text); }
-.sub-edit-pct span { font-size: 13px; color: var(--muted); }
-.pct-warning { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
-.pct-ok { font-size: 12px; color: var(--green); margin-top: 8px; display: none; }
-.btn-apply { padding: 9px 20px; background: var(--text); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 14px; }
-.btn-apply:hover { background: #333; }
-
-.alloc-chart-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-@media (max-width: 700px) { .alloc-chart-wrap { grid-template-columns: 1fr; } }
-
-.alloc-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
-.alloc-summary-table td { padding: 7px 0; border-bottom: 1px solid #f5f5f0; }
-.alloc-summary-table tr:last-child td { border-bottom: none; }
-.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 7px; vertical-align: middle; }
-
-.nav { background: var(--card); border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
-.nav button { padding: 14px 18px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-.nav button.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
-.nav button:hover:not(.active) { color: var(--text); background: #f9f9f7; }
-.container { max-width: 1140px; margin: 0 auto; padding: 24px 20px; }
+.loading-overlay { display:none; position:fixed; inset:0; background:rgba(255,255,255,0.85); z-index:999; align-items:center; justify-content:center; flex-direction:column; gap:12px; backdrop-filter:blur(2px); }
+.loading-overlay.show { display:flex; }
+.spinner { width:36px; height:36px; border:3px solid #eee; border-top-color:#1a1a18; border-radius:50%; animation:spin 0.7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-txt { font-size:13px; color:#888; font-weight:500; }
 </style>
 </head>
 <body>
+
+<div class="loading-overlay show" id="loadingOv">
+  <div class="spinner"></div>
+  <div class="loading-txt">Memuat data...</div>
+</div>
 
 <div class="header">
   <div class="header-left">
     <span class="logo">OMAJI</span>
     <span class="header-badge">Laporan Keuangan 2026</span>
   </div>
-  <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="sync-status sync-load" id="syncStatus">⟳ Menghubungkan...</span>
+    <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+  </div>
 </div>
 
 <nav class="nav">
@@ -519,7 +230,6 @@ tr:hover td { background: #fafaf8; }
 
 <div class="container">
 
-<!-- DASHBOARD -->
 <div id="page-dashboard" class="page active">
   <div class="metrics">
     <div class="metric green"><div class="lbl">Total Kas Masuk</div><div class="val g" id="m1"></div><div class="sub" id="m1s"></div></div>
@@ -536,7 +246,6 @@ tr:hover td { background: #fafaf8; }
   <div class="card full"><h3>Pemasukan per Kategori</h3><div id="barsM"></div></div>
 </div>
 
-<!-- KAS MASUK -->
 <div id="page-kas-masuk" class="page">
   <div class="toolbar">
     <select id="fmB" onchange="renderKM()"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option></select>
@@ -552,7 +261,6 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<!-- KAS KELUAR -->
 <div id="page-kas-keluar" class="page">
   <div class="toolbar">
     <select id="fkB" onchange="renderKK()"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option></select>
@@ -568,7 +276,6 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<!-- LABA RUGI -->
 <div id="page-laba-rugi" class="page">
   <div class="card" style="max-width:520px;margin:0 auto">
     <h3 style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;text-transform:none;letter-spacing:0">Laporan Laba Rugi</h3>
@@ -576,9 +283,7 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<!-- ALOKASI -->
 <div id="page-alokasi" class="page">
-  <!-- Hero -->
   <div class="alloc-hero">
     <div class="alloc-hero-left">
       <h2>Laba Bersih yang Dialokasikan</h2>
@@ -591,8 +296,6 @@ tr:hover td { background: #fafaf8; }
       <div class="margin-txt" id="al-trx"></div>
     </div>
   </div>
-
-  <!-- 3 Kartu Alokasi Utama -->
   <div class="alloc-grid">
     <div class="alloc-card ac-omaji">
       <div class="ac-icon">🏠</div>
@@ -616,8 +319,6 @@ tr:hover td { background: #fafaf8; }
       <div class="ac-bar-out"><div class="ac-bar-in" style="width:50%"></div></div>
     </div>
   </div>
-
-  <!-- Chart Alokasi -->
   <div class="alloc-chart-wrap">
     <div class="card">
       <h3>Proporsi Alokasi Utama</h3>
@@ -628,26 +329,18 @@ tr:hover td { background: #fafaf8; }
       <table class="alloc-summary-table" id="allocSummaryTable"></table>
     </div>
   </div>
-
-  <!-- Sub Alokasi Gaji -->
   <div class="sub-alloc-card">
     <h3>💼 Sub Alokasi Gaji / Bagi Hasil</h3>
-    <div class="sub-desc">Atur pembagian dari 50% gaji/bagi hasil sesuai kebutuhan. Total harus 100%.</div>
-
-    <!-- Tampilan Sub Item -->
+    <div class="sub-desc">Atur pembagian dari 50% gaji/bagi hasil. Total harus 100%.</div>
     <div class="sub-alloc-grid" id="subAllocDisplay"></div>
-
-    <!-- Form Edit Sub Alokasi -->
     <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px">
       <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">⚙️ Kustomisasi Sub Alokasi</div>
       <div id="subEditRows"></div>
-      <div class="pct-warning" id="pctWarn">⚠️ Total persentase harus 100%. Saat ini: <span id="pctTotal"></span>%</div>
-      <div class="pct-ok" id="pctOk">✓ Total persentase sudah 100%</div>
+      <div class="pct-warning" id="pctWarn">⚠️ Total harus 100%. Saat ini: <span id="pctTotal"></span>%</div>
+      <div class="pct-ok" id="pctOk">✓ Total sudah 100%</div>
       <button class="btn-apply" onclick="applySubAlloc()">Terapkan</button>
     </div>
   </div>
-
-  <!-- Chart Sub Alokasi -->
   <div class="alloc-chart-wrap">
     <div class="card">
       <h3>Proporsi Sub Alokasi Gaji</h3>
@@ -668,12 +361,12 @@ tr:hover td { background: #fafaf8; }
     <h2 id="mTitle">Tambah Transaksi</h2>
     <input type="hidden" id="mType"><input type="hidden" id="mIdx">
     <div class="form-row"><label>Tanggal *</label><input type="date" id="fTgl"></div>
-    <div class="form-row"><label>Deskripsi *</label><input type="text" id="fDes" placeholder="Contoh: penjualan, belanja bahan..."></div>
+    <div class="form-row"><label>Deskripsi *</label><input type="text" id="fDes"></div>
     <div class="form-row"><label>Kategori *</label><select id="fKat"></select></div>
     <div class="form-row"><label>Jenis Transaksi</label><select id="fJen"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div>
     <div class="form-row"><label>Status Pembayaran</label><select id="fSts"><option>Lunas</option><option>Belum Bayar</option><option>Bayar Sebagian</option></select></div>
-    <div class="form-row"><label>Nominal (Rp) *</label><input type="number" id="fNom" placeholder="Contoh: 150000"></div>
-    <div class="form-row"><label>Catatan</label><textarea id="fCat" placeholder="Opsional..."></textarea></div>
+    <div class="form-row"><label>Nominal (Rp) *</label><input type="number" id="fNom"></div>
+    <div class="form-row"><label>Catatan</label><textarea id="fCat"></textarea></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
       <button class="btn-save" onclick="saveTrx()">Simpan</button>
@@ -693,23 +386,35 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<script>
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXRJDLQA86QMaFbEP5AFklcucIu_fAxHU",
+  authDomain: "omajiklepu.firebaseapp.com",
+  projectId: "omajiklepu",
+  storageBucket: "omajiklepu.firebasestorage.app",
+  messagingSenderId: "96752900164",
+  appId: "1:96752900164:web:e3769cf5d9a915f54e4411"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const IDR = v => 'Rp ' + Math.round(v).toLocaleString('id-ID');
 const KM_KATS = ['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uang Belanja'];
 const KK_KATS = ['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
 const COLORS = ['#1D9E75','#185FA5','#534AB7','#D85A30','#BA7517','#A32D2D','#3B6D11','#0C447C'];
 const JC = {Tunai:'#185FA5',QRIS:'#534AB7',Transfer:'#BA7517',ShopeeFood:'#D85A30'};
 
-let km = [{"tanggal":"2026-01-10","deskripsi":"Uang sisa","kategori":"Modal Usaha","jenis":"QRIS","status":"Lunas","nominal":1000000,"catatan":""},{"tanggal":"2026-01-10","deskripsi":"Uang sisa","kategori":"Modal Usaha","jenis":"Tunai","status":"Lunas","nominal":1500000,"catatan":""},{"tanggal":"2026-01-11","deskripsi":"bookingan natal","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":500000,"catatan":""},{"tanggal":"2026-01-11","deskripsi":"bookingan natal","kategori":"Bookingan","jenis":"Tunai","status":"Lunas","nominal":300000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"transferan kas omaji","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":272600,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":57000,"catatan":""},{"tanggal":"2026-01-13","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":65000,"catatan":""},{"tanggal":"2026-01-15","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":79000,"catatan":""},{"tanggal":"2026-01-16","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":43000,"catatan":""},{"tanggal":"2026-01-17","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":228000,"catatan":""},{"tanggal":"2026-01-17","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":125000,"catatan":""},{"tanggal":"2026-01-18","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":45000,"catatan":""},{"tanggal":"2026-01-18","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":159000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":45000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":9000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":54,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":33000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"jual mie instan","kategori":"Pendapatan Lainnya","jenis":"QRIS","status":"Lunas","nominal":100800,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-01-21","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":36,"catatan":""},{"tanggal":"2026-01-21","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":156000,"catatan":""},{"tanggal":"2026-01-22","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":40,"catatan":""},{"tanggal":"2026-01-22","deskripsi":"penjualan offline","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":105000,"catatan":""},{"tanggal":"2026-01-22","deskripsi":"penjualan qris","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":53000,"catatan":""},{"tanggal":"2026-01-22","deskripsi":"penjualan online","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":44,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":99000,"catatan":""},{"tanggal":"2026-01-24","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":42,"catatan":""},{"tanggal":"2026-01-24","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":212000,"catatan":""},{"tanggal":"2026-01-24","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":107000,"catatan":""},{"tanggal":"2026-01-25","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":69,"catatan":""},{"tanggal":"2026-01-25","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":88000,"catatan":""},{"tanggal":"2026-01-25","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":156000,"catatan":""},{"tanggal":"2026-01-26","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":70,"catatan":""},{"tanggal":"2026-01-26","deskripsi":"penjualan online","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":95090,"catatan":""},{"tanggal":"2026-01-26","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-27","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":81,"catatan":""},{"tanggal":"2026-01-27","deskripsi":"penjualan offline","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":31000,"catatan":""},{"tanggal":"2026-01-27","deskripsi":"penjualan online","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":117508,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":108,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":100000,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":94000,"catatan":""},{"tanggal":"2026-01-29","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":109,"catatan":""},{"tanggal":"2026-01-29","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":109000,"catatan":""},{"tanggal":"2026-01-29","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":54000,"catatan":""},{"tanggal":"2026-01-30","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":116,"catatan":""},{"tanggal":"2026-01-30","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":39000,"catatan":""},{"tanggal":"2026-01-30","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":27000,"catatan":""},{"tanggal":"2026-01-30","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":25813,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":119,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":236000,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":61985,"catatan":""},{"tanggal":"2026-02-01","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":123,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":147,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":115000,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":46000,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":8775,"catatan":""},{"tanggal":"2026-02-03","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":139,"catatan":""},{"tanggal":"2026-02-03","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-02-04","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":143,"catatan":""},{"tanggal":"2026-02-05","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":141,"catatan":""},{"tanggal":"2026-02-05","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":48000,"catatan":""},{"tanggal":"2026-02-06","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":141,"catatan":""},{"tanggal":"2026-02-07","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":156,"catatan":""},{"tanggal":"2026-02-07","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":68000,"catatan":""},{"tanggal":"2026-02-08","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":153,"catatan":""},{"tanggal":"2026-02-09","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":89001,"catatan":""},{"tanggal":"2026-02-13","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":82000,"catatan":""},{"tanggal":"2026-02-14","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":106000,"catatan":""},{"tanggal":"2026-02-14","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":36825,"catatan":""},{"tanggal":"2026-02-15","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":72000,"catatan":""},{"tanggal":"2026-02-17","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":35000,"catatan":""},{"tanggal":"2026-02-19","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":24000,"catatan":""},{"tanggal":"2026-02-20","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":54000,"catatan":""},{"tanggal":"2026-02-21","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":54000,"catatan":""},{"tanggal":"2026-02-21","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":46000,"catatan":""},{"tanggal":"2026-02-23","deskripsi":"DP Bookingan tgl 8 maret","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":500000,"catatan":""},{"tanggal":"2026-02-23","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":27675,"catatan":""},{"tanggal":"2026-02-23","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-02-25","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":55000,"catatan":""},{"tanggal":"2026-02-26","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":45000,"catatan":""},{"tanggal":"2026-02-27","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":37000,"catatan":""},{"tanggal":"2026-02-28","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":76000,"catatan":""},{"tanggal":"2026-02-28","deskripsi":"bunga","kategori":"Pendapatan Lainnya","jenis":"QRIS","status":"Lunas","nominal":1438,"catatan":""},{"tanggal":"2026-03-02","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":65000,"catatan":""},{"tanggal":"2026-03-02","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-03-03","deskripsi":"DP Bookingan tgl 4 april","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":200000,"catatan":""},{"tanggal":"2026-03-03","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":42000,"catatan":""},{"tanggal":"2026-03-04","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":83000,"catatan":""},{"tanggal":"2026-03-04","deskripsi":"DP Bookingan tgl 7 maret","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":300000,"catatan":""},{"tanggal":"2026-03-05","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":21000,"catatan":""},{"tanggal":"2026-03-05","deskripsi":"DP Bookingan tgl 9 maret","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":200000,"catatan":""},{"tanggal":"2026-03-06","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":41000,"catatan":""},{"tanggal":"2026-03-06","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":59887,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"DP Bookingan tgl 11 maret","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":100000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":970000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":242000,"catatan":""},{"tanggal":"2026-03-08","deskripsi":"pelunasan bookingan","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":525000,"catatan":""},{"tanggal":"2026-03-08","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":319000,"catatan":""},{"tanggal":"2026-03-09","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":424000,"catatan":""},{"tanggal":"2026-03-09","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":39000,"catatan":""},{"tanggal":"2026-03-09","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":39562,"catatan":""},{"tanggal":"2026-03-10","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":81000,"catatan":""},{"tanggal":"2026-03-10","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-03-11","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":885000,"catatan":""},{"tanggal":"2026-03-12","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":44000,"catatan":""},{"tanggal":"2026-03-13","deskripsi":"bookingan","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":409000,"catatan":""},{"tanggal":"2026-03-13","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":86000,"catatan":""},{"tanggal":"2026-03-14","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":15000,"catatan":""},{"tanggal":"2026-03-14","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":75000,"catatan":""},{"tanggal":"2026-03-14","deskripsi":"bookingan 5 april","kategori":"Bookingan","jenis":"Tunai","status":"Lunas","nominal":500000,"catatan":""},{"tanggal":"2026-03-15","deskripsi":"bookingan 15 maret","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":191000,"catatan":""},{"tanggal":"2026-03-15","deskripsi":"DP Bookingan 17 maret","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":250000,"catatan":""},{"tanggal":"2026-03-15","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":53000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"DP Bookingan 31 maret","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":300000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":56000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"bookingan 16 maret","kategori":"Bookingan","jenis":"Tunai","status":"Lunas","nominal":146000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"bookingan","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":170000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":58000,"catatan":""},{"tanggal":"2026-03-18","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":65000,"catatan":""},{"tanggal":"2026-03-26","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":40905,"catatan":""},{"tanggal":"2026-03-27","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":45874,"catatan":""},{"tanggal":"2026-03-28","deskripsi":"DP Bookingan 2 April","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":200000,"catatan":""},{"tanggal":"2026-03-28","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":103683,"catatan":""},{"tanggal":"2026-03-28","deskripsi":"penjualan 3 hari","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":49000,"catatan":""},{"tanggal":"2026-03-28","deskripsi":"bunga bank","kategori":"Pendapatan Lainnya","jenis":"Transfer","status":"Lunas","nominal":3950,"catatan":""},{"tanggal":"2026-03-30","deskripsi":"pelunasan bookingan cimory","kategori":"Bookingan","jenis":"Tunai","status":"Lunas","nominal":4100000,"catatan":""},{"tanggal":"2026-03-30","deskripsi":"penjualan","kategori":"Penjualan","jenis":"QRIS","status":"Lunas","nominal":48000,"catatan":""},{"tanggal":"2026-03-30","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":217000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"tambahan pelunasan bookingan cimoriy","kategori":"Bookingan","jenis":"Tunai","status":"Lunas","nominal":325000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":36000,"catatan":""},{"tanggal":"2026-04-01","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-04-01","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":95433,"catatan":""},{"tanggal":"2026-04-02","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":174000,"catatan":""},{"tanggal":"2026-04-02","deskripsi":"pelunasan booking","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":725000,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"pelunasan booking","kategori":"Bookingan","jenis":"QRIS","status":"Lunas","nominal":950000,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"penjualan","kategori":"Penjualan","jenis":"ShopeeFood","status":"Lunas","nominal":70515,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":72000,"catatan":""},{"tanggal":"2026-04-05","deskripsi":"pelunasan booking","kategori":"Bookingan","jenis":"Tunai","status":"Lunas","nominal":680000,"catatan":""},{"tanggal":"2026-04-06","deskripsi":"penjualan","kategori":"Penjualan","jenis":"Tunai","status":"Lunas","nominal":40000,"catatan":""}];
-
-let kk = [{"tanggal":"2026-01-11","deskripsi":"Belanja mulia","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":776400,"catatan":""},{"tanggal":"2026-01-11","deskripsi":"DP Freezer Box","kategori":"Bahan Pendukung Produksi","jenis":"QRIS","status":"Lunas","nominal":1000000,"catatan":""},{"tanggal":"2026-01-11","deskripsi":"Beli Blender","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":200000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"bayar sewa tratak","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":300000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"cetak daftar menu","kategori":"Marketing / Promosi","jenis":"Tunai","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"beli atk","kategori":"Administrasi Umum","jenis":"Tunai","status":"Lunas","nominal":8000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"buat nota","kategori":"Administrasi Umum","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"print qris","kategori":"Marketing / Promosi","jenis":"Tunai","status":"Lunas","nominal":5000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":822200,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"belanja tambahan","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":54000,"catatan":""},{"tanggal":"2026-01-14","deskripsi":"beli piring","kategori":"Bahan Pendukung Produksi","jenis":"Transfer","status":"Lunas","nominal":123217,"catatan":""},{"tanggal":"2026-01-15","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-18","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":26000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"belanja gelas cup","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":95000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"beli jamur enoki","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"beli jagung manis","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"beli telur","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"beli mie sukses 1 dus","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":83000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"beli lunch box L","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":55000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"parkir","kategori":"Transportasi","jenis":"Tunai","status":"Lunas","nominal":2000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"belanja pisang dll","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":15000,"catatan":""},{"tanggal":"2026-01-21","deskripsi":"belanja tepung","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":34200,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"belanja kentang dan enoki","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":42000,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"belanja susu dan gooday","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":65200,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"print qris shopeefood","kategori":"Marketing / Promosi","jenis":"QRIS","status":"Lunas","nominal":2000,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"beli timun","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":4000,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-24","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":46500,"catatan":""},{"tanggal":"2026-01-26","deskripsi":"belanja buah","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-01-26","deskripsi":"beli plastik","kategori":"Bahan Pendukung Produksi","jenis":"QRIS","status":"Lunas","nominal":3150,"catatan":""},{"tanggal":"2026-01-27","deskripsi":"belanja ayam","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":47000,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"beli minyak dan ayam","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"belanja frozen","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":42000,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"belanja pasar","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-01-29","deskripsi":"belanja telur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":28000,"catatan":""},{"tanggal":"2026-01-29","deskripsi":"belanja dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"belanja kentang dan jamur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":54000,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"belanja minyak dan ayam","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":53000,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"bayar pdam","kategori":"Air","jenis":"Transfer","status":"Lunas","nominal":39540,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"beli pisang","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"beli buah lain","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":75000,"catatan":""},{"tanggal":"2026-02-07","deskripsi":"belanja jagung manis","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-02-11","deskripsi":"beli telur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":38000,"catatan":""},{"tanggal":"2026-02-12","deskripsi":"belanja ayam dan tepung","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":37100,"catatan":""},{"tanggal":"2026-02-18","deskripsi":"belanja jamur enoki","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":12000,"catatan":""},{"tanggal":"2026-02-20","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":46000,"catatan":""},{"tanggal":"2026-02-21","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-03-01","deskripsi":"bayar air","kategori":"Air","jenis":"QRIS","status":"Lunas","nominal":28205,"catatan":""},{"tanggal":"2026-03-03","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-05","deskripsi":"belanja bookingan","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":156000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":70000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":17000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-08","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":39000,"catatan":""},{"tanggal":"2026-03-11","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":480000,"catatan":""},{"tanggal":"2026-03-11","deskripsi":"bayar makmi","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":1595000,"catatan":""},{"tanggal":"2026-03-12","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":415000,"catatan":""},{"tanggal":"2026-03-12","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":117000,"catatan":""},{"tanggal":"2026-03-13","deskripsi":"beli telur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-03-14","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":49000,"catatan":""},{"tanggal":"2026-03-14","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":99000,"catatan":""},{"tanggal":"2026-03-15","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":465000,"catatan":""},{"tanggal":"2026-03-15","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":45000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":356000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":75000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":51000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":15000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":15000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"gajian","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":2620000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"omaji","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":1050000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"tabungan","kategori":"Tabungan Uang Belanja","jenis":"Tunai","status":"Lunas","nominal":1575000,"catatan":""},{"tanggal":"2026-03-26","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":150000,"catatan":""},{"tanggal":"2026-03-26","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-29","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-03-30","deskripsi":"bayar tratak","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":400000,"catatan":""},{"tanggal":"2026-03-30","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":230000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":62000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"bayar makmi - 31 mar 26","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":2475000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"beli dus","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":92000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"bayar tratak tambahan","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":200000,"catatan":""},{"tanggal":"2026-04-01","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":80000,"catatan":""},{"tanggal":"2026-04-02","deskripsi":"beli plastik","kategori":"Bahan Pendukung Produksi","jenis":"Transfer","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-04-02","deskripsi":"bayar makmi","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":555000,"catatan":""},{"tanggal":"2026-04-03","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":155250,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":90000,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"bayar makmi","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":690000,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":395000,"catatan":""},{"tanggal":"2026-04-05","deskripsi":"bayar air","kategori":"Air","jenis":"Transfer","status":"Lunas","nominal":29020,"catatan":""},{"tanggal":"2026-04-05","deskripsi":"bayar makju","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":100000,"catatan":""},{"tanggal":"2026-04-06","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":31500,"catatan":""}];
-
-// Sub alokasi default
-let subAlloc = [
-  { nama: 'Pemilik', pct: 40 },
-  { nama: 'Karyawan', pct: 40 },
-  { nama: 'Cadangan', pct: 20 }
-];
+let km = [], kk = [];
+let charts = {}, pgKM = 1, pgKK = 1;
+const PS = 20;
+let pendDel = null;
+let subAlloc = [{nama:'Pemilik',pct:40},{nama:'Karyawan',pct:40},{nama:'Cadangan',pct:20}];
+let kmLoaded = false, kkLoaded = false;
 
 // Populate filter selects
 const selFmK = document.getElementById('fmK');
@@ -717,22 +422,50 @@ KM_KATS.forEach(k => selFmK.innerHTML += `<option>${k}</option>`);
 const selFkK = document.getElementById('fkK');
 KK_KATS.forEach(k => selFkK.innerHTML += `<option>${k}</option>`);
 
-let charts = {}, pgKM = 1, pgKK = 1;
-const PS = 20;
-let pendDel = null;
+function setSync(status) {
+  const el = document.getElementById('syncStatus');
+  if(status==='ok'){ el.className='sync-status sync-ok'; el.textContent='● Tersinkron'; }
+  else if(status==='load'){ el.className='sync-status sync-load'; el.textContent='⟳ Memuat...'; }
+  else { el.className='sync-status sync-err'; el.textContent='✕ Gagal'; }
+}
+
+function checkLoaded() {
+  if(kmLoaded && kkLoaded) {
+    document.getElementById('loadingOv').classList.remove('show');
+    setSync('ok');
+    refreshDash(); renderKM(); renderKK();
+  }
+}
+
+// Real-time listener kas masuk
+onSnapshot(query(collection(db,'kas_masuk'), orderBy('tanggal')), snap => {
+  km = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  kmLoaded = true;
+  checkLoaded();
+  refreshDash(); renderKM();
+}, err => { console.error(err); setSync('err'); });
+
+// Real-time listener kas keluar
+onSnapshot(query(collection(db,'kas_keluar'), orderBy('tanggal')), snap => {
+  kk = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  kkLoaded = true;
+  checkLoaded();
+  refreshDash(); renderKK();
+}, err => { console.error(err); setSync('err'); });
 
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (id === 'dashboard') refreshDash();
-  if (id === 'laba-rugi') renderLaba();
-  if (id === 'alokasi') renderAlokasi();
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='dashboard') refreshDash();
+  if(id==='laba-rugi') renderLaba();
+  if(id==='alokasi') renderAlokasi();
 }
+window.showPage = showPage;
 
 function jB(j) {
-  const c = {Tunai:'bt',QRIS:'bq',Transfer:'btr',ShopeeFood:'bsf'}[j] || 'bt';
+  const c={Tunai:'bt',QRIS:'bq',Transfer:'btr',ShopeeFood:'bsf'}[j]||'bt';
   return `<span class="badge ${c}">${j}</span>`;
 }
 function sB(s) { return `<span class="badge ${s==='Lunas'?'bl':'bb'}">${s}</span>`; }
@@ -752,10 +485,10 @@ function filt(data, type) {
 
 function renderTbl(data, tbId, pgId, pg, type) {
   const rows = data.slice((pg-1)*PS, pg*PS);
-  document.getElementById(tbId).innerHTML = rows.map(r => {
-    const i = data.indexOf(r);
-    const col = type==='masuk' ? '#1D9E75' : '#D85A30';
-    return `<tr><td>${r.tanggal}</td><td>${r.deskripsi}</td><td><span class="badge bk">${r.kategori}</span></td><td>${jB(r.jenis)}</td><td>${sB(r.status)}</td><td style="text-align:right;font-weight:600;color:${col}">${IDR(r.nominal)}</td><td style="white-space:nowrap"><button class="act-btn edit" onclick="openModal('${type}',${i})">Edit</button><button class="act-btn del" onclick="askDel('${type}',${i})">Hapus</button></td></tr>`;
+  document.getElementById(tbId).innerHTML = rows.map((r,i) => {
+    const realIdx = (pg-1)*PS + i;
+    const col = type==='masuk'?'#1D9E75':'#D85A30';
+    return `<tr><td>${r.tanggal}</td><td>${r.deskripsi}</td><td><span class="badge bk">${r.kategori}</span></td><td>${jB(r.jenis)}</td><td>${sB(r.status)}</td><td style="text-align:right;font-weight:600;color:${col}">${IDR(r.nominal)}</td><td style="white-space:nowrap"><button class="act-btn edit" onclick="openModal('${type}',${realIdx})">Edit</button><button class="act-btn del" onclick="askDel('${type}',${realIdx})">Hapus</button></td></tr>`;
   }).join('');
   const tot = Math.ceil(data.length/PS);
   let p = `<span>${data.length} data</span>`;
@@ -764,17 +497,22 @@ function renderTbl(data, tbId, pgId, pg, type) {
 }
 
 function goPg(t,n){if(t==='masuk'){pgKM=n;renderKM();}else{pgKK=n;renderKK();}}
+window.goPg = goPg;
+
 function renderKM(){renderTbl(filt(km,'masuk'),'tbM','pgM',pgKM,'masuk');}
 function renderKK(){renderTbl(filt(kk,'keluar'),'tbK','pgK',pgKK,'keluar');}
+window.renderKM = renderKM;
+window.renderKK = renderKK;
 
 function openModal(type, idx) {
   document.getElementById('mType').value = type;
   document.getElementById('mIdx').value = idx !== null ? idx : '';
   document.getElementById('mTitle').textContent = idx !== null ? 'Edit Transaksi' : 'Tambah Transaksi';
-  const kats = type === 'masuk' ? KM_KATS : KK_KATS;
+  const kats = type==='masuk' ? KM_KATS : KK_KATS;
   document.getElementById('fKat').innerHTML = kats.map(k=>`<option>${k}</option>`).join('');
-  if (idx !== null) {
-    const r = type==='masuk' ? km[idx] : kk[idx];
+  if(idx !== null) {
+    const data = type==='masuk' ? filt(km,'masuk') : filt(kk,'keluar');
+    const r = data[idx];
     document.getElementById('fTgl').value = r.tanggal;
     document.getElementById('fDes').value = r.deskripsi;
     document.getElementById('fKat').value = r.kategori;
@@ -784,41 +522,85 @@ function openModal(type, idx) {
     document.getElementById('fCat').value = r.catatan||'';
   } else {
     document.getElementById('fTgl').value = new Date().toISOString().slice(0,10);
-    document.getElementById('fDes').value='';
-    document.getElementById('fJen').value='Tunai';
-    document.getElementById('fSts').value='Lunas';
-    document.getElementById('fNom').value='';
-    document.getElementById('fCat').value='';
+    document.getElementById('fDes').value = '';
+    document.getElementById('fJen').value = 'Tunai';
+    document.getElementById('fSts').value = 'Lunas';
+    document.getElementById('fNom').value = '';
+    document.getElementById('fCat').value = '';
   }
   document.getElementById('mOv').classList.add('open');
 }
+window.openModal = openModal;
+
 function closeModal(){document.getElementById('mOv').classList.remove('open');}
+window.closeModal = closeModal;
 
-function saveTrx() {
+async function saveTrx() {
   const type = document.getElementById('mType').value;
-  const idx = document.getElementById('mIdx').value;
-  const tanggal = document.getElementById('fTgl').value;
+  const idx  = document.getElementById('mIdx').value;
+  const tanggal   = document.getElementById('fTgl').value;
   const deskripsi = document.getElementById('fDes').value.trim();
-  const nominal = parseFloat(document.getElementById('fNom').value);
-  if (!tanggal||!deskripsi||isNaN(nominal)||nominal<=0) { alert('Mohon isi Tanggal, Deskripsi, dan Nominal.'); return; }
-  const obj = { tanggal, deskripsi, kategori: document.getElementById('fKat').value, jenis: document.getElementById('fJen').value, status: document.getElementById('fSts').value, nominal, catatan: document.getElementById('fCat').value };
-  if (idx !== '') {
-    if(type==='masuk') km[parseInt(idx)]=obj; else kk[parseInt(idx)]=obj;
-  } else {
-    if(type==='masuk'){km.push(obj);km.sort((a,b)=>a.tanggal.localeCompare(b.tanggal));}
-    else{kk.push(obj);kk.sort((a,b)=>a.tanggal.localeCompare(b.tanggal));}
+  const nominal   = parseFloat(document.getElementById('fNom').value);
+  if(!tanggal||!deskripsi||isNaN(nominal)||nominal<=0){
+    alert('Mohon isi Tanggal, Deskripsi, dan Nominal.'); return;
   }
-  closeModal();
-  renderKM(); renderKK(); refreshDash();
-}
+  const obj = {
+    tanggal,
+    deskripsi,
+    kategori: document.getElementById('fKat').value,
+    jenis:    document.getElementById('fJen').value,
+    status:   document.getElementById('fSts').value,
+    nominal,
+    catatan:  document.getElementById('fCat').value
+  };
 
-function askDel(type, idx) { pendDel={type,idx}; document.getElementById('cOv').classList.add('open'); }
-function closeConfirm() { document.getElementById('cOv').classList.remove('open'); pendDel=null; }
-function doDelete() {
-  if(!pendDel)return;
-  if(pendDel.type==='masuk') km.splice(pendDel.idx,1); else kk.splice(pendDel.idx,1);
-  closeConfirm(); renderKM(); renderKK(); refreshDash();
+  const btn = document.querySelector('.btn-save');
+  btn.textContent = 'Menyimpan...';
+  btn.disabled = true;
+
+  try {
+    if(idx !== '') {
+      const data = type==='masuk' ? filt(km,'masuk') : filt(kk,'keluar');
+      const docId = data[parseInt(idx)].id;
+      const col = type==='masuk' ? 'kas_masuk' : 'kas_keluar';
+      await updateDoc(doc(db, col, docId), obj);
+    } else {
+      const col = type==='masuk' ? 'kas_masuk' : 'kas_keluar';
+      await addDoc(collection(db, col), obj);
+    }
+    closeModal();
+  } catch(e) {
+    alert('Gagal menyimpan: '+e.message);
+  }
+
+  btn.textContent = 'Simpan';
+  btn.disabled = false;
 }
+window.saveTrx = saveTrx;
+
+function askDel(type, idx) {
+  pendDel = {type, idx};
+  document.getElementById('cOv').classList.add('open');
+}
+window.askDel = askDel;
+
+function closeConfirm(){document.getElementById('cOv').classList.remove('open'); pendDel=null;}
+window.closeConfirm = closeConfirm;
+
+async function doDelete() {
+  if(!pendDel) return;
+  const data  = pendDel.type==='masuk' ? filt(km,'masuk') : filt(kk,'keluar');
+  const docId = data[pendDel.idx].id;
+  const col   = pendDel.type==='masuk' ? 'kas_masuk' : 'kas_keluar';
+  try {
+    await deleteDoc(doc(db, col, docId));
+    closeConfirm();
+  } catch(e) {
+    alert('Gagal menghapus: '+e.message);
+    closeConfirm();
+  }
+}
+window.doDelete = doDelete;
 
 function updChart(id, cfg) {
   if(charts[id]) charts[id].destroy();
@@ -826,7 +608,9 @@ function updChart(id, cfg) {
 }
 
 function refreshDash() {
-  const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK;
+  const tM=km.reduce((s,r)=>s+r.nominal,0);
+  const tK=kk.reduce((s,r)=>s+r.nominal,0);
+  const lb=tM-tK;
   document.getElementById('m1').textContent=IDR(tM);
   document.getElementById('m1s').textContent=km.length+' transaksi';
   document.getElementById('m2').textContent=IDR(tK);
@@ -840,7 +624,10 @@ function refreshDash() {
   km.forEach(r=>{const m=r.tanggal.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
   kk.forEach(r=>{const m=r.tanggal.slice(5,7);if(ks[m]!==undefined)ks[m]+=r.nominal;});
 
-  updChart('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr'],datasets:[{label:'Masuk',data:['01','02','03','04'].map(m=>ms[m]),backgroundColor:'#1D9E7540',borderColor:'#1D9E75',borderWidth:2,borderRadius:4},{label:'Keluar',data:['01','02','03','04'].map(m=>ks[m]),backgroundColor:'#D85A3040',borderColor:'#D85A30',borderWidth:2,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:10}}},scales:{y:{ticks:{callback:v=>'Rp'+Math.round(v/1e6)+'jt',font:{size:10}},grid:{color:'#f0f0ec'}},x:{grid:{display:false}}}}});
+  updChart('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr'],datasets:[
+    {label:'Masuk',data:['01','02','03','04'].map(m=>ms[m]),backgroundColor:'#1D9E7540',borderColor:'#1D9E75',borderWidth:2,borderRadius:4},
+    {label:'Keluar',data:['01','02','03','04'].map(m=>ks[m]),backgroundColor:'#D85A3040',borderColor:'#D85A30',borderWidth:2,borderRadius:4}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:10}}},scales:{y:{ticks:{callback:v=>'Rp'+Math.round(v/1e6)+'jt',font:{size:10}},grid:{color:'#f0f0ec'}},x:{grid:{display:false}}}}});
 
   const kke={};kk.forEach(r=>{kke[r.kategori]=(kke[r.kategori]||0)+r.nominal;});
   const kL=Object.keys(kke).sort((a,b)=>kke[b]-kke[a]);
@@ -855,7 +642,8 @@ function refreshDash() {
   const md={},kd={};
   km.forEach(r=>{md[r.tanggal]=(md[r.tanggal]||0)+r.nominal;});
   kk.forEach(r=>{kd[r.tanggal]=(kd[r.tanggal]||0)+r.nominal;});
-  updChart('cH',{type:'line',data:{labels:allD.map(d=>d.slice(5)),datasets:[    {label:'Masuk',data:allD.map(d=>md[d]||0),borderColor:'#1D9E75',backgroundColor:'#1D9E7515',tension:0.3,pointRadius:2,borderWidth:2,fill:true},
+  updChart('cH',{type:'line',data:{labels:allD.map(d=>d.slice(5)),datasets:[
+    {label:'Masuk',data:allD.map(d=>md[d]||0),borderColor:'#1D9E75',backgroundColor:'#1D9E7515',tension:0.3,pointRadius:2,borderWidth:2,fill:true},
     {label:'Keluar',data:allD.map(d=>kd[d]||0),borderColor:'#D85A30',backgroundColor:'#D85A3015',tension:0.3,pointRadius:2,borderWidth:2,fill:true}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{x:{ticks:{maxTicksLimit:8,font:{size:10}},grid:{display:false}},y:{ticks:{callback:v=>'Rp'+Math.round(v/1000)+'rb',font:{size:10}},grid:{color:'#f0f0ec'}}}}});
 
@@ -890,48 +678,20 @@ function renderAlokasi() {
   const tK=kk.reduce((s,r)=>s+r.nominal,0);
   const lb=tM-tK;
   const isL=lb>=0;
+  const omaji  =lb*0.20;
+  const belanja=lb*0.30;
+  const gaji   =lb*0.50;
 
-  // Hero
   document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
   document.getElementById('al-laba').style.color=isL?'#2dd4a0':'#f08060';
   document.getElementById('al-margin').textContent=tM?(lb/tM*100).toFixed(1)+'% margin':'0%';
   document.getElementById('al-trx').textContent=(km.length+kk.length)+' transaksi';
+  document.getElementById('al-omaji').textContent=IDR(omaji);
+  document.getElementById('al-belanja').textContent=IDR(belanja);
+  document.getElementById('al-gaji').textContent=IDR(gaji);
 
-  // 3 Alokasi utama
-  const omaji   = lb * 0.20;
-  const belanja  = lb * 0.30;
-  const gaji     = lb * 0.50;
+  updChart('cAlloc',{type:'doughnut',data:{labels:['Omaji (20%)','Belanja (30%)','Gaji (50%)'],datasets:[{data:[omaji,belanja,gaji],backgroundColor:['#185FA5','#BA7517','#1D9E75'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12,padding:10}}}}});
 
-  document.getElementById('al-omaji').textContent   = IDR(omaji);
-  document.getElementById('al-belanja').textContent = IDR(belanja);
-  document.getElementById('al-gaji').textContent    = IDR(gaji);
-
-  // Chart donut alokasi utama
-  updChart('cAlloc',{
-    type:'doughnut',
-    data:{
-      labels:['Omaji (20%)','Belanja (30%)','Gaji/Bagi Hasil (50%)'],
-      datasets:[{
-        data:[omaji,belanja,gaji],
-        backgroundColor:['#185FA5','#BA7517','#1D9E75'],
-        borderWidth:3,
-        borderColor:'#fff'
-      }]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      cutout:'62%',
-      plugins:{
-        legend:{
-          position:'bottom',
-          labels:{font:{size:11},boxWidth:12,padding:10}
-        }
-      }
-    }
-  });
-
-  // Summary table alokasi utama
   const allocItems=[
     {label:'🏠 Omaji',pct:20,val:omaji,color:'#185FA5'},
     {label:'🛒 Belanja',pct:30,val:belanja,color:'#BA7517'},
@@ -944,7 +704,6 @@ function renderAlokasi() {
       <td style="text-align:right;font-weight:700">${IDR(a.val)}</td>
     </tr>`).join('');
 
-  // Sub alokasi display
   const subColors=['#534AB7','#D85A30','#BA7517'];
   document.getElementById('subAllocDisplay').innerHTML=subAlloc.map((s,i)=>{
     const val=gaji*(s.pct/100);
@@ -961,11 +720,10 @@ function renderAlokasi() {
     </div>`;
   }).join('');
 
-  // Edit rows sub alokasi
   document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`
     <div class="sub-edit-row">
       <div class="sub-edit-label">
-        <input type="text" value="${s.nama}" id="sName${i}" placeholder="Nama alokasi" oninput="checkPct()">
+        <input type="text" value="${s.nama}" id="sName${i}" oninput="checkPct()">
       </div>
       <div class="sub-edit-pct">
         <input type="number" value="${s.pct}" id="sPct${i}" min="0" max="100" oninput="checkPct()">
@@ -975,32 +733,8 @@ function renderAlokasi() {
 
   checkPct();
 
-  // Chart sub alokasi
-  updChart('cSubAlloc',{
-    type:'doughnut',
-    data:{
-      labels:subAlloc.map(s=>`${s.nama} (${s.pct}%)`),
-      datasets:[{
-        data:subAlloc.map(s=>gaji*(s.pct/100)),
-        backgroundColor:subColors,
-        borderWidth:3,
-        borderColor:'#fff'
-      }]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      cutout:'62%',
-      plugins:{
-        legend:{
-          position:'bottom',
-          labels:{font:{size:11},boxWidth:12,padding:10}
-        }
-      }
-    }
-  });
+  updChart('cSubAlloc',{type:'doughnut',data:{labels:subAlloc.map(s=>`${s.nama} (${s.pct}%)`),datasets:[{data:subAlloc.map(s=>gaji*(s.pct/100)),backgroundColor:subColors,borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12,padding:10}}}}});
 
-  // Sub summary table
   document.getElementById('subSummaryTable').innerHTML=subAlloc.map((s,i)=>{
     const val=gaji*(s.pct/100);
     return `
@@ -1011,6 +745,7 @@ function renderAlokasi() {
     </tr>`;
   }).join('');
 }
+window.renderAlokasi = renderAlokasi;
 
 function checkPct() {
   let total=0;
@@ -1029,18 +764,20 @@ function checkPct() {
     ok.style.display='none';
   }
 }
+window.checkPct = checkPct;
 
 function applySubAlloc() {
   let total=0;
   const newSub=subAlloc.map((_,i)=>{
     const pct=parseFloat(document.getElementById('sPct'+i)?.value)||0;
     total+=pct;
-    return { nama: document.getElementById('sName'+i)?.value||'Alokasi '+(i+1), pct };
+    return {nama:document.getElementById('sName'+i)?.value||'Alokasi '+(i+1), pct};
   });
   if(total!==100){ alert('Total persentase harus 100%. Saat ini: '+total+'%'); return; }
   subAlloc=newSub;
   renderAlokasi();
 }
+window.applySubAlloc = applySubAlloc;
 
 function exportCSV() {
   const rows=[['Tipe','Tanggal','Deskripsi','Kategori','Jenis','Status','Nominal','Catatan']];
@@ -1052,11 +789,11 @@ function exportCSV() {
   a.download='omaji_keuangan.csv';
   a.click();
 }
+window.exportCSV = exportCSV;
 
 document.getElementById('mOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 document.getElementById('cOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeConfirm();});
 
-refreshDash(); renderKM(); renderKK();
 </script>
 </body>
 </html>
