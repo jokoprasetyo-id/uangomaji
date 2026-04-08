@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Pencatatan Keuangan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .header span {
+            font-size: 28px;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 0 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            padding: 14px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover {
+            color: #1a73e8;
+            background: #f5f9ff;
+        }
+
+        .tab-btn.active {
+            color: #1a73e8;
+            border-bottom: 3px solid #1a73e8;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 900px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        /* SUMMARY CARDS */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 5px solid;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card.income { border-color: #2ecc71; }
+        .card.expense { border-color: #e74c3c; }
+        .card.balance { border-color: #1a73e8; }
+
+        .card .label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card .amount {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .card.income .amount { color: #2ecc71; }
+        .card.expense .amount { color: #e74c3c; }
+        .card.balance .amount { color: #1a73e8; }
+
+        .card .count {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        /* FORM SECTION */
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+
+        .form-section h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26,115,232,0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .btn-submit {
+            margin-top: 16px;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-submit.income-btn {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .btn-submit.expense-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* TABLE SECTION */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .table-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box {
+            padding: 8px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            width: 200px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #1a73e8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead th {
+            background: #f8f9fa;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 700;
+            color: #555;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        tbody td {
+            padding: 12px 14px;
+            color: #444;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge.income {
+            background: #e8f8f0;
+            color: #2ecc71;
+        }
+
+        .badge.expense {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+
+        .amount-cell.income { color: #2ecc71; font-weight: 700; }
+        .amount-cell.expense { color: #e74c3c; font-weight: 700; }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #e74c3c;
+            font-size: 16px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #fdecea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #aaa;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        /* SUMMARY PAGE */
+        .summary-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .summary-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .summary-box h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-box h3.income-title { color: #2ecc71; }
+        .summary-box h3.expense-title { color: #e74c3c; }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 13px;
+        }
+
+        .category-item:last-child { border-bottom: none; }
+
+        .category-name { color: #555; }
+        .category-amount { font-weight: 700; }
+        .category-amount.income { color: #2ecc71; }
+        .category-amount.expense { color: #e74c3c; }
+
+        .progress-bar {
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s;
+        }
+
+        .progress-fill.income { background: #2ecc71; }
+        .progress-fill.expense { background: #e74c3c; }
+
+        /* CHART */
+        .chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .chart-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 120px;
+            padding: 10px 0;
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .bar-wrap {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 100px;
+        }
+
+        .bar {
+            width: 18px;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s;
+            min-height: 4px;
+        }
+
+        .bar.income { background: #2ecc71; }
+        .bar.expense { background: #e74c3c; }
+
+        .bar-label {
+            font-size: 10px;
+            color: #888;
+            text-align: center;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 14px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { background: #2ecc71; }
+        .toast.error { background: #e74c3c; }
+        .toast.info { background: #1a73e8; }
+
+        /* FILTER */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 6px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #666;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            border-color: #1a73e8;
+            color: #1a73e8;
+            background: #f0f6ff;
+        }
+
+        .filter-btn.income-filter.active {
+            border-color: #2ecc71;
+            color: #2ecc71;
+            background: #f0fff6;
+        }
+
+        .filter-btn.expense-filter.active
+```html
+        .filter-btn.expense-filter.active {
+            border-color: #e74c3c;
+            color: #e74c3c;
+            background: #fff0f0;
+        }
+
+        /* EXPORT BTN */
+        .btn-export {
+            padding: 8px 16px;
+            border: 1.5px solid #1a73e8;
+            border-radius: 8px;
+            background: white;
+            color: #1a73e8;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-export:hover {
+            background: #1a73e8;
+            color: white;
+        }
+
+        /* PAGE */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .summary-cards { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .summary-detail { grid-template-columns: 1fr; }
+            .table-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .search-box { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <span>💰</span>
+    <h1>Pencatatan Keuangan</h1>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+    <button class="tab-btn active" onclick="showPage('pemasukan')">➕ Pemasukan</button>
+    <button class="tab-btn" onclick="showPage('pengeluaran')">➖ Pengeluaran</button>
+    <button class="tab-btn" onclick="showPage('summary')">📊 Ringkasan</button>
+</div>
+
+<!-- ===================== PAGE: PEMASUKAN ===================== -->
+<div id="page-pemasukan" class="page active">
+    <div class="container">
+
+        <!-- MINI SUMMARY -->
+        <div class="summary-cards">
+            <div class="card income">
+                <div class="label">💚 Total Pemasukan</div>
+                <div class="amount" id="mini-income">Rp 0</div>
+                <div class="count" id="mini-income-count">0 transaksi</div>
+            </div>
+            <div class="card expense">
+                <div class="label">❤️ Total Pengeluaran</div>
+                <div class="amount" id="mini-expense">Rp 0</div>
+                <div class="count" id="mini-expense-count">0 transaksi</div>
+            </div>
+            <div class="card balance">
+                <div class="label">💙 Saldo</div>
+                <div class="amount" id="mini-balance">Rp 0</div>
+                <div class="count" id="mini-balance-status">-</div>
+            </div>
+        </div>
+
+        <!-- FORM PEMASUKAN -->
+        <div class="form-section">
+            <h2>➕ Tambah Pemasukan</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="income-date">
+                </div>
+                <div class="form-group">
+                    <label>Jumlah (Rp)</label>
+                    <input type="number" id="income-amount" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="income-category">
+                        <option value="">-- Pilih Kategori --</option>
+                        <option>Modal Usaha</option>
+                        <option>Penjualan</option>
+                        <option>Bookingan</option>
+                        <option>Pendapatan Lainnya</option>
+                        <option>Hutang Uang Belanja</option>
+                        <option>Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sumber</label>
+                    <input type="text" id="income-source" placeholder="Contoh: PT. ABC">
+                </div>
+                <div class="form-group full">
+                    <label>Keterangan</label>
+                    <textarea id="income-note" placeholder="Keterangan tambahan..."></textarea>
+                </div>
+            </div>
+            <button class="btn-submit income-btn" onclick="addTransaction('income')">
+                ➕ Tambah Pemasukan
+            </button>
+        </div>
+
+        <!-- TABLE PEMASUKAN -->
+        <div class="table-section">
+            <div class="table-header">
+                <h2>📋 Riwayat Pemasukan</h2>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="text" class="search-box" id="search-income" placeholder="🔍 Cari..." oninput="renderTable('income')">
+                    <button class="btn-export" onclick="exportCSV('income')">⬇️ Export</button>
+                </div>
+            </div>
+           
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tanggal</th>
+                        <th>Kategori</th>
+                        <th>Sumber</th>
+                        <th>Keterangan</th>
+                        <th>Jumlah</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="income-table-body"></tbody>
+            </table>
+            <div id="income-empty" class="empty-state" style="display:none;">
+                <div class="icon">📭</div>
+                <div>Belum ada data pemasukan</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== PAGE: PENGELUARAN ===================== -->
+<div id="page-pengeluaran" class="page">
+    <div class="container">
+
+        <!-- MINI SUMMARY -->
+        <div class="summary-cards">
+            <div class="card income">
+                <div class="label">💚 Total Pemasukan</div>
+                <div class="amount" id="mini-income2">Rp 0</div>
+                <div class="count" id="mini-income-count2">0 transaksi</div>
+            </div>
+            <div class="card expense">
+                <div class="label">❤️ Total Pengeluaran</div>
+                <div class="amount" id="mini-expense2">Rp 0</div>
+                <div class="count" id="mini-expense-count2">0 transaksi</div>
+            </div>
+            <div class="card balance">
+                <div class="label">💙 Saldo</div>
+                <div class="amount" id="mini-balance2">Rp 0</div>
+                <div class="count" id="mini-balance-status2">-</div>
+            </div>
+        </div>
+
+        <!-- FORM PENGELUARAN -->
+        <div class="form-section">
+            <h2>➖ Tambah Pengeluaran</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="expense-date">
+                </div>
+                <div class="form-group">
+                    <label>Jumlah (Rp)</label>
+                    <input type="number" id="expense-amount" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="expense-category">
+                        <option value="">-- Pilih Kategori --</option>
+                        <option>Bahan Baku / Stok</option>
+                        <option>Gaji / Upah</option>
+                        <option>Sewa</option>
+                        <option>Listrik</option>
+                        <option>Air</option>
+                        <option>Transportasi</option>
+                        <option>Marketing / Promosi</option>
+                        <option>Administrasi Umum</option>
+			<option>Pajak</option>
+                        <option>Perawatan</option>
+                        <option>Bahan Pendukung Produksi</option>
+                        <option>Tabungan Uang Belanja</option>
+                        <option>Pelunasan Uang Belanja</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kepada / Tujuan</label>
+                    <input type="text" id="expense-to" placeholder="Contoh: Alfamart">
+                </div>
+                <div class="form-group full">
+                    <label>Keterangan</label>
+                    <textarea id="expense-note" placeholder="Keterangan tambahan..."></textarea>
+                </div>
+            </div>
+            <button class="btn-submit expense-btn" onclick="addTransaction('expense')">
+                ➖ Tambah Pengeluaran
+            </button>
+        </div>
+
+        <!-- TABLE PENGELUARAN -->
+        <div class="table-section">
+            <div class="table-header">
+                <h2>📋 Riwayat Pengeluaran</h2>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="text" class="search-box" id="search-expense" placeholder="🔍 Cari..." oninput="renderTable('expense')">
+                    <button class="btn-export" onclick="exportCSV('expense')">⬇️ Export</button>
+                </div>
+            </div>
+           
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tanggal</th>
+                        <th>Kategori</th>
+                        <th>Kepada</th>
+                        <th>Keterangan</th>
+                        <th>Jumlah</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="expense-table-body"></tbody>
+            </table>
+            <div id="expense-empty" class="empty-state" style="display:none;">
+                <div class="icon">📭</div>
+                <div>Belum ada data pengeluaran</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== PAGE: SUMMARY ===================== -->
+<div id="page-summary" class="page">
+    <div class="container">
+
+        <!-- SUMMARY CARDS -->
+        <div class="summary-cards">
+            <div class="card income">
+                <div class="label">💚 Total Pemasukan</div>
+                <div class="amount" id="sum-income">Rp 0</div>
+                <div class="count" id="sum-income-count">0 transaksi</div>
+            </div>
+            <div class="card expense">
+                <div class="label">❤️ Total Pengeluaran</div>
+                <div class="amount" id="sum-expense">Rp 0</div>
+                <div class="count" id="sum-expense-count">0 transaksi</div>
+            </div>
+            <div class="card balance">
+                <div class="label">💙 Saldo Bersih</div>
+                <div class="amount" id="sum-balance">Rp 0</div>
+                <div class="count" id="sum-balance-pct">-</div>
+            </div>
+        </div>
+
+        <!-- BAR CHART -->
+        <div class="chart-section">
+            <h3>📊 Grafik Pemasukan vs Pengeluaran (per Bulan)</h3>
+            <div class="bar-chart" id="bar-chart"></div>
+            <div style="display:flex; gap:16px; margin-top:8px; font-size:12px;">
+                <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;background:#2ecc71;border-radius:2px;display:inline-block;"></span> Pemasukan</span>
+                <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;background:#e74c3c;border-radius:2px;display:inline-block;"></span> Pengeluaran</span>
+            </div>
+        </div>
+
+        <!-- DETAIL BY CATEGORY -->
+        <div class="summary-detail">
+            <div class="summary-box">
+                <h3 class="income-title">💚 Pemasukan per Kategori</h3>
+                <div id="income-by-category"></div>
+            </div>
+            <div class="summary-box">
+                <h3 class="expense-title">❤️ Pengeluaran per Kategori</h3>
+                <div id="expense-by-category"></div>
+            </div>
+        </div>
+
+        <!-- RECENT TRANSACTIONS -->
+        <div class="table-section" style="margin-top:20px;">
+            <div class="table-header">
+                <h2>🕐 Semua Transaksi Terbaru</h2>
+                <button class="btn-export" onclick="exportCSV('all')">⬇️ Export Semua</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tanggal</th>
+                        <th>Tipe</th>
+                        <th>Kategori</th
+```html
+                        <th>Keterangan</th>
+                        <th>Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody id="all-table-body"></tbody>
+            </table>
+            <div id="all-empty" class="empty-state" style="display:none;">
+                <div class="icon">📭</div>
+                <div>Belum ada transaksi</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // ===================== DATA STORE =====================
+    let data = {
+        income: JSON.parse(localStorage.getItem('income') || '[]'),
+        expense: JSON.parse(localStorage.getItem('expense') || '[]')
+    };
+
+    let filters = { income: 'all', expense: 'all' };
+
+    // ===================== INIT =====================
+    window.onload = () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('income-date').value = today;
+        document.getElementById('expense-date').value = today;
+        updateAll();
+    };
+
+    // ===================== SAVE =====================
+    function saveData() {
+        localStorage.setItem('income', JSON.stringify(data.income));
+        localStorage.setItem('expense', JSON.stringify(data.expense));
+    }
+
+    // ===================== FORMAT RUPIAH =====================
+    function formatRp(num) {
+        return 'Rp ' + Number(num).toLocaleString('id-ID');
+    }
+
+    // ===================== FORMAT TANGGAL =====================
+    function formatDate(dateStr) {
+        if (!dateStr) return '-';
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    // ===================== SHOW PAGE =====================
+    function showPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('page-' + page).classList.add('active');
+        event.target.classList.add('active');
+        updateAll();
+    }
+
+    // ===================== ADD TRANSACTION =====================
+    function addTransaction(type) {
+        if (type === 'income') {
+            const date     = document.getElementById('income-date').value;
+            const amount   = parseFloat(document.getElementById('income-amount').value);
+            const category = document.getElementById('income-category').value;
+            const source   = document.getElementById('income-source').value.trim();
+            const note     = document.getElementById('income-note').value.trim();
+
+            if (!date)     return showToast('⚠️ Tanggal wajib diisi!', 'error');
+            if (!amount || amount <= 0) return showToast('⚠️ Jumlah harus lebih dari 0!', 'error');
+            if (!category) return showToast('⚠️ Kategori wajib dipilih!', 'error');
+
+            data.income.push({
+                id: Date.now(),
+                date, amount, category,
+                source: source || '-',
+                note: note || '-'
+            });
+
+            // Reset form
+            document.getElementById('income-amount').value = '';
+            document.getElementById('income-category').value = '';
+            document.getElementById('income-source').value = '';
+            document.getElementById('income-note').value = '';
+
+            showToast('✅ Pemasukan berhasil ditambahkan!', 'success');
+
+        } else {
+            const date     = document.getElementById('expense-date').value;
+            const amount   = parseFloat(document.getElementById('expense-amount').value);
+            const category = document.getElementById('expense-category').value;
+            const to       = document.getElementById('expense-to').value.trim();
+            const note     = document.getElementById('expense-note').value.trim();
+
+            if (!date)     return showToast('⚠️ Tanggal wajib diisi!', 'error');
+            if (!amount || amount <= 0) return showToast('⚠️ Jumlah harus lebih dari 0!', 'error');
+            if (!category) return showToast('⚠️ Kategori wajib dipilih!', 'error');
+
+            data.expense.push({
+                id: Date.now(),
+                date, amount, category,
+                to: to || '-',
+                note: note || '-'
+            });
+
+            // Reset form
+            document.getElementById('expense-amount').value = '';
+            document.getElementById('expense-category').value = '';
+            document.getElementById('expense-to').value = '';
+            document.getElementById('expense-note').value = '';
+
+            showToast('✅ Pengeluaran berhasil ditambahkan!', 'success');
+        }
+
+        saveData();
+        updateAll();
+    }
+
+    // ===================== DELETE TRANSACTION =====================
+    function deleteTransaction(type, id) {
+        if (!confirm('Hapus transaksi ini?')) return;
+        data[type] = data[type].filter(t => t.id !== id);
+        saveData();
+        updateAll();
+        showToast('🗑️ Transaksi dihapus!', 'info');
+    }
+
+    // ===================== SET FILTER =====================
+    function setFilter(type, value, btn) {
+        filters[type] = value;
+        const parent = btn.closest('.filter-bar');
+        parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderTable(type);
+    }
+
+    // ===================== RENDER TABLE =====================
+    function renderTable(type) {
+        const tbody     = document.getElementById(type + '-table-body');
+        const emptyDiv  = document.getElementById(type + '-empty');
+        const searchVal = (document.getElementById('search-' + type)?.value || '').toLowerCase();
+        const filter    = filters[type];
+
+        let rows = [...data[type]].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // Filter kategori
+        if (filter !== 'all') {
+            rows = rows.filter(r => r.category === filter);
+        }
+
+        // Filter search
+        if (searchVal) {
+            rows = rows.filter(r =>
+                r.category.toLowerCase().includes(searchVal) ||
+                (r.source || '').toLowerCase().includes(searchVal) ||
+                (r.to || '').toLowerCase().includes(searchVal) ||
+                (r.note || '').toLowerCase().includes(searchVal) ||
+                formatDate(r.date).toLowerCase().includes(searchVal)
+            );
+        }
+
+        if (rows.length === 0) {
+            tbody.innerHTML = '';
+            emptyDiv.style.display = 'block';
+            return;
+        }
+
+        emptyDiv.style.display = 'none';
+
+        tbody.innerHTML = rows.map((r, i) => `
+            <tr>
+                <td style="color:#aaa;">${i + 1}</td>
+                <td>${formatDate(r.date)}</td>
+                <td><span class="badge ${type}">${r.category}</span></td>
+                <td style="color:#555;">${type === 'income' ? r.source : r.to}</td>
+                <td style="color:#888; font-size:12px;">${r.note}</td>
+                <td class="amount-cell ${type}">${type === 'income' ? '+' : '-'} ${formatRp(r.amount)}</td>
+                <td>
+                    <button class="btn-delete" onclick="deleteTransaction('${type}', ${r.id})" title="Hapus">🗑️</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // ===================== RENDER ALL TABLE (SUMMARY) =====================
+    function renderAllTable() {
+        const tbody   = document.getElementById('all-table-body');
+        const emptyDiv = document.getElementById('all-empty');
+
+        const incomeRows  = data.income.map(r => ({ ...r, type: 'income' }));
+        const expenseRows = data.expense.map(r => ({ ...r, type: 'expense' }));
+        const all = [...incomeRows, ...expenseRows].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        if (all.length === 0) {
+            tbody.innerHTML = '';
+            emptyDiv.style.display = 'block';
+            return;
+        }
+
+        emptyDiv.style.display = 'none';
+
+        tbody.innerHTML = all.map((r, i) => `
+            <tr>
+                <td style="color:#aaa;">${i + 1}</td>
+                <td>${formatDate(r.date)}</td>
+                <td><span class="badge ${r.type}">${r.type === 'income' ? '➕ Pemasukan' : '➖ Pengeluaran'}</span></td>
+                <td><span class="badge ${r.type}">${r.category}</span></td>
+                <td style="color:#888; font-size:12px;">${r.note}</td>
+                <td class="amount-cell ${r.type}">${r.type === 'income' ? '+' : '-'} ${formatRp(r.amount)}</td>
+            </tr>
+        `).join('');
+    }
+
+    // ===================== UPDATE SUMMARY CARDS =====================
+    function updateSummaryCards() {
+        const totalIncome  = data.income.reduce((s, r) => s + r.amount, 0);
+        const totalExpense = data.expense.reduce((s, r) => s + r.amount, 0);
+        const balance      = totalIncome - totalExpense;
+        const pct          = totalIncome > 0 ? ((totalExpense / totalIncome) * 100).toFixed(1) : 0;
+        const balanceStatus = balance >= 0 ? '✅ Surplus' : '⚠️ Defisit';
+
+        // Page 1 (Pemasukan)
+        document.getElementById('mini-income').textContent        = formatRp(totalIncome);
+        document.getElementById('mini-expense').textContent       = formatRp(totalExpense);
+        document.getElementById('mini-balance').textContent       = formatRp(balance);
+        document.getElementById('mini-income-count').textContent  = data.income.length + ' transaksi';
+        document.getElementById('mini-expense-count').textContent = data.expense.length + ' transaksi';
+        document.getElementById('mini-balance-status').textContent = balanceStatus;
+
+        // Page 2 (Pengeluaran)
+        document.getElementById('mini-income2').textContent        = formatRp(totalIncome);
+        document.getElementById('mini-expense2').textContent       = formatRp(totalExpense);
+        document.getElementById('mini-balance2').textContent       = formatRp(balance);
+        document.getElementById('mini-income-count2').textContent  = data.income.length + ' transaksi';
+        document.getElementById('mini-expense-count2').textContent = data.expense.length + ' transaksi';
+        document.getElementById('mini-balance-status2').textContent = balanceStatus;
+
+        // Page 3 (Summary)
+        document.getElementById('sum-income').textContent        = formatRp(totalIncome);
+        document.getElementById('sum-expense').textContent       = formatRp(totalExpense);
+        document.getElementById('sum-balance').textContent       = formatRp(balance);
+        document.getElementById('sum-income-count').textContent  = data.income.length + ' transaksi';
+        document.getElementById('sum-expense-count').textContent = data.expense.length + ' transaksi';
+        document.getElementById('sum-balance-pct').textContent   = `${pct}% dari pemasukan terpakai`;
+
+        // Balance color
+        const balanceEls = ['mini-balance', 'mini-balance2', 'sum-balance'];
+        balanceEls.forEach(id => {
+            document.getElementById(id).style.color = balance >= 0 ? '#1a73e8' : '#e74c3c';
+        });
+    }
+
+    // ===================== UPDATE CATEGORY SUMMARY =====================
+    function updateCategorySummary() {
+        // Income by category
+        const incomeBycat = {};
+        data.income.forEach(r => {
+            incomeBycat[r.category] = (incomeBycat[r.category] || 0) + r.amount;
+        });
+        const totalIncome = data.income.reduce((s, r) => s + r.amount, 0);
+
+        const incomeCatDiv = document.getElementById('income-by-category');
+        if (Object.keys(incomeBycat).length === 0) {
+            incomeCatDiv.innerHTML = '<div style="color:#aaa;font-size:13px;text-align:center;padding:20px;">Belum ada data</div>';
+        } else {
+            incomeCatDiv.innerHTML = Object.entries(incomeBycat)
+                .sort((a, b) => b[1] - a[1])
+                .map(([cat, amt]) => {
+                    const pct = totalIncome > 0 ? ((amt / totalIncome) * 100).toFixed(1) : 0;
+                    return `
+                        <div class="category-item">
+                            <div>
+                                <div class="category-name">${cat}</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill income" style="width:${pct}%"></div>
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div class="category-amount income">${formatRp(amt)}</div>
+                                <div style="font-size:10px;color:#aaa;">${pct}%</div>
+                            </div>
+                        </div>`;
+                }).join('');
+        }
+
+        // Expense by category
+        const expenseBycat = {};
+        data.expense.forEach(r => {
+            expenseBycat[r.category] = (expenseBycat[r.category] || 0) + r.amount;
+        });
+        const totalExpense = data.expense.reduce((s, r) => s + r.amount, 0);
+
+        const expenseCatDiv = document.getElementById('expense-by-category');
+        if (Object.keys(expenseBycat).length === 0) {
+            expenseCatDiv.innerHTML = '<div style="color:#aaa;font-size:13px;text-align:center;padding:20px;">Belum ada data</div>';
+        } else {
+            expenseCatDiv.innerHTML = Object.entries(expenseBycat)
+                .sort((a, b) => b[1] - a[1])
+                .map(([cat, amt]) => {
+                    const pct = totalExpense > 0 ? ((amt / totalExpense) * 100).toFixed(1) : 0;
+                    return `
+                        <div class="category-item">
+                            <div>
+                                <div class="category-name">${cat}</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill expense" style="width:${pct}%"></div>
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div class="category-amount expense">${formatRp(amt)}</div>
+                                <div style="font-size:10px;color:#aaa;">${pct}%</div>
+                            </div>
+                        </div>`;
+                }).join('');
+        }
+    }
+
+    // ===================== UPDATE BAR CHART =====================
+    function updateBarChart() {
+        const monthlyData = {};
+
+        data.income.forEach(r => {
+            const key = r.date.substring(0, 7);
+            if (!monthlyData[key]) monthlyData[key] = { income: 0, expense: 0
+            };
+            monthlyData[key].income += r.amount;
+        });
+
+        data.expense.forEach(r => {
+            const key = r.date.substring(0, 7);
+            if (!monthlyData[key]) monthlyData[key] = { income: 0, expense: 0 };
+            monthlyData[key].expense += r.amount;
+        });
+
+        const chartDiv = document.getElementById('bar-chart');
+
+        if (Object.keys(monthlyData).length === 0) {
+            chartDiv.innerHTML = '<div style="color:#aaa;font-size:13px;text-align:center;width:100%;padding:30px;">Belum ada data untuk ditampilkan</div>';
+            return;
+        }
+
+        const sorted = Object.entries(monthlyData).sort((a, b) => a[0].localeCompare(b[0]));
+        const maxVal = Math.max(...sorted.map(([, v]) => Math.max(v.income, v.expense)));
+
+        chartDiv.innerHTML = sorted.map(([month, val]) => {
+            const incomeH  = maxVal > 0 ? Math.round((val.income / maxVal) * 100) : 0;
+            const expenseH = maxVal > 0 ? Math.round((val.expense / maxVal) * 100) : 0;
+            const label    = new Date(month + '-01').toLocaleDateString('id-ID', { month: 'short', year: '2-digit' });
+
+            return `
+                <div class="bar-group">
+                    <div class="bar-wrap">
+                        <div class="bar income" style="height:${incomeH}px;" title="Pemasukan: ${formatRp(val.income)}"></div>
+                        <div class="bar expense" style="height:${expenseH}px;" title="Pengeluaran: ${formatRp(val.expense)}"></div>
+                    </div>
+                    <div class="bar-label">${label}</div>
+                </div>`;
+        }).join('');
+    }
+
+    // ===================== EXPORT CSV =====================
+    function exportCSV(type) {
+        let rows = [];
+        let filename = '';
+
+        if (type === 'income') {
+            filename = 'pemasukan.csv';
+            rows.push(['No', 'Tanggal', 'Kategori', 'Sumber', 'Keterangan', 'Jumlah']);
+            data.income.forEach((r, i) => {
+                rows.push([i + 1, r.date, r.category, r.source, r.note, r.amount]);
+            });
+
+        } else if (type === 'expense') {
+            filename = 'pengeluaran.csv';
+            rows.push(['No', 'Tanggal', 'Kategori', 'Kepada', 'Keterangan', 'Jumlah']);
+            data.expense.forEach((r, i) => {
+                rows.push([i + 1, r.date, r.category, r.to, r.note, r.amount]);
+            });
+
+        } else {
+            filename = 'semua_transaksi.csv';
+            rows.push(['No', 'Tanggal', 'Tipe', 'Kategori', 'Detail', 'Keterangan', 'Jumlah']);
+            const incomeRows  = data.income.map(r => ({ ...r, type: 'Pemasukan' }));
+            const expenseRows = data.expense.map(r => ({ ...r, type: 'Pengeluaran' }));
+            const all = [...incomeRows, ...expenseRows].sort((a, b) => new Date(b.date) - new Date(a.date));
+            all.forEach((r, i) => {
+                rows.push([
+                    i + 1,
+                    r.date,
+                    r.type,
+                    r.category,
+                    r.source || r.to || '-',
+                    r.note,
+                    r.type === 'Pemasukan' ? r.amount : -r.amount
+                ]);
+            });
+        }
+
+        if (rows.length <= 1) {
+            showToast('⚠️ Tidak ada data untuk diekspor!', 'error');
+            return;
+        }
+
+        const csvContent = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+        const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href     = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('✅ File berhasil diexport!', 'success');
+    }
+
+    // ===================== TOAST =====================
+    function showToast(msg, type = 'success') {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.className   = `toast ${type} show`;
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // ===================== UPDATE ALL =====================
+    function updateAll() {
+        updateSummaryCards();
+        renderTable('income');
+        renderTable('expense');
+        renderAllTable();
+        updateCategorySummary();
+        updateBarChart();
+    }
+
+</script>
+</body>
+</html>
