@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,38 +8,101 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f0; color: #1a1a18; font-size: 15px; }
-.header { background: #1a1a18; color: #fff; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.header h1 { font-size: 19px; font-weight: 700; letter-spacing: 2px; }
-.btn-export { padding: 7px 14px; background: #fff; color: #1a1a18; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; }
-.btn-export:hover { background: #ddd; }
-.nav { background: #fff; border-bottom: 1px solid #e8e6e0; display: flex; overflow-x: auto; }
-.nav button { padding: 13px 20px; background: none; border: none; border-bottom: 2px solid transparent; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; white-space: nowrap; }
-.nav button.active { color: #1a1a18; border-bottom-color: #1a1a18; }
-.nav button:hover { color: #1a1a18; background: #f9f9f7; }
-.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-bottom: 20px; }
-.metric { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #e8e6e0; }
-.metric .lbl { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
-.metric .val { font-size: 20px; font-weight: 700; }
-.metric .sub { font-size: 12px; color: #aaa; margin-top: 3px; }
-.g { color: #1D9E75; } .r { color: #D85A30; } .b { color: #185FA5; }
-.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-@media (max-width: 680px) { .chart-grid { grid-template-columns: 1fr; } }
-.card { background: #fff; border-radius: 10px; border: 1px solid #e8e6e0; padding: 18px; }
-.card h3 { font-size: 13px; font-weight: 500; color: #666; margin-bottom: 14px; }
+:root {
+  --bg: #f4f4f0;
+  --card: #ffffff;
+  --border: #e8e6e0;
+  --text: #1a1a18;
+  --muted: #888;
+  --green: #1D9E75;
+  --red: #D85A30;
+  --blue: #185FA5;
+  --purple: #534AB7;
+  --gold: #BA7517;
+  --radius: 12px;
+}
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; min-height: 100vh; }
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 100%);
+  color: #fff;
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo { font-size: 22px; font-weight: 800; letter-spacing: 3px; background: linear-gradient(135deg, #fff 0%, #aaa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.header-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 12px; font-size: 11px; color: #ccc; }
+.btn-export { padding: 8px 16px; background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-export:hover { background: rgba(255,255,255,0.22); }
+
+/* NAV */
+.nav { background: var(--card); border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
+.nav button { padding: 14px 18px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; border-radius: 0; }
+.nav button.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
+.nav button:hover:not(.active) { color: var(--text); background: #f9f9f7; }
+
+.container { max-width: 1140px; margin: 0 auto; padding: 24px 20px; }
+
+/* METRICS */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.metric {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.metric:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
+.metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: var(--radius) var(--radius) 0 0; }
+.metric.green::before { background: linear-gradient(90deg, var(--green), #2dd4a0); }
+.metric.red::before { background: linear-gradient(90deg, var(--red), #f08060); }
+.metric.blue::before { background: linear-gradient(90deg, var(--blue), #4a90d9); }
+.metric.dark::before { background: linear-gradient(90deg, #555, #888); }
+.metric .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; font-weight: 500; }
+.metric .val { font-size: 22px; font-weight: 800; line-height: 1; }
+.metric .sub { font-size: 12px; color: #aaa; margin-top: 6px; }
+.g { color: var(--green); } .r { color: var(--red); } .b { color: var(--blue); }
+
+/* CHART GRID */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+@media (max-width: 700px) { .chart-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 20px;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.card h3 { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
 .card.full { grid-column: 1/-1; }
-.toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
-.toolbar select, .toolbar input[type=text] { padding: 7px 11px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; background: #fff; color: #1a1a18; outline: none; }
-.toolbar select:focus, .toolbar input:focus { border-color: #1a1a18; }
-.btn-add { margin-left: auto; padding: 8px 16px; background: #1a1a18; color: #fff; border: none; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+/* TOOLBAR */
+.toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.toolbar select, .toolbar input[type=text] { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: var(--card); color: var(--text); outline: none; transition: border-color 0.2s; }
+.toolbar select:focus, .toolbar input:focus { border-color: var(--text); }
+.btn-add { margin-left: auto; padding: 9px 18px; background: var(--text); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
 .btn-add:hover { background: #333; }
+
+/* TABLE */
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; padding: 9px 10px; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid #eee; font-weight: 500; }
-td { padding: 9px 10px; border-bottom: 1px solid #f5f5f0; vertical-align: middle; }
+th { text-align: left; padding: 10px 12px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); font-weight: 600; background: #fafaf8; }
+th:first-child { border-radius: 8px 0 0 0; }
+th:last-child { border-radius: 0 8px 0 0; }
+td { padding: 10px 12px; border-bottom: 1px solid #f5f5f0; vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #fafaf8; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 11px; font-weight: 500; }
+
+/* BADGES */
+.badge { display: inline-block; padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 600; }
 .bl { background: #EAF3DE; color: #3B6D11; }
 .bb { background: #FCEBEB; color: #A32D2D; }
 .bt { background: #E6F1FB; color: #185FA5; }
@@ -46,81 +110,433 @@ tr:hover td { background: #fafaf8; }
 .btr { background: #FAEEDA; color: #854F0B; }
 .bsf { background: #FAECE7; color: #993C1D; }
 .bk { background: #f0efe8; color: #555; }
-.act-btn { padding: 4px 9px; border-radius: 5px; border: 1px solid #ddd; background: #fff; font-size: 11px; cursor: pointer; margin-right: 3px; }
-.act-btn.edit { color: #185FA5; border-color: #b5d4f4; }
+
+.act-btn { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); font-size: 11px; cursor: pointer; margin-right: 3px; transition: all 0.15s; font-weight: 500; }
+.act-btn.edit { color: var(--blue); border-color: #b5d4f4; }
 .act-btn.edit:hover { background: #e6f1fb; }
-.act-btn.del { color: #D85A30; border-color: #f0997b; }
+.act-btn.del { color: var(--red); border-color: #f0997b; }
 .act-btn.del:hover { background: #faece7; }
-.pagination { display: flex; gap: 5px; justify-content: center; margin-top: 14px; align-items: center; font-size: 12px; color: #888; flex-wrap: wrap; }
-.pagination button { padding: 5px 9px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
-.pagination button.active { background: #1a1a18; color: #fff; border-color: #1a1a18; }
-.pagination button:hover:not(.active) { background: #f5f5f0; }
-.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; }
+
+/* PAGINATION */
+.pagination { display: flex; gap: 5px; justify-content: center; margin-top: 16px; align-items: center; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.pagination button { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); cursor: pointer; font-size: 12px; transition: all 0.15s; }
+.pagination button.active { background: var(--text); color: #fff; border-color: var(--text); }
+.pagination button:hover:not(.active) { background: var(--bg); }
+
+/* MODAL */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
 .overlay.open { display: flex; }
-.modal { background: #fff; border-radius: 12px; padding: 24px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; margin: 20px; }
-.modal h2 { font-size: 16px; font-weight: 700; margin-bottom: 18px; }
+.modal { background: var(--card); border-radius: 16px; padding: 28px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; margin: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.modal h2 { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
 .form-row { margin-bottom: 14px; }
-.form-row label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; background: #fff; color: #1a1a18; }
-.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: #1a1a18; }
+.form-row label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: 9px; font-size: 14px; font-family: inherit; outline: none; background: var(--card); color: var(--text); transition: border-color 0.2s; }
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(26,26,24,0.06); }
 .form-row textarea { height: 70px; resize: vertical; }
-.modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-.btn-cancel { padding: 9px 18px; border: 1px solid #ddd; background: #fff; border-radius: 8px; font-size: 14px; cursor: pointer; }
-.btn-save { padding: 9px 20px; background: #1a1a18; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 22px; }
+.btn-cancel { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); border-radius: 9px; font-size: 14px; cursor: pointer; font-weight: 500; }
+.btn-save { padding: 10px 22px; background: var(--text); color: #fff; border: none; border-radius: 9px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
 .btn-save:hover { background: #333; }
-.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+
+/* CONFIRM */
+.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
 .confirm-overlay.open { display: flex; }
-.confirm-box { background: #fff; border-radius: 12px; padding: 24px; max-width: 340px; width: 100%; margin: 20px; }
-.confirm-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-.confirm-box p { font-size: 13px; color: #666; margin-bottom: 18px; }
+.confirm-box { background: var(--card); border-radius: 16px; padding: 28px; max-width: 340px; width: 100%; margin: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.confirm-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.confirm-box p { font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.5; }
 .confirm-btns { display: flex; gap: 8px; justify-content: flex-end; }
-.btn-del-ok { padding: 9px 18px; background: #D85A30; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; }
+.btn-del-ok { padding: 10px 20px; background: var(--red); color: #fff; border: none; border-radius: 9px; font-size: 14px; cursor: pointer; font-weight: 700; }
+
+/* PAGE */
 .page { display: none; }
 .page.active { display: block; }
-.laba-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 14px; border-bottom: 1px solid #f5f5f0; }
-.laba-sec { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; padding: 12px 0 4px; }
-.laba-tot { font-weight: 700; border-top: 1px solid #ddd; padding-top: 10px; font-size: 15px; }
-.laba-bersih { background: #f5f5f0; border-radius: 8px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+
+/* LABA RUGI */
+.laba-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f5f5f0; }
+.laba-sec { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; padding: 14px 0 5px; }
+.laba-tot { font-weight: 700; border-top: 2px solid var(--border); padding-top: 10px; font-size: 15px; }
+.laba-bersih { background: linear-gradient(135deg, #f0f9f5, #e8f5f0); border: 1px solid #c8e8dc; border-radius: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
 .laba-bersih span:first-child { font-weight: 700; font-size: 15px; }
-.laba-bersih span:last-child { font-weight: 800; font-size: 19px; }
-.mb-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; font-size: 13px; }
-.bar-out { flex: 1; background: #f0efe8; border-radius: 4px; height: 7px; overflow: hidden; }
-.bar-in { height: 100%; border-radius: 4px; transition: width 0.3s; }
-.bar-amt { min-width: 110px; text-align: right; font-size: 12px; color: #555; }
+.laba-bersih span:last-child { font-weight: 800; font-size: 20px; }
+
+/* BAR CHART */
+.mb-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+.bar-out { flex: 1; background: #f0efe8; border-radius: 6px; height: 8px; overflow: hidden; }
+.bar-in { height: 100%; border-radius: 6px; transition: width 0.5s ease; }
+.bar-amt { min-width: 120px; text-align: right; font-size: 12px; color: #555; font-weight: 500; }
+
+/* ===== ALOKASI PAGE ===== */
+.alloc-header { margin-bottom: 24px; }
+.alloc-hero {
+  background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 100%);
+  border-radius: var(--radius);
+  padding: 28px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.alloc-hero-left h2 { font-size: 13px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+.alloc-hero-left .big-num { font-size: 36px; font-weight: 800; color: #fff; }
+.alloc-hero-right { text-align: right; }
+.alloc-hero-right .sub-txt { font-size: 12px; color: #888; margin-bottom: 4px; }
+.alloc-hero-right .margin-txt { font-size: 15px; font-weight: 600; color: #2dd4a0; }
+
+.alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+@media (max-width: 700px) { .alloc-grid { grid-template-columns: 1fr; } }
+
+.alloc-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.alloc-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.alloc-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.alloc-card.ac-omaji::before { background: linear-gradient(90deg, #185FA5, #4a90d9); }
+.alloc-card.ac-belanja::before { background: linear-gradient(90deg, #BA7517, #e8a030); }
+.alloc-card.ac-gaji::before { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
+
+.alloc-card .ac-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.ac-omaji .ac-icon { background: #e6f1fb; }
+.ac-belanja .ac-icon { background: #faeeda; }
+.ac-gaji .ac-icon { background: #eaf3de; }
+
+.alloc-card .ac-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
+.alloc-card .ac-pct { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.ac-omaji .ac-pct { color: var(--blue); }
+.ac-belanja .ac-pct { color: var(--gold); }
+.ac-gaji .ac-pct { color: var(--green); }
+
+.alloc-card .ac-amount { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+.alloc-card .ac-bar-out { background: #f0efe8; border-radius: 6px; height: 6px; overflow: hidden; }
+.alloc-card .ac-bar-in { height: 100%; border-radius: 6px; }
+.ac-omaji .ac-bar-in { background: linear-gradient(90deg, #185FA5, #4a90d9); }
+.ac-belanja .ac-bar-in { background: linear-gradient(90deg, #BA7517, #e8a030); }
+.ac-gaji .ac-bar-in { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
+
+/* Sub alokasi gaji */
+.sub-alloc-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 22px;
+  margin-bottom: 16px;
+}
+.sub-alloc-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.sub-alloc-card .sub-desc { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+
+.sub-alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+@media (max-width: 700px) { .sub-alloc-grid { grid-template-columns: 1fr; } }
+
+.sub-item {
+  background: #fafaf8;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+}
+.sub-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.sub-item-name { font-size: 13px; font-weight: 600; }
+.sub-item-pct-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.sub-item:nth-child(1) .sub-item-pct-badge { background: #EEEDFE; color: var(--purple); }
+.sub-item:nth-child(2) .sub-item-pct-badge { background: #FCEBEB; color: #A32D2D; }
+.sub-item:nth-child(3) .sub-item-pct-badge { background: #FAEEDA; color: #854F0B; }
+
+.sub-item-amount { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+.sub-item:nth-child(1) .sub-item-amount { color: var(--purple); }
+.sub-item:nth-child(2) .sub-item-amount { color: var(--red); }
+.sub-item:nth-child(3) .sub-item-amount { color: var(--gold); }
+
+.sub-item-bar-out { background: #ebebeb; border-radius: 4px; height: 5px; overflow: hidden; }
+.sub-item-bar-in { height: 100%; border-radius: 4px; }
+.sub-item:nth-child(1) .sub-item-bar-in { background: var(--purple); }
+.sub-item:nth-child(2) .sub-item-bar-in { background: var(--red); }
+.sub-item:nth-child(3) .sub-item-bar-in { background: var(--gold); }
+
+/* Edit sub alokasi */
+.sub-edit-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f0;
+}
+.sub-edit-row:last-child { border-bottom: none; }
+.sub-edit-label { flex: 1; }
+.sub-edit-label input[type=text] {
+  width: 100%; padding: 7px 10px;
+  border: 1px solid var(--border); border-radius: 7px;
+  font-size: 13px; font-weight: 600;
+  background: #fff; color: var(--text); outline: none;
+}
+.sub-edit-label input[type=text]:focus { border-color: var(--text); }
+.sub-edit-pct { display: flex; align-items: center; gap: 6px; }
+.sub-edit-pct input[type=number] {
+  width: 64px; padding: 7px 10px;
+  border: 1px solid var(--border); border-radius: 7px;
+  font-size: 13px; font-weight: 700;
+  text-align: center; outline: none;
+  background: #fff; color: var(--text);
+}
+.sub-edit-pct input[type=number]:focus { border-color: var(--text); }
+.sub-edit-pct span { font-size: 13px; color: var(--muted); }
+
+.pct-warning { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+.pct-ok { font-size: 12px; color: var(--green); margin-top: 8px; display: none; }
+
+.btn-apply {
+  padding: 9px 20px; background: var(--text); color: #fff;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s; margin-top: 14px;
+}
+.btn-apply:hover { background: #333; }
+
+/* Donut alokasi */
+.alloc-chart-wrap {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+}
+@media (max-width: 700px) { .alloc-chart-wrap { grid-template-columns: 1fr; } }
+
+.alloc-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+.alloc-summary-table td { padding: 7px 0; border-bottom: 1px solid #f5f5f0; }
+.alloc-summary-table tr:last-child td { border-bottom: none; }
+.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 7px; vertical-align: middle; }
+
+/* Metric cards */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.metric { background: var(--card); border-radius: var(--radius); padding: 18px 20px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+.metric:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
+.metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: var(--radius) var(--radius) 0 0; }
+.metric.green::before { background: linear-gradient(90deg, var(--green), #2dd4a0); }
+.metric.red::before { background: linear-gradient(90deg, var(--red), #f08060); }
+.metric.blue::before { background: linear-gradient(90deg, var(--blue), #4a90d9); }
+.metric.dark::before { background: linear-gradient(90deg, #555, #888); }
+.metric .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; font-weight: 500; }
+.metric .val { font-size: 22px; font-weight: 800; line-height: 1; }
+.metric .sub { font-size: 12px; color: #aaa; margin-top: 6px; }
+.g { color: var(--green); } .r { color: var(--red); } .b { color: var(--blue); }
+
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+@media (max-width: 700px) { .chart-grid { grid-template-columns: 1fr; } }
+.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; transition: box-shadow 0.2s; }
+.card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.card h3 { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+.card.full { grid-column: 1/-1; }
+
+.toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.toolbar select, .toolbar input[type=text] { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: var(--card); color: var(--text); outline: none; transition: border-color 0.2s; }
+.toolbar select:focus, .toolbar input:focus { border-color: var(--text); }
+.btn-add { margin-left: auto; padding: 9px 18px; background: var(--text); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.btn-add:hover { background: #333; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 10px 12px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); font-weight: 600; background: #fafaf8; }
+td { padding: 10px 12px; border-bottom: 1px solid #f5f5f0; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafaf8; }
+
+.badge { display: inline-block; padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+.bl { background: #EAF3DE; color: #3B6D11; }
+.bb { background: #FCEBEB; color: #A32D2D; }
+.bt { background: #E6F1FB; color: #185FA5; }
+.bq { background: #EEEDFE; color: #534AB7; }
+.btr { background: #FAEEDA; color: #854F0B; }
+.bsf { background: #FAECE7; color: #993C1D; }
+.bk { background: #f0efe8; color: #555; }
+
+.act-btn { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); font-size: 11px; cursor: pointer; margin-right: 3px; transition: all 0.15s; font-weight: 500; }
+.act-btn.edit { color: var(--blue); border-color: #b5d4f4; }
+.act-btn.edit:hover { background: #e6f1fb; }
+.act-btn.del { color: var(--red); border-color: #f0997b; }
+.act-btn.del:hover { background: #faece7; }
+
+.pagination { display: flex; gap: 5px; justify-content: center; margin-top: 16px; align-items: center; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.pagination button { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); cursor: pointer; font-size: 12px; transition: all 0.15s; }
+.pagination button.active { background: var(--text); color: #fff; border-color: var(--text); }
+.pagination button:hover:not(.active) { background: var(--bg); }
+
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+.overlay.open { display: flex; }
+.modal { background: var(--card); border-radius: 16px; padding: 28px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; margin: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.modal h2 { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
+.form-row { margin-bottom: 14px; }
+.form-row label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: 9px; font-size: 14px; font-family: inherit; outline: none; background: var(--card); color: var(--text); transition: border-color 0.2s; }
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(26,26,24,0.06); }
+.form-row textarea { height: 70px; resize: vertical; }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 22px; }
+.btn-cancel { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); border-radius: 9px; font-size: 14px; cursor: pointer; font-weight: 500; }
+.btn-save { padding: 10px 22px; background: var(--text); color: #fff; border: none; border-radius: 9px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.btn-save:hover { background: #333; }
+
+.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+.confirm-overlay.open { display: flex; }
+.confirm-box { background: var(--card); border-radius: 16px; padding: 28px; max-width: 340px; width: 100%; margin: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.confirm-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.confirm-box p { font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.5; }
+.confirm-btns { display: flex; gap: 8px; justify-content: flex-end; }
+.btn-del-ok { padding: 10px 20px; background: var(--red); color: #fff; border: none; border-radius: 9px; font-size: 14px; cursor: pointer; font-weight: 700; }
+
+.page { display: none; }
+.page.active { display: block; }
+
+.laba-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f5f5f0; }
+.laba-sec { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; padding: 14px 0 5px; }
+.laba-tot { font-weight: 700; border-top: 2px solid var(--border); padding-top: 10px; font-size: 15px; }
+.laba-bersih { background: linear-gradient(135deg, #f0f9f5, #e8f5f0); border: 1px solid #c8e8dc; border-radius: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+.laba-bersih span:first-child { font-weight: 700; font-size: 15px; }
+.laba-bersih span:last-child { font-weight: 800; font-size: 20px; }
+
+.mb-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+.bar-out { flex: 1; background: #f0efe8; border-radius: 6px; height: 8px; overflow: hidden; }
+.bar-in { height: 100%; border-radius: 6px; transition: width 0.5s ease; }
+.bar-amt { min-width: 120px; text-align: right; font-size: 12px; color: #555; font-weight: 500; }
+
+/* ===== ALOKASI PAGE ===== */
+.alloc-hero { background: linear-gradient(135deg, #1a1a18 0%, #2d2d2a 100%); border-radius: var(--radius); padding: 28px; color: #fff; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
+.alloc-hero-left h2 { font-size: 13px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+.alloc-hero-left .big-num { font-size: 36px; font-weight: 800; color: #fff; }
+.alloc-hero-right { text-align: right; }
+.alloc-hero-right .sub-txt { font-size: 12px; color: #888; margin-bottom: 4px; }
+.alloc-hero-right .margin-txt { font-size: 15px; font-weight: 600; color: #2dd4a0; }
+
+.alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+@media (max-width: 700px) { .alloc-grid { grid-template-columns: 1fr; } }
+
+.alloc-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+.alloc-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.alloc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: var(--radius) var(--radius) 0 0; }
+.alloc-card.ac-omaji::before { background: linear-gradient(90deg, #185FA5, #4a90d9); }
+.alloc-card.ac-belanja::before { background: linear-gradient(90deg, #BA7517, #e8a030); }
+.alloc-card.ac-gaji::before { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
+.alloc-card .ac-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
+.ac-omaji .ac-icon { background: #e6f1fb; }
+.ac-belanja .ac-icon { background: #faeeda; }
+.ac-gaji .ac-icon { background: #eaf3de; }
+.alloc-card .ac-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
+.alloc-card .ac-pct { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.ac-omaji .ac-pct { color: var(--blue); }
+.ac-belanja .ac-pct { color: var(--gold); }
+.ac-gaji .ac-pct { color: var(--green); }
+.alloc-card .ac-amount { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+.alloc-card .ac-bar-out { background: #f0efe8; border-radius: 6px; height: 6px; overflow: hidden; }
+.alloc-card .ac-bar-in { height: 100%; border-radius: 6px; }
+.ac-omaji .ac-bar-in { background: linear-gradient(90deg, #185FA5, #4a90d9); }
+.ac-belanja .ac-bar-in { background: linear-gradient(90deg, #BA7517, #e8a030); }
+.ac-gaji .ac-bar-in { background: linear-gradient(90deg, #1D9E75, #2dd4a0); }
+
+.sub-alloc-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 22px; margin-bottom: 16px; }
+.sub-alloc-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.sub-alloc-card .sub-desc { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+
+.sub-alloc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+@media (max-width: 700px) { .sub-alloc-grid { grid-template-columns: 1fr; } }
+
+.sub-item { background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.sub-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.sub-item-name { font-size: 13px; font-weight: 600; }
+.sub-item-pct-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.sub-item:nth-child(1) .sub-item-pct-badge { background: #EEEDFE; color: var(--purple); }
+.sub-item:nth-child(2) .sub-item-pct-badge { background: #FCEBEB; color: #A32D2D; }
+.sub-item:nth-child(3) .sub-item-pct-badge { background: #FAEEDA; color: #854F0B; }
+.sub-item-amount { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+.sub-item:nth-child(1) .sub-item-amount { color: var(--purple); }
+.sub-item:nth-child(2) .sub-item-amount { color: var(--red); }
+.sub-item:nth-child(3) .sub-item-amount { color: var(--gold); }
+.sub-item-bar-out { background: #ebebeb; border-radius: 4px; height: 5px; overflow: hidden; }
+.sub-item-bar-in { height: 100%; border-radius: 4px; }
+.sub-item:nth-child(1) .sub-item-bar-in { background: var(--purple); }
+.sub-item:nth-child(2) .sub-item-bar-in { background: var(--red); }
+.sub-item:nth-child(3) .sub-item-bar-in { background: var(--gold); }
+
+.sub-edit-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f5f5f0; }
+.sub-edit-row:last-child { border-bottom: none; }
+.sub-edit-label { flex: 1; }
+.sub-edit-label input[type=text] { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; font-weight: 600; background: #fff; color: var(--text); outline: none; }
+.sub-edit-label input[type=text]:focus { border-color: var(--text); }
+.sub-edit-pct { display: flex; align-items: center; gap: 6px; }
+.sub-edit-pct input[type=number] { width: 64px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; font-weight: 700; text-align: center; outline: none; background: #fff; color: var(--text); }
+.sub-edit-pct input[type=number]:focus { border-color: var(--text); }
+.sub-edit-pct span { font-size: 13px; color: var(--muted); }
+.pct-warning { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+.pct-ok { font-size: 12px; color: var(--green); margin-top: 8px; display: none; }
+.btn-apply { padding: 9px 20px; background: var(--text); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 14px; }
+.btn-apply:hover { background: #333; }
+
+.alloc-chart-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 700px) { .alloc-chart-wrap { grid-template-columns: 1fr; } }
+
+.alloc-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+.alloc-summary-table td { padding: 7px 0; border-bottom: 1px solid #f5f5f0; }
+.alloc-summary-table tr:last-child td { border-bottom: none; }
+.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 7px; vertical-align: middle; }
+
+.nav { background: var(--card); border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
+.nav button { padding: 14px 18px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+.nav button.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
+.nav button:hover:not(.active) { color: var(--text); background: #f9f9f7; }
+.container { max-width: 1140px; margin: 0 auto; padding: 24px 20px; }
 </style>
 </head>
 <body>
+
 <div class="header">
-  <h1>OMAJI</h1>
-  <div style="display:flex;gap:8px;align-items:center">
-    <span style="font-size:12px;color:#aaa">Laporan Keuangan 2026</span>
-    <button class="btn-export" onclick="exportCSV()">Export CSV</button>
+  <div class="header-left">
+    <span class="logo">OMAJI</span>
+    <span class="header-badge">Laporan Keuangan 2026</span>
   </div>
+  <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
 </div>
+
 <nav class="nav">
   <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
   <button onclick="showPage('kas-masuk',this)">Kas Masuk</button>
   <button onclick="showPage('kas-keluar',this)">Kas Keluar</button>
   <button onclick="showPage('laba-rugi',this)">Laba Rugi</button>
+  <button onclick="showPage('alokasi',this)">Alokasi</button>
 </nav>
+
 <div class="container">
 
+<!-- DASHBOARD -->
 <div id="page-dashboard" class="page active">
   <div class="metrics">
-    <div class="metric"><div class="lbl">Total Kas Masuk</div><div class="val g" id="m1"></div><div class="sub" id="m1s"></div></div>
-    <div class="metric"><div class="lbl">Total Kas Keluar</div><div class="val r" id="m2"></div><div class="sub" id="m2s"></div></div>
-    <div class="metric"><div class="lbl">Laba Bersih</div><div class="val b" id="m3"></div><div class="sub" id="m3s"></div></div>
-    <div class="metric"><div class="lbl">Total Transaksi</div><div class="val" id="m4"></div><div class="sub">semua transaksi</div></div>
+    <div class="metric green"><div class="lbl">Total Kas Masuk</div><div class="val g" id="m1"></div><div class="sub" id="m1s"></div></div>
+    <div class="metric red"><div class="lbl">Total Kas Keluar</div><div class="val r" id="m2"></div><div class="sub" id="m2s"></div></div>
+    <div class="metric blue"><div class="lbl">Laba Bersih</div><div class="val b" id="m3"></div><div class="sub" id="m3s"></div></div>
+    <div class="metric dark"><div class="lbl">Total Transaksi</div><div class="val" id="m4"></div><div class="sub">semua transaksi</div></div>
   </div>
   <div class="chart-grid">
-    <div class="card"><h3>Pemasukan &amp; pengeluaran per bulan</h3><div style="position:relative;height:210px"><canvas id="cB" role="img" aria-label="Per bulan"></canvas></div></div>
-    <div class="card"><h3>Kategori pengeluaran</h3><div style="position:relative;height:210px"><canvas id="cK" role="img" aria-label="Kategori keluar"></canvas></div></div>
-    <div class="card"><h3>Metode pembayaran masuk</h3><div id="lgJ" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;font-size:12px;color:#888"></div><div style="position:relative;height:170px"><canvas id="cJ" role="img" aria-label="Metode pembayaran"></canvas></div></div>
-    <div class="card"><h3>Tren harian</h3><div style="position:relative;height:170px"><canvas id="cH" role="img" aria-label="Tren harian"></canvas></div></div>
+    <div class="card"><h3>Pemasukan &amp; Pengeluaran per Bulan</h3><div style="position:relative;height:210px"><canvas id="cB"></canvas></div></div>
+    <div class="card"><h3>Kategori Pengeluaran</h3><div style="position:relative;height:210px"><canvas id="cK"></canvas></div></div>
+    <div class="card"><h3>Metode Pembayaran Masuk</h3><div id="lgJ" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:12px;color:#888"></div><div style="position:relative;height:170px"><canvas id="cJ"></canvas></div></div>
+    <div class="card"><h3>Tren Harian</h3><div style="position:relative;height:170px"><canvas id="cH"></canvas></div></div>
   </div>
-  <div class="card full"><h3>Pemasukan per kategori</h3><div id="barsM"></div></div>
+  <div class="card full"><h3>Pemasukan per Kategori</h3><div id="barsM"></div></div>
 </div>
 
+<!-- KAS MASUK -->
 <div id="page-kas-masuk" class="page">
   <div class="toolbar">
     <select id="fmB" onchange="renderKM()"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option></select>
@@ -136,6 +552,7 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
+<!-- KAS KELUAR -->
 <div id="page-kas-keluar" class="page">
   <div class="toolbar">
     <select id="fkB" onchange="renderKK()"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option></select>
@@ -151,16 +568,101 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
+<!-- LABA RUGI -->
 <div id="page-laba-rugi" class="page">
-  <div class="card" style="max-width:500px;margin:0 auto">
-    <h3 style="font-size:15px;font-weight:700;color:#1a1a18;margin-bottom:16px">Laporan Laba Rugi</h3>
+  <div class="card" style="max-width:520px;margin:0 auto">
+    <h3 style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;text-transform:none;letter-spacing:0">Laporan Laba Rugi</h3>
     <div id="labaC"></div>
   </div>
 </div>
 
+<!-- ALOKASI -->
+<div id="page-alokasi" class="page">
+  <!-- Hero -->
+  <div class="alloc-hero">
+    <div class="alloc-hero-left">
+      <h2>Laba Bersih yang Dialokasikan</h2>
+      <div class="big-num" id="al-laba"></div>
+    </div>
+    <div class="alloc-hero-right">
+      <div class="sub-txt">Margin Keuntungan</div>
+      <div class="margin-txt" id="al-margin"></div>
+      <div class="sub-txt" style="margin-top:8px">Total Transaksi</div>
+      <div class="margin-txt" id="al-trx"></div>
+    </div>
+  </div>
+
+  <!-- 3 Kartu Alokasi Utama -->
+  <div class="alloc-grid">
+    <div class="alloc-card ac-omaji">
+      <div class="ac-icon">🏠</div>
+      <div class="ac-label">Omaji</div>
+      <div class="ac-pct">20% dari Laba Bersih</div>
+      <div class="ac-amount" id="al-omaji"></div>
+      <div class="ac-bar-out"><div class="ac-bar-in" style="width:20%"></div></div>
+    </div>
+    <div class="alloc-card ac-belanja">
+      <div class="ac-icon">🛒</div>
+      <div class="ac-label">Belanja</div>
+      <div class="ac-pct">30% dari Laba Bersih</div>
+      <div class="ac-amount" id="al-belanja"></div>
+      <div class="ac-bar-out"><div class="ac-bar-in" style="width:30%"></div></div>
+    </div>
+    <div class="alloc-card ac-gaji">
+      <div class="ac-icon">💰</div>
+      <div class="ac-label">Gaji / Bagi Hasil</div>
+      <div class="ac-pct">50% dari Laba Bersih</div>
+      <div class="ac-amount" id="al-gaji"></div>
+      <div class="ac-bar-out"><div class="ac-bar-in" style="width:50%"></div></div>
+    </div>
+  </div>
+
+  <!-- Chart Alokasi -->
+  <div class="alloc-chart-wrap">
+    <div class="card">
+      <h3>Proporsi Alokasi Utama</h3>
+      <div style="position:relative;height:200px"><canvas id="cAlloc"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Ringkasan Alokasi</h3>
+      <table class="alloc-summary-table" id="allocSummaryTable"></table>
+    </div>
+  </div>
+
+  <!-- Sub Alokasi Gaji -->
+  <div class="sub-alloc-card">
+    <h3>💼 Sub Alokasi Gaji / Bagi Hasil</h3>
+    <div class="sub-desc">Atur pembagian dari 50% gaji/bagi hasil sesuai kebutuhan. Total harus 100%.</div>
+
+    <!-- Tampilan Sub Item -->
+    <div class="sub-alloc-grid" id="subAllocDisplay"></div>
+
+    <!-- Form Edit Sub Alokasi -->
+    <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">⚙️ Kustomisasi Sub Alokasi</div>
+      <div id="subEditRows"></div>
+      <div class="pct-warning" id="pctWarn">⚠️ Total persentase harus 100%. Saat ini: <span id="pctTotal"></span>%</div>
+      <div class="pct-ok" id="pctOk">✓ Total persentase sudah 100%</div>
+      <button class="btn-apply" onclick="applySubAlloc()">Terapkan</button>
+    </div>
+  </div>
+
+  <!-- Chart Sub Alokasi -->
+  <div class="alloc-chart-wrap">
+    <div class="card">
+      <h3>Proporsi Sub Alokasi Gaji</h3>
+      <div style="position:relative;height:200px"><canvas id="cSubAlloc"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Detail Sub Alokasi</h3>
+      <table class="alloc-summary-table" id="subSummaryTable"></table>
+    </div>
+  </div>
 </div>
 
-<!-- Modal -->
+</div><!-- end container -->
+
+<!-- Modal Transaksi -->
 <div class="overlay" id="mOv">
   <div class="modal">
     <h2 id="mTitle">Tambah Transaksi</h2>
@@ -183,7 +685,7 @@ tr:hover td { background: #fafaf8; }
 <div class="confirm-overlay" id="cOv">
   <div class="confirm-box">
     <h3>Hapus Transaksi?</h3>
-    <p>Transaksi ini akan dihapus dan tidak bisa dikembalikan.</p>
+    <p>Transaksi ini akan dihapus permanen dan tidak bisa dikembalikan.</p>
     <div class="confirm-btns">
       <button class="btn-cancel" onclick="closeConfirm()">Batal</button>
       <button class="btn-del-ok" onclick="doDelete()">Hapus</button>
@@ -202,7 +704,14 @@ let km = [{"tanggal":"2026-01-10","deskripsi":"Uang sisa","kategori":"Modal Usah
 
 let kk = [{"tanggal":"2026-01-11","deskripsi":"Belanja mulia","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":776400,"catatan":""},{"tanggal":"2026-01-11","deskripsi":"DP Freezer Box","kategori":"Bahan Pendukung Produksi","jenis":"QRIS","status":"Lunas","nominal":1000000,"catatan":""},{"tanggal":"2026-01-11","deskripsi":"Beli Blender","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":200000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"bayar sewa tratak","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":300000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"cetak daftar menu","kategori":"Marketing / Promosi","jenis":"Tunai","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"beli atk","kategori":"Administrasi Umum","jenis":"Tunai","status":"Lunas","nominal":8000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"buat nota","kategori":"Administrasi Umum","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"print qris","kategori":"Marketing / Promosi","jenis":"Tunai","status":"Lunas","nominal":5000,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":822200,"catatan":""},{"tanggal":"2026-01-12","deskripsi":"belanja tambahan","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":54000,"catatan":""},{"tanggal":"2026-01-14","deskripsi":"beli piring","kategori":"Bahan Pendukung Produksi","jenis":"Transfer","status":"Lunas","nominal":123217,"catatan":""},{"tanggal":"2026-01-15","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-18","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":26000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"belanja gelas cup","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":95000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"beli jamur enoki","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"beli jagung manis","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-19","deskripsi":"beli telur","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"beli mie sukses 1 dus","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":83000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"beli lunch box L","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":55000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"parkir","kategori":"Transportasi","jenis":"Tunai","status":"Lunas","nominal":2000,"catatan":""},{"tanggal":"2026-01-20","deskripsi":"belanja pisang dll","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":15000,"catatan":""},{"tanggal":"2026-01-21","deskripsi":"belanja tepung","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":34200,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"belanja kentang dan enoki","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":42000,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"belanja susu dan gooday","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":65200,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"print qris shopeefood","kategori":"Marketing / Promosi","jenis":"QRIS","status":"Lunas","nominal":2000,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"beli timun","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":4000,"catatan":""},{"tanggal":"2026-01-23","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-24","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":46500,"catatan":""},{"tanggal":"2026-01-26","deskripsi":"belanja buah","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-01-26","deskripsi":"beli plastik","kategori":"Bahan Pendukung Produksi","jenis":"QRIS","status":"Lunas","nominal":3150,"catatan":""},{"tanggal":"2026-01-27","deskripsi":"belanja ayam","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":47000,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"beli minyak dan ayam","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"belanja frozen","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":42000,"catatan":""},{"tanggal":"2026-01-28","deskripsi":"belanja pasar","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-01-29","deskripsi":"belanja telur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":28000,"catatan":""},{"tanggal":"2026-01-29","deskripsi":"belanja dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"belanja kentang dan jamur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":54000,"catatan":""},{"tanggal":"2026-01-31","deskripsi":"belanja minyak dan ayam","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":53000,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"bayar pdam","kategori":"Air","jenis":"Transfer","status":"Lunas","nominal":39540,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"beli pisang","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":10000,"catatan":""},{"tanggal":"2026-02-02","deskripsi":"beli buah lain","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":75000,"catatan":""},{"tanggal":"2026-02-07","deskripsi":"belanja jagung manis","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-02-11","deskripsi":"beli telur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":38000,"catatan":""},{"tanggal":"2026-02-12","deskripsi":"belanja ayam dan tepung","kategori":"Bahan Baku / Stok","jenis":"QRIS","status":"Lunas","nominal":37100,"catatan":""},{"tanggal":"2026-02-18","deskripsi":"belanja jamur enoki","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":12000,"catatan":""},{"tanggal":"2026-02-20","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":46000,"catatan":""},{"tanggal":"2026-02-21","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-03-01","deskripsi":"bayar air","kategori":"Air","jenis":"QRIS","status":"Lunas","nominal":28205,"catatan":""},{"tanggal":"2026-03-03","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-05","deskripsi":"belanja bookingan","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":156000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":70000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":17000,"catatan":""},{"tanggal":"2026-03-07","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-08","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":39000,"catatan":""},{"tanggal":"2026-03-11","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":480000,"catatan":""},{"tanggal":"2026-03-11","deskripsi":"bayar makmi","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":1595000,"catatan":""},{"tanggal":"2026-03-12","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":415000,"catatan":""},{"tanggal":"2026-03-12","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":117000,"catatan":""},{"tanggal":"2026-03-13","deskripsi":"beli telur","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-03-14","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":49000,"catatan":""},{"tanggal":"2026-03-14","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":99000,"catatan":""},{"tanggal":"2026-03-15","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":465000,"catatan":""},{"tanggal":"2026-03-15","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":45000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":356000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":75000,"catatan":""},{"tanggal":"2026-03-16","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":51000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":15000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":15000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"gajian","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":2620000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"omaji","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":1050000,"catatan":""},{"tanggal":"2026-03-17","deskripsi":"tabungan","kategori":"Tabungan Uang Belanja","jenis":"Tunai","status":"Lunas","nominal":1575000,"catatan":""},{"tanggal":"2026-03-26","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":150000,"catatan":""},{"tanggal":"2026-03-26","deskripsi":"beli dimsum","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":60000,"catatan":""},{"tanggal":"2026-03-29","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":50000,"catatan":""},{"tanggal":"2026-03-30","deskripsi":"bayar tratak","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":400000,"catatan":""},{"tanggal":"2026-03-30","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":230000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":62000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"bayar makmi - 31 mar 26","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":2475000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":30000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"beli dus","kategori":"Bahan Pendukung Produksi","jenis":"Tunai","status":"Lunas","nominal":92000,"catatan":""},{"tanggal":"2026-03-31","deskripsi":"bayar tratak tambahan","kategori":"Sewa","jenis":"Tunai","status":"Lunas","nominal":200000,"catatan":""},{"tanggal":"2026-04-01","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":80000,"catatan":""},{"tanggal":"2026-04-02","deskripsi":"beli plastik","kategori":"Bahan Pendukung Produksi","jenis":"Transfer","status":"Lunas","nominal":20000,"catatan":""},{"tanggal":"2026-04-02","deskripsi":"bayar makmi","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":555000,"catatan":""},{"tanggal":"2026-04-03","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":155250,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":90000,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"bayar makmi","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":690000,"catatan":""},{"tanggal":"2026-04-04","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Tunai","status":"Lunas","nominal":395000,"catatan":""},{"tanggal":"2026-04-05","deskripsi":"bayar air","kategori":"Air","jenis":"Transfer","status":"Lunas","nominal":29020,"catatan":""},{"tanggal":"2026-04-05","deskripsi":"bayar makju","kategori":"Gaji / Upah","jenis":"Tunai","status":"Lunas","nominal":100000,"catatan":""},{"tanggal":"2026-04-06","deskripsi":"belanja","kategori":"Bahan Baku / Stok","jenis":"Transfer","status":"Lunas","nominal":31500,"catatan":""}];
 
-// Populate selects
+// Sub alokasi default
+let subAlloc = [
+  { nama: 'Pemilik', pct: 40 },
+  { nama: 'Karyawan', pct: 40 },
+  { nama: 'Cadangan', pct: 20 }
+];
+
+// Populate filter selects
 const selFmK = document.getElementById('fmK');
 KM_KATS.forEach(k => selFmK.innerHTML += `<option>${k}</option>`);
 const selFkK = document.getElementById('fkK');
@@ -219,10 +728,11 @@ function showPage(id, btn) {
   if (btn) btn.classList.add('active');
   if (id === 'dashboard') refreshDash();
   if (id === 'laba-rugi') renderLaba();
+  if (id === 'alokasi') renderAlokasi();
 }
 
 function jB(j) {
-  const c={Tunai:'bt',QRIS:'bq',Transfer:'btr',ShopeeFood:'bsf'}[j]||'bt';
+  const c = {Tunai:'bt',QRIS:'bq',Transfer:'btr',ShopeeFood:'bsf'}[j] || 'bt';
   return `<span class="badge ${c}">${j}</span>`;
 }
 function sB(s) { return `<span class="badge ${s==='Lunas'?'bl':'bb'}">${s}</span>`; }
@@ -244,8 +754,8 @@ function renderTbl(data, tbId, pgId, pg, type) {
   const rows = data.slice((pg-1)*PS, pg*PS);
   document.getElementById(tbId).innerHTML = rows.map(r => {
     const i = data.indexOf(r);
-    const col = type==='masuk'?'#1D9E75':'#D85A30';
-    return `<tr><td>${r.tanggal}</td><td>${r.deskripsi}</td><td><span class="badge bk">${r.kategori}</span></td><td>${jB(r.jenis)}</td><td>${sB(r.status)}</td><td style="text-align:right;font-weight:500;color:${col}">${IDR(r.nominal)}</td><td style="white-space:nowrap"><button class="act-btn edit" onclick="openModal('${type}',${i})">Edit</button><button class="act-btn del" onclick="askDel('${type}',${i})">Hapus</button></td></tr>`;
+    const col = type==='masuk' ? '#1D9E75' : '#D85A30';
+    return `<tr><td>${r.tanggal}</td><td>${r.deskripsi}</td><td><span class="badge bk">${r.kategori}</span></td><td>${jB(r.jenis)}</td><td>${sB(r.status)}</td><td style="text-align:right;font-weight:600;color:${col}">${IDR(r.nominal)}</td><td style="white-space:nowrap"><button class="act-btn edit" onclick="openModal('${type}',${i})">Edit</button><button class="act-btn del" onclick="askDel('${type}',${i})">Hapus</button></td></tr>`;
   }).join('');
   const tot = Math.ceil(data.length/PS);
   let p = `<span>${data.length} data</span>`;
@@ -324,26 +834,39 @@ function refreshDash() {
   document.getElementById('m3').textContent=IDR(lb);
   document.getElementById('m3s').textContent=tM?'Margin '+(lb/tM*100).toFixed(1)+'%':'';
   document.getElementById('m4').textContent=km.length+kk.length;
+
   const ms={},ks={};
   ['01','02','03','04'].forEach(m=>{ms[m]=0;ks[m]=0;});
   km.forEach(r=>{const m=r.tanggal.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
   kk.forEach(r=>{const m=r.tanggal.slice(5,7);if(ks[m]!==undefined)ks[m]+=r.nominal;});
-  updChart('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr'],datasets:[{label:'Masuk',data:['01','02','03','04'].map(m=>ms[m]),backgroundColor:'#1D9E7566',borderColor:'#1D9E75',borderWidth:1.5},{label:'Keluar',data:['01','02','03','04'].map(m=>ks[m]),backgroundColor:'#D85A3066',borderColor:'#D85A30',borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:10}}},scales:{y:{ticks:{callback:v=>'Rp'+Math.round(v/1e6)+'jt',font:{size:10}}}}}});
+
+  updChart('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr'],datasets:[{label:'Masuk',data:['01','02','03','04'].map(m=>ms[m]),backgroundColor:'#1D9E7540',borderColor:'#1D9E75',borderWidth:2,borderRadius:4},{label:'Keluar',data:['01','02','03','04'].map(m=>ks[m]),backgroundColor:'#D85A3040',borderColor:'#D85A30',borderWidth:2,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:10}}},scales:{y:{ticks:{callback:v=>'Rp'+Math.round(v/1e6)+'jt',font:{size:10}},grid:{color:'#f0f0ec'}},x:{grid:{display:false}}}}});
+
   const kke={};kk.forEach(r=>{kke[r.kategori]=(kke[r.kategori]||0)+r.nominal;});
   const kL=Object.keys(kke).sort((a,b)=>kke[b]-kke[a]);
-  updChart('cK',{type:'doughnut',data:{labels:kL,datasets:[{data:kL.map(k=>kke[k]),backgroundColor:COLORS}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10,padding:5}}}}});
+  updChart('cK',{type:'doughnut',data:{labels:kL,datasets:[{data:kL.map(k=>kke[k]),backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10,padding:6}}}}});
+
   const jm={};km.forEach(r=>{jm[r.jenis]=(jm[r.jenis]||0)+r.nominal;});
   const jL=Object.keys(jm);
   document.getElementById('lgJ').innerHTML=jL.map(j=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:${JC[j]||'#888'}"></span>${j} ${tM?(jm[j]/tM*100).toFixed(1):'0'}%</span>`).join('');
-  updChart('cJ',{type:'pie',data:{labels:jL,datasets:[{data:jL.map(j=>jm[j]),backgroundColor:jL.map(j=>JC[j]||'#888')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  updChart('cJ',{type:'pie',data:{labels:jL,datasets:[{data:jL.map(j=>jm[j]),backgroundColor:jL.map(j=>JC[j]||'#888'),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+
   const allD=[...new Set([...km,...kk].map(r=>r.tanggal))].sort().slice(-30);
   const md={},kd={};
   km.forEach(r=>{md[r.tanggal]=(md[r.tanggal]||0)+r.nominal;});
   kk.forEach(r=>{kd[r.tanggal]=(kd[r.tanggal]||0)+r.nominal;});
-  updChart('cH',{type:'line',data:{labels:allD.map(d=>d.slice(5)),datasets:[{label:'Masuk',data:allD.map(d=>md[d]||0),borderColor:'#1D9E75',tension:0.3,pointRadius:2,borderWidth:1.5,fill:false},{label:'Keluar',data:allD.map(d=>kd[d]||0),borderColor:'#D85A30',tension:0.3,pointRadius:2,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{x:{ticks:{maxTicksLimit:8,font:{size:10}}},y:{ticks:{callback:v=>'Rp'+Math.round(v/1000)+'rb',font:{size:10}}}}}});
+  updChart('cH',{type:'line',data:{labels:allD.map(d=>d.slice(5)),datasets:[    {label:'Masuk',data:allD.map(d=>md[d]||0),borderColor:'#1D9E75',backgroundColor:'#1D9E7515',tension:0.3,pointRadius:2,borderWidth:2,fill:true},
+    {label:'Keluar',data:allD.map(d=>kd[d]||0),borderColor:'#D85A30',backgroundColor:'#D85A3015',tension:0.3,pointRadius:2,borderWidth:2,fill:true}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{x:{ticks:{maxTicksLimit:8,font:{size:10}},grid:{display:false}},y:{ticks:{callback:v=>'Rp'+Math.round(v/1000)+'rb',font:{size:10}},grid:{color:'#f0f0ec'}}}}});
+
   const kmE={};km.forEach(r=>{kmE[r.kategori]=(kmE[r.kategori]||0)+r.nominal;});
   const mx=Math.max(...Object.values(kmE),1);
-  document.getElementById('barsM').innerHTML=Object.entries(kmE).sort((a,b)=>b[1]-a[1]).map(([k,v],i)=>`<div class="mb-row"><span style="min-width:170px;font-size:13px">${k}</span><div class="bar-out"><div class="bar-in" style="width:${(v/mx*100).toFixed(0)}%;background:${COLORS[i%COLORS.length]}"></div></div><span class="bar-amt">${IDR(v)}</span></div>`).join('');
+  document.getElementById('barsM').innerHTML=Object.entries(kmE).sort((a,b)=>b[1]-a[1]).map(([k,v],i)=>`
+    <div class="mb-row">
+      <span style="min-width:170px;font-size:13px">${k}</span>
+      <div class="bar-out"><div class="bar-in" style="width:${(v/mx*100).toFixed(0)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      <span class="bar-amt">${IDR(v)}</span>
+    </div>`).join('');
 }
 
 function renderLaba() {
@@ -362,6 +885,163 @@ function renderLaba() {
   document.getElementById('labaC').innerHTML=h;
 }
 
+function renderAlokasi() {
+  const tM=km.reduce((s,r)=>s+r.nominal,0);
+  const tK=kk.reduce((s,r)=>s+r.nominal,0);
+  const lb=tM-tK;
+  const isL=lb>=0;
+
+  // Hero
+  document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
+  document.getElementById('al-laba').style.color=isL?'#2dd4a0':'#f08060';
+  document.getElementById('al-margin').textContent=tM?(lb/tM*100).toFixed(1)+'% margin':'0%';
+  document.getElementById('al-trx').textContent=(km.length+kk.length)+' transaksi';
+
+  // 3 Alokasi utama
+  const omaji   = lb * 0.20;
+  const belanja  = lb * 0.30;
+  const gaji     = lb * 0.50;
+
+  document.getElementById('al-omaji').textContent   = IDR(omaji);
+  document.getElementById('al-belanja').textContent = IDR(belanja);
+  document.getElementById('al-gaji').textContent    = IDR(gaji);
+
+  // Chart donut alokasi utama
+  updChart('cAlloc',{
+    type:'doughnut',
+    data:{
+      labels:['Omaji (20%)','Belanja (30%)','Gaji/Bagi Hasil (50%)'],
+      datasets:[{
+        data:[omaji,belanja,gaji],
+        backgroundColor:['#185FA5','#BA7517','#1D9E75'],
+        borderWidth:3,
+        borderColor:'#fff'
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      cutout:'62%',
+      plugins:{
+        legend:{
+          position:'bottom',
+          labels:{font:{size:11},boxWidth:12,padding:10}
+        }
+      }
+    }
+  });
+
+  // Summary table alokasi utama
+  const allocItems=[
+    {label:'🏠 Omaji',pct:20,val:omaji,color:'#185FA5'},
+    {label:'🛒 Belanja',pct:30,val:belanja,color:'#BA7517'},
+    {label:'💰 Gaji / Bagi Hasil',pct:50,val:gaji,color:'#1D9E75'}
+  ];
+  document.getElementById('allocSummaryTable').innerHTML=allocItems.map(a=>`
+    <tr>
+      <td><span class="dot" style="background:${a.color}"></span>${a.label}</td>
+      <td style="text-align:center;color:${a.color};font-weight:700">${a.pct}%</td>
+      <td style="text-align:right;font-weight:700">${IDR(a.val)}</td>
+    </tr>`).join('');
+
+  // Sub alokasi display
+  const subColors=['#534AB7','#D85A30','#BA7517'];
+  document.getElementById('subAllocDisplay').innerHTML=subAlloc.map((s,i)=>{
+    const val=gaji*(s.pct/100);
+    return `
+    <div class="sub-item">
+      <div class="sub-item-top">
+        <span class="sub-item-name">${s.nama}</span>
+        <span class="sub-item-pct-badge">${s.pct}%</span>
+      </div>
+      <div class="sub-item-amount">${IDR(val)}</div>
+      <div class="sub-item-bar-out">
+        <div class="sub-item-bar-in" style="width:${s.pct}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Edit rows sub alokasi
+  document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`
+    <div class="sub-edit-row">
+      <div class="sub-edit-label">
+        <input type="text" value="${s.nama}" id="sName${i}" placeholder="Nama alokasi" oninput="checkPct()">
+      </div>
+      <div class="sub-edit-pct">
+        <input type="number" value="${s.pct}" id="sPct${i}" min="0" max="100" oninput="checkPct()">
+        <span>%</span>
+      </div>
+    </div>`).join('');
+
+  checkPct();
+
+  // Chart sub alokasi
+  updChart('cSubAlloc',{
+    type:'doughnut',
+    data:{
+      labels:subAlloc.map(s=>`${s.nama} (${s.pct}%)`),
+      datasets:[{
+        data:subAlloc.map(s=>gaji*(s.pct/100)),
+        backgroundColor:subColors,
+        borderWidth:3,
+        borderColor:'#fff'
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      cutout:'62%',
+      plugins:{
+        legend:{
+          position:'bottom',
+          labels:{font:{size:11},boxWidth:12,padding:10}
+        }
+      }
+    }
+  });
+
+  // Sub summary table
+  document.getElementById('subSummaryTable').innerHTML=subAlloc.map((s,i)=>{
+    const val=gaji*(s.pct/100);
+    return `
+    <tr>
+      <td><span class="dot" style="background:${subColors[i]}"></span>${s.nama}</td>
+      <td style="text-align:center;color:${subColors[i]};font-weight:700">${s.pct}%</td>
+      <td style="text-align:right;font-weight:700">${IDR(val)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function checkPct() {
+  let total=0;
+  subAlloc.forEach((_,i)=>{
+    const v=parseFloat(document.getElementById('sPct'+i)?.value)||0;
+    total+=v;
+  });
+  const warn=document.getElementById('pctWarn');
+  const ok=document.getElementById('pctOk');
+  document.getElementById('pctTotal').textContent=total;
+  if(total===100){
+    warn.style.display='none';
+    ok.style.display='block';
+  } else {
+    warn.style.display='block';
+    ok.style.display='none';
+  }
+}
+
+function applySubAlloc() {
+  let total=0;
+  const newSub=subAlloc.map((_,i)=>{
+    const pct=parseFloat(document.getElementById('sPct'+i)?.value)||0;
+    total+=pct;
+    return { nama: document.getElementById('sName'+i)?.value||'Alokasi '+(i+1), pct };
+  });
+  if(total!==100){ alert('Total persentase harus 100%. Saat ini: '+total+'%'); return; }
+  subAlloc=newSub;
+  renderAlokasi();
+}
+
 function exportCSV() {
   const rows=[['Tipe','Tanggal','Deskripsi','Kategori','Jenis','Status','Nominal','Catatan']];
   km.forEach(r=>rows.push(['Masuk',r.tanggal,r.deskripsi,r.kategori,r.jenis,r.status,r.nominal,r.catatan||'']));
@@ -369,7 +1049,8 @@ function exportCSV() {
   const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');
   a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
-  a.download='omaji_keuangan.csv';a.click();
+  a.download='omaji_keuangan.csv';
+  a.click();
 }
 
 document.getElementById('mOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
