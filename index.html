@@ -1,238 +1,589 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMAJI - Financial Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-    <style>
-        :root {
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --border: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --primary: #0f172a;
-            --success: #10b981;
-            --danger: #f43f5e;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>OMAJI - Liquid Glass</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body { 
-            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
-            background: var(--bg); 
-            color: var(--text-main); 
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        /* --- Layout --- */
-        .header { 
-            background: var(--primary); 
-            color: white; 
-            padding: 1.25rem 2rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
+:root {
+  --text-main: #1c1c1e;
+  --text-muted: #8e8e93;
+  --blue: #007aff;
+  --green: #34c759;
+  --red: #ff3b30;
+  --orange: #ff9500;
+  --purple: #af52de;
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
 
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.025em; }
-        .header-badge { background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 500; }
+body { 
+    background-color: #f2f2f7; 
+    color: var(--text-main); 
+    font-size: 14px; 
+    min-height: 100vh;
+    padding-bottom: 90px;
+    position: relative;
+    overflow-x: hidden;
+}
 
-        .nav { 
-            background: var(--card); 
-            border-bottom: 1px solid var(--border); 
-            display: flex; 
-            padding: 0 2rem; 
-            gap: 1.5rem;
-            overflow-x: auto;
-        }
+.bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 400px; height: 400px; background: var(--blue); border-radius: 50%; filter: blur(100px); opacity: 0.15; z-index: -1; }
+.bg-blob-2 { position: fixed; bottom: -10%; right: -10%; width: 400px; height: 400px; background: var(--green); border-radius: 50%; filter: blur(100px); opacity: 0.15; z-index: -1; }
 
-        .nav button { 
-            padding: 1rem 0.5rem; 
-            background: none; 
-            border: none; 
-            border-bottom: 2px solid transparent;
-            font-size: 0.875rem; 
-            font-weight: 600; 
-            color: var(--text-muted); 
-            cursor: pointer; 
-            transition: 0.2s;
-            white-space: nowrap;
-        }
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
 
-        .nav button.active { color: var(--primary); border-bottom-color: var(--primary); }
+.header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.3); }
+.logo { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: #000; }
+.sync-pill { background: rgba(52, 199, 89, 0.15); color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 4px;}
+.btn-export { background: transparent; border: none; color: var(--blue); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;}
 
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+.nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-around; padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); z-index: 100; border-top: 1px solid rgba(255,255,255,0.4); border-radius: 30px 30px 0 0; }
+.nav button { flex: 1; background: none; border: none; font-size: 10px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: 0.3s; }
+.nav button.active { color: var(--blue); }
 
-        /* --- Widgets --- */
-        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        
-        .metric { 
-            background: var(--card); 
-            padding: 1.5rem; 
-            border-radius: var(--radius-lg); 
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            transition: transform 0.2s;
-        }
+.container { max-width: 600px; margin: 0 auto; padding: 16px; }
 
-        .metric:hover { transform: translateY(-4px); }
-        .metric .lbl { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; }
-        .metric .val { font-size: 1.75rem; font-weight: 800; }
-        .metric .sub { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
+.card { border-radius: 24px; padding: 20px; margin-bottom: 16px; }
+.card h3 { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
 
-        .card { 
-            background: var(--card); 
-            border-radius: var(--radius-lg); 
-            border: 1px solid var(--border); 
-            padding: 1.5rem; 
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-        }
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.metric { border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+.metric .lbl { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+.metric .val { font-size: 18px; font-weight: 800; }
 
-        .card h3 { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.trx-list { display: flex; flex-direction: column; gap: 12px; }
+.trx-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); }
+.trx-item-left { display: flex; flex-direction: column; gap: 4px; }
+.trx-title { font-weight: 700; font-size: 14px; }
+.trx-meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; align-items: center; }
+.trx-item-right { text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.trx-amt { font-weight: 800; font-size: 14px; }
+.trx-actions { display: flex; gap: 8px; margin-top: 4px; }
+.btn-icon { background: rgba(0,0,0,0.05); border: none; border-radius: 50%; width: 26px; height: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--text-muted); }
 
-        /* --- Tables --- */
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; color: var(--text-muted); background: #f8fafc; border-bottom: 1px solid var(--border); }
-        td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.875rem; }
-        
-        /* --- Buttons --- */
-        .btn-add { background: var(--primary); color: white; padding: 0.6rem 1.2rem; border-radius: var(--radius-md); border: none; font-weight: 600; cursor: pointer; }
-        .act-btn { padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: white; margin-right: 4px; }
-        .act-btn.edit { color: var(--info); }
-        .act-btn.del { color: var(--danger); }
+.fab { position: fixed; bottom: 100px; right: 20px; width: 60px; height: 60px; border-radius: 30px; background: var(--blue); color: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3); border: none; cursor: pointer; z-index: 90; transition: transform 0.2s; }
+.fab:active { transform: scale(0.9); }
 
-        /* --- Badges --- */
-        .badge { padding: 4px 10px; border-radius: 99px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
-        .bl { background: #dcfce7; color: #166534; } /* Lunas */
-        .bb { background: #fee2e2; color: #991b1b; } /* Belum */
+.toolbar { display: flex; gap: 8px; margin-bottom: 16px; }
+.toolbar select, .toolbar input { flex: 1; padding: 12px; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 13px; background: rgba(255,255,255,0.5); color: var(--text-main); outline: none; }
+.badge { padding: 3px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; }
 
-        /* --- Components --- */
-        .sync-status { font-size: 0.75rem; font-weight: 600; padding: 4px 12px; border-radius: 99px; }
-        .sync-ok { background: #059669; color: #ecfdf5; }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.overlay.open { display: flex; }
+.modal { background: rgba(255,255,255,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 24px 24px 0 0; padding: 24px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.5); }
+.form-row { margin-bottom: 16px; }
+.form-row label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; font-size: 14px; background: rgba(255,255,255,0.9); outline: none; transition: 0.2s;}
+.form-row input:focus { border-color: var(--blue); }
+.modal-btns { display: flex; gap: 12px; margin-top: 24px; }
+.btn-save { flex: 2; padding: 14px; background: var(--blue); color: #fff; border: none; border-radius: 14px; font-weight: 700; font-size: 15px;}
+.btn-cancel { flex: 1; padding: 14px; background: rgba(0,0,0,0.05); color: var(--text-main); border: none; border-radius: 14px; font-weight: 600; }
 
-        .laba-bersih { 
-            background: #f0fdf4; 
-            border: 1px dashed var(--success); 
-            padding: 1.5rem; 
-            border-radius: var(--radius-md); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-        }
+.alloc-bar-bg { background: rgba(0,0,0,0.05); border-radius: 8px; height: 8px; margin-top: 8px; overflow: hidden; }
+.alloc-bar-fill { height: 100%; border-radius: 8px; transition: width 0.5s ease; }
 
-        /* Chart Grids */
-        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
-        @media (max-width: 600px) { .chart-grid { grid-template-columns: 1fr; } }
+.page { display: none; animation: slideUp 0.3s ease; }
+.page.active { display: block; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-    </style>
+.chart-container { position: relative; height: 180px; width: 100%; }
+</style>
 </head>
 <body>
 
-<div class="header">
-    <div style="display:flex; align-items:center; gap:1rem;">
-        <span class="logo">OMAJI</span>
-        <span class="header-badge">Admin Panel 2026</span>
-    </div>
-    <div style="display:flex; gap:12px; align-items:center;">
-        <span id="syncStatus" class="sync-status sync-ok">● Connected</span>
-        <button onclick="exportCSV()" style="background:none; border:1px solid rgba(255,255,255,0.3); color:white; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem;">Export</button>
-    </div>
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
+
+<div class="header glass">
+  <div class="logo">OMAJI</div>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <span class="sync-pill" id="syncStatus"><i data-lucide="cloud-lightning" style="width:12px;height:12px"></i> Sync</span>
+    <button class="btn-export" onclick="exportCSV()"><i data-lucide="download" style="width:16px;height:16px"></i></button>
+  </div>
 </div>
 
-<nav class="nav">
-    <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
-    <button onclick="showPage('kas-masuk',this)">Kas Masuk</button>
-    <button onclick="showPage('kas-keluar',this)">Kas Keluar</button>
-    <button onclick="showPage('laba-rugi',this)">Laba Rugi</button>
-    <button onclick="showPage('alokasi',this)">Alokasi</button>
+<nav class="nav glass">
+  <button class="active" onclick="showPage('dashboard',this)"><i data-lucide="layout-dashboard"></i><span>Home</span></button>
+  <button onclick="showPage('kas-masuk',this)"><i data-lucide="arrow-down-circle"></i><span>Masuk</span></button>
+  <button onclick="showPage('kas-keluar',this)"><i data-lucide="arrow-up-circle"></i><span>Keluar</span></button>
+  <button onclick="showPage('laba-rugi',this)"><i data-lucide="bar-chart-2"></i><span>Laba</span></button>
+  <button onclick="showPage('alokasi',this)"><i data-lucide="pie-chart"></i><span>Alokasi</span></button>
 </nav>
 
 <div class="container">
-    <div id="page-dashboard" class="page active">
-        <div class="metrics">
-            <div class="metric"><div class="lbl">Pendapatan</div><div class="val" id="m1" style="color:var(--success)">-</div><div class="sub" id="m1s"></div></div>
-            <div class="metric"><div class="lbl">Pengeluaran</div><div class="val" id="m2" style="color:var(--danger)">-</div><div class="sub" id="m2s"></div></div>
-            <div class="metric"><div class="lbl">Laba Bersih</div><div class="val" id="m3" style="color:var(--info)">-</div><div class="sub" id="m3s"></div></div>
-        </div>
 
-        <div class="chart-grid">
-            <div class="card"><h3>Performa Bulanan</h3><canvas id="cB" height="250"></canvas></div>
-            <div class="card"><h3>Struktur Biaya</h3><canvas id="cK" height="250"></canvas></div>
-        </div>
+<div id="page-dashboard" class="page active">
+  <div class="card glass" style="background: linear-gradient(135deg, rgba(0,122,255,0.1) 0%, rgba(52,199,89,0.1) 100%); border-color: rgba(0,122,255,0.2);">
+    <p style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Saldo Kas Laba Bersih</p>
+    <h2 id="m3" style="font-size: 28px; font-weight: 800; margin: 8px 0; color: var(--text-main);">Rp 0</h2>
+    <div style="font-size: 12px; color: var(--text-muted);" id="m4">Total 0 Transaksi</div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric glass">
+      <div class="lbl">Masuk (Bulan Ini)</div>
+      <div class="val" id="m1" style="color: var(--green);">Rp 0</div>
     </div>
+    <div class="metric glass">
+      <div class="lbl">Keluar (Bulan Ini)</div>
+      <div class="val" id="m2" style="color: var(--red);">Rp 0</div>
+    </div>
+  </div>
 
-    <div id="page-kas-masuk" class="page" style="display:none">
-        <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem; align-items:center;">
-            <h2 style="font-size:1.25rem;">Data Arus Kas Masuk</h2>
-            <button class="btn-add" onclick="openModal('masuk',null)">+ Transaksi Baru</button>
+  <div class="card glass">
+    <h3><i data-lucide="bar-chart-3" style="width:16px"></i> Arus Kas Bulanan</h3>
+    <div class="chart-container"><canvas id="cB"></canvas></div>
+  </div>
+
+  <div class="card glass">
+    <h3><i data-lucide="trending-up" style="width:16px"></i> Tren Harian (14 Hari)</h3>
+    <div class="chart-container"><canvas id="cH"></canvas></div>
+  </div>
+
+  <div class="card glass">
+    <h3><i data-lucide="pie-chart" style="width:16px"></i> Distribusi Pengeluaran</h3>
+    <div class="chart-container" style="height: 200px;"><canvas id="cK"></canvas></div>
+  </div>
+
+  <div class="card glass">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+        <h3 style="margin:0;"><i data-lucide="history" style="width:16px"></i> Transaksi Terakhir</h3>
+        <button onclick="showPage('kas-masuk', document.querySelectorAll('.nav button')[1])" style="background:none; border:none; color:var(--blue); font-size:12px; font-weight:700; cursor:pointer;">Lihat Semua</button>
+    </div>
+    <div id="recentTrxList" class="trx-list"></div>
+  </div>
+</div>
+
+<div id="page-kas-masuk" class="page">
+  <div class="toolbar">
+    <select id="fmB" onchange="renderKM()"><option value="">Bulan</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option></select>
+    <select id="fmK" onchange="renderKM()"><option value="">Kategori</option></select>
+  </div>
+  <div class="card glass" style="padding:16px 12px;">
+    <div id="listM" class="trx-list"></div>
+  </div>
+</div>
+
+<div id="page-kas-keluar" class="page">
+  <div class="toolbar">
+    <select id="fkB" onchange="renderKK()"><option value="">Bulan</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option></select>
+    <select id="fkK" onchange="renderKK()"><option value="">Kategori</option></select>
+  </div>
+  <div class="card glass" style="padding:16px 12px;">
+    <div id="listK" class="trx-list"></div>
+  </div>
+</div>
+
+<div id="page-laba-rugi" class="page">
+  <div class="card glass">
+    <h3 style="text-align: center;">Ringkasan Profit</h3>
+    <div id="labaC"></div>
+  </div>
+</div>
+
+<div id="page-alokasi" class="page">
+  <div class="card glass">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div>
+        <p style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Laba Tersedia</p>
+        <div id="al-laba" style="font-size:22px; font-weight:800;">Rp 0</div>
+      </div>
+      <div id="al-margin" style="background:rgba(52,199,89,0.1); color:var(--green); padding:6px 12px; border-radius:12px; font-weight:700; font-size:12px;">0% Margin</div>
+    </div>
+    
+    <div style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;"><span>Omaji (20%)</span><span id="al-omaji">Rp 0</span></div>
+      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:20%; background:var(--blue);"></div></div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;"><span>Belanja (30%)</span><span id="al-belanja">Rp 0</span></div>
+      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:30%; background:var(--orange);"></div></div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;"><span>Gaji (50%)</span><span id="al-gaji">Rp 0</span></div>
+      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:50%; background:var(--green);"></div></div>
+    </div>
+  </div>
+
+  <div class="card glass">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h3>Sub Alokasi Gaji</h3>
+      <div id="subAllocProgress" style="font-size:11px; font-weight:600; padding:4px 8px; border-radius:8px; background:rgba(0,0,0,0.05);">Total: 100% / 100%</div>
+    </div>
+    <div id="subAllocDisplay" style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;"></div>
+    
+    <div style="border-top:1px solid var(--glass-border); padding-top:16px;">
+      <p style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:12px;">KUSTOMISASI PERSENTASE</p>
+      <div id="subEditRows"></div>
+      <button onclick="applySubAlloc()" style="width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1px solid var(--blue); color:var(--blue); background:transparent; font-weight:700; cursor:pointer;">Update Sub Alokasi</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<button class="fab" onclick="handleFabClick()">
+  <i data-lucide="plus" style="width:28px; height:28px;"></i>
+</button>
+
+<div class="overlay" id="mOv">
+  <div class="modal">
+    <h2 id="mTitle">Tambah Transaksi</h2>
+    <input type="hidden" id="mType"><input type="hidden" id="mIdx">
+    <div class="form-row"><label>Tanggal</label><input type="date" id="fTgl"></div>
+    <div class="form-row"><label>Deskripsi</label><input type="text" id="fDes" placeholder="Contoh: Penjualan produk"></div>
+    <div class="form-row"><label>Kategori</label><select id="fKat"></select></div>
+    <div style="display:flex; gap:12px;">
+      <div class="form-row" style="flex:1"><label>Jenis Pembayaran</label><select id="fJen"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div>
+      <div class="form-row" style="flex:1"><label>Status</label><select id="fSts"><option>Lunas</option><option>Belum Bayar</option></select></div>
+    </div>
+    
+    <div class="form-row"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="fNom" placeholder="0" oninput="formatInputNominal(this)"></div>
+    
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveTrx()">Simpan Data</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyCXRJDLQA86QMaFbEP5AFklcucIu_fAxHU",
+  authDomain: "omajiklepu.firebaseapp.com",
+  projectId: "omajiklepu",
+  storageBucket: "omajiklepu.firebasestorage.app",
+  messagingSenderId: "96752900164",
+  appId: "1:96752900164:web:e3769cf5d9a915f54e4411"
+});
+const db = getFirestore(app);
+
+const IDR = v => 'Rp ' + Math.round(v).toLocaleString('id-ID');
+const KM_KATS = ['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uang Belanja'];
+const KK_KATS = ['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
+const PIE_COLORS = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#5ac8fa', '#007aff', '#5856d6', '#af52de'];
+
+let km = [], kk = [];
+let charts = {};
+let subAlloc = [{nama:'Pemilik',pct:40},{nama:'Karyawan',pct:40},{nama:'Cadangan',pct:20}];
+
+lucide.createIcons();
+
+const selFmK = document.getElementById('fmK');
+KM_KATS.forEach(k => selFmK.innerHTML += `<option>${k}</option>`);
+const selFkK = document.getElementById('fkK');
+KK_KATS.forEach(k => selFkK.innerHTML += `<option>${k}</option>`);
+
+onSnapshot(collection(db,'kas_masuk'), snap => {
+  km = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  refreshDash(); renderKM(); renderAlokasi();
+});
+
+onSnapshot(collection(db,'kas_keluar'), snap => {
+  kk = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  refreshDash(); renderKK(); renderAlokasi();
+});
+
+window.showPage = function(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='dashboard') refreshDash();
+  if(id==='laba-rugi') renderLaba();
+  if(id==='alokasi') renderAlokasi();
+}
+
+window.handleFabClick = function() {
+  const activePage = document.querySelector('.page.active').id;
+  if(activePage === 'page-kas-keluar') {
+    openModal('keluar', null);
+  } else {
+    openModal('masuk', null);
+  }
+}
+
+// PERUBAHAN: Fungsi format real-time saat ngetik
+window.formatInputNominal = function(elem) {
+  // Hanya ambil angka
+  let val = elem.value.replace(/[^0-9]/g, '');
+  if(val !== '') {
+    // Format dengan titik
+    elem.value = parseInt(val, 10).toLocaleString('id-ID');
+  } else {
+    elem.value = '';
+  }
+}
+
+function filtAndSort(data, type) {
+  let b = type==='masuk' ? document.getElementById('fmB').value : document.getElementById('fkB').value;
+  let k = type==='masuk' ? document.getElementById('fmK').value : document.getElementById('fkK').value;
+  
+  let filtered = data.filter(r => {
+    if(b && r.tanggal.slice(5,7) !== b) return false;
+    if(k && r.kategori !== k) return false;
+    return true;
+  });
+  return filtered.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+}
+
+function renderList(data, listId, type) {
+  const isMasuk = type === 'masuk';
+  const color = isMasuk ? 'var(--green)' : 'var(--text-main)';
+  const sign = isMasuk ? '+' : '-';
+  
+  document.getElementById(listId).innerHTML = data.map((r) => {
+    const origIdx = (isMasuk ? km : kk).findIndex(item => item.id === r.id);
+    return `
+    <div class="trx-item">
+      <div class="trx-item-left">
+        <div class="trx-title">${r.deskripsi}</div>
+        <div class="trx-meta"><span>${r.tanggal.slice(5)}</span> • <span style="background:rgba(0,0,0,0.05); padding:2px 6px; border-radius:4px;">${r.kategori}</span></div>
+      </div>
+      <div class="trx-item-right">
+        <div class="trx-amt" style="color:${color}">${sign} ${IDR(r.nominal)}</div>
+        <div class="trx-actions">
+          <button class="btn-icon" onclick="openModal('${type}',${origIdx})"><i data-lucide="edit-2" style="width:12px;height:12px"></i></button>
+          <button class="btn-icon" onclick="doDelete('${type}','${r.id}')" style="color:var(--red)"><i data-lucide="trash" style="width:12px;height:12px"></i></button>
         </div>
-        <div class="card">
-            <div class="table-wrap">
-                <table>
-                    <thead><tr><th>Tanggal</th><th>Deskripsi</th><th>Kategori</th><th>Status</th><th style="text-align:right">Nominal</th><th>Aksi</th></tr></thead>
-                    <tbody id="tbM"></tbody>
-                </table>
+      </div>
+    </div>
+    `;
+  }).join('');
+  lucide.createIcons();
+}
+
+window.renderKM = () => renderList(filtAndSort(km,'masuk'), 'listM', 'masuk');
+window.renderKK = () => renderList(filtAndSort(kk,'keluar'), 'listK', 'keluar');
+
+window.openModal = function(type, idx) {
+  document.getElementById('mType').value = type;
+  document.getElementById('mIdx').value = idx !== null ? idx : '';
+  document.getElementById('mTitle').textContent = idx !== null ? 'Edit Transaksi' : (type==='masuk'?'Tambah Pemasukan':'Tambah Pengeluaran');
+  document.getElementById('fKat').innerHTML = (type==='masuk'?KM_KATS:KK_KATS).map(k=>`<option>${k}</option>`).join('');
+  
+  if(idx !== null) {
+    const r = (type==='masuk'?km:kk)[idx];
+    document.getElementById('fTgl').value = r.tanggal;
+    document.getElementById('fDes').value = r.deskripsi;
+    document.getElementById('fKat').value = r.kategori;
+    document.getElementById('fJen').value = r.jenis;
+    document.getElementById('fSts').value = r.status;
+    
+    // PERUBAHAN: Set value dengan titik saat mode Edit
+    document.getElementById('fNom').value = r.nominal.toLocaleString('id-ID');
+  } else {
+    document.getElementById('fTgl').value = new Date().toISOString().slice(0,10);
+    ['fDes','fNom'].forEach(id => document.getElementById(id).value = '');
+  }
+  document.getElementById('mOv').classList.add('open');
+}
+
+window.closeModal = () => document.getElementById('mOv').classList.remove('open');
+
+window.saveTrx = async function() {
+  const type = document.getElementById('mType').value;
+  const idx  = document.getElementById('mIdx').value;
+  
+  // PERUBAHAN: Membersihkan titik sebelum disimpan sebagai angka (float)
+  let rawNominal = document.getElementById('fNom').value.replace(/\./g, '');
+  
+  const obj = {
+    tanggal: document.getElementById('fTgl').value,
+    deskripsi: document.getElementById('fDes').value.trim(),
+    kategori: document.getElementById('fKat').value,
+    jenis: document.getElementById('fJen').value,
+    status: document.getElementById('fSts').value,
+    nominal: parseFloat(rawNominal)
+  };
+  
+  if(!obj.tanggal||!obj.deskripsi||isNaN(obj.nominal)||obj.nominal <= 0){ alert('Isi form dengan benar dan lengkap'); return; }
+  
+  const colName = type==='masuk' ? 'kas_masuk' : 'kas_keluar';
+  if(idx !== '') {
+    const docId = (type==='masuk'?km:kk)[parseInt(idx)].id;
+    await updateDoc(doc(db, colName, docId), obj);
+  } else {
+    await addDoc(collection(db, colName), obj);
+  }
+  closeModal();
+}
+
+window.doDelete = async function(type, id) {
+  if(confirm("Hapus transaksi ini?")) {
+    await deleteDoc(doc(db, type==='masuk'?'kas_masuk':'kas_keluar', id));
+  }
+}
+
+function updChart(id, cfg) {
+  if(charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), cfg);
+}
+
+function refreshDash() {
+  const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK;
+  document.getElementById('m1').textContent=IDR(tM);
+  document.getElementById('m2').textContent=IDR(tK);
+  document.getElementById('m3').textContent=IDR(lb);
+  document.getElementById('m4').textContent=`Total ${km.length+kk.length} Transaksi`;
+
+  Chart.defaults.color = '#8e8e93';
+  Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+
+  const ms={},ks={}; ['01','02','03','04','05'].forEach(m=>{ms[m]=0;ks[m]=0;});
+  km.forEach(r=>{const m=r.tanggal.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
+  kk.forEach(r=>{const m=r.tanggal.slice(5,7);if(ks[m]!==undefined)ks[m]+=r.nominal;});
+  
+  updChart('cB',{
+      type:'bar',
+      data:{labels:['Jan','Feb','Mar','Apr','Mei'],datasets:[{label:'Masuk',data:Object.values(ms),backgroundColor:'#34c759',borderRadius:6},{label:'Keluar',data:Object.values(ks),backgroundColor:'#ff3b30',borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{border:{display:false},grid:{color:'rgba(0,0,0,0.05)'}}}}
+  });
+
+  const allD=[...new Set([...km,...kk].map(r=>r.tanggal))].sort().slice(-14);
+  const md={},kd={};
+  km.forEach(r=>{md[r.tanggal]=(md[r.tanggal]||0)+r.nominal;});
+  kk.forEach(r=>{kd[r.tanggal]=(kd[r.tanggal]||0)+r.nominal;});
+
+  updChart('cH',{
+      type:'line',
+      data:{
+          labels:allD.map(d=>d.slice(5)),
+          datasets:[
+              {label:'Masuk',data:allD.map(d=>md[d]||0),borderColor:'#34c759',backgroundColor:'rgba(52, 199, 89, 0.1)',tension:0.4,fill:true,pointRadius:2},
+              {label:'Keluar',data:allD.map(d=>kd[d]||0),borderColor:'#ff3b30',backgroundColor:'rgba(255, 59, 48, 0.1)',tension:0.4,fill:true,pointRadius:2}
+          ]
+      },
+      options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{border:{display:false},grid:{color:'rgba(0,0,0,0.05)'}}}}
+  });
+
+  const kke={}; kk.forEach(r=>{kke[r.kategori]=(kke[r.kategori]||0)+r.nominal;});
+  updChart('cK',{
+      type:'doughnut',
+      data:{labels:Object.keys(kke),datasets:[{data:Object.values(kke),backgroundColor:PIE_COLORS,borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false, cutout:'70%', plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:10}}}}}
+  });
+
+  const allTrx = [...km.map(x=>({...x, type:'masuk'})), ...kk.map(x=>({...x, type:'keluar'}))];
+  allTrx.sort((a,b)=> new Date(b.tanggal) - new Date(a.tanggal));
+  const recentTrx = allTrx.slice(0, 3);
+
+  document.getElementById('recentTrxList').innerHTML = recentTrx.map(r => {
+      const isMasuk = r.type === 'masuk';
+      const color = isMasuk ? 'var(--green)' : 'var(--text-main)';
+      const sign = isMasuk ? '+' : '-';
+      const icon = isMasuk ? 'arrow-down-circle' : 'arrow-up-circle';
+      const iconColor = isMasuk ? 'var(--green)' : 'var(--red)';
+      
+      return `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.05);">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="background:rgba(0,0,0,0.05); padding:8px; border-radius:12px; color:${iconColor};"><i data-lucide="${icon}" style="width:16px;height:16px;"></i></div>
+            <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:700; font-size:13px;">${r.deskripsi}</span>
+                <span style="font-size:10px; color:var(--text-muted);">${r.tanggal.slice(5)} • ${r.kategori}</span>
             </div>
         </div>
-    </div>
+        <div style="font-weight:800; font-size:13px; color:${color};">${sign} ${IDR(r.nominal)}</div>
+      </div>
+      `;
+  }).join('');
+  
+  lucide.createIcons();
+}
 
-    <div id="page-laba-rugi" class="page" style="display:none">
-        <div class="card" style="max-width:600px; margin: 0 auto;">
-            <h2 style="text-align:center; margin-bottom:2rem;">Laporan Laba Rugi</h2>
-            <div id="labaC"></div>
-        </div>
-    </div>
-</div>
+function renderLaba() {
+  const kmE={},kkE={};
+  km.forEach(r=>{kmE[r.kategori]=(kmE[r.kategori]||0)+r.nominal;});
+  kk.forEach(r=>{kkE[r.kategori]=(kkE[r.kategori]||0)+r.nominal;});
+  let tM=0,tK=0;
+  
+  let h='<div style="font-size:11px; font-weight:700; color:var(--text-muted); margin:12px 0 8px;">PENDAPATAN</div>';
+  Object.entries(kmE).forEach(([k,v])=>{tM+=v; h+=`<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;"><span>${k}</span><span style="font-weight:600">${IDR(v)}</span></div>`;});
+  
+  h+='<div style="font-size:11px; font-weight:700; color:var(--text-muted); margin:20px 0 8px; border-top:1px solid rgba(0,0,0,0.1); padding-top:12px;">PENGELUARAN</div>';
+  Object.entries(kkE).forEach(([k,v])=>{tK+=v; h+=`<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;"><span>${k}</span><span style="font-weight:600">${IDR(v)}</span></div>`;});
+  
+  const lb=tM-tK;
+  h+=`<div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; padding:16px; background:rgba(0,122,255,0.1); border-radius:16px;">
+        <span style="font-weight:700;">Laba Bersih</span>
+        <span style="font-size:20px; font-weight:800; color:var(--blue);">${IDR(lb)}</span>
+      </div>`;
+  document.getElementById('labaC').innerHTML=h;
+}
 
-<div id="mOv" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:100; align-items:center; justify-content:center;">
-    <div class="card" style="width:100%; max-width:400px; margin:1rem;">
-        <h2 id="mTitle" style="margin-bottom:1rem;">Form Transaksi</h2>
-        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1.5rem;">
-            <button onclick="closeModal()" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:8px; cursor:pointer;">Batal</button>
-            <button onclick="saveTrx()" class="btn-add">Simpan Data</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Gunakan logika JavaScript Firebase yang Anda miliki sebelumnya.
-    // Tambahkan fungsi showPage yang lebih smooth:
-    function showPage(id, btn) {
-        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-        
-        document.getElementById('page-' + id).style.display = 'block';
-        btn.classList.add('active');
-        
-        // Trigger Chart Resize jika diperlukan
-        if(id === 'dashboard') refreshDash();
+window.liveUpdatePct = function() {
+    let total = 0;
+    for(let i=0; i<subAlloc.length; i++) {
+        let val = parseFloat(document.getElementById('sPct'+i).value) || 0;
+        total += val;
     }
+    let pctColor = total === 100 ? 'var(--green)' : 'var(--red)';
+    document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${pctColor}">${total}%</span> / 100%`;
+}
 
-    // Tips: Tambahkan konfigurasi Chart.js yang lebih minimalis:
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: { grid: { display: false }, ticks: { display: false }},
-            x: { grid: { display: false }}
-        }
-    };
+window.renderAlokasi = function() {
+  const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK;
+  const gaji=lb*0.50;
+  document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
+  document.getElementById('al-margin').textContent = tM ? (lb/tM*100).toFixed(1)+'% Margin' : '0%';
+  document.getElementById('al-omaji').textContent=IDR(lb*0.20);
+  document.getElementById('al-belanja').textContent=IDR(lb*0.30);
+  document.getElementById('al-gaji').textContent=IDR(gaji);
+
+  let currentTotalPct = subAlloc.reduce((sum, s) => sum + s.pct, 0);
+  let pctColor = currentTotalPct === 100 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${pctColor}">${currentTotalPct}%</span> / 100%`;
+
+  document.getElementById('subAllocDisplay').innerHTML=subAlloc.map((s,i)=>`
+    <div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px">
+        <span>${s.nama} (${s.pct}%)</span> <span>${IDR(gaji*(s.pct/100))}</span>
+      </div>
+      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${s.pct}%;background:var(--purple)"></div></div>
+    </div>`).join('');
+
+  document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <input type="text" id="sName${i}" value="${s.nama}" style="flex:2;padding:12px;border:1px solid rgba(0,0,0,0.1);border-radius:12px;font-size:13px; background:rgba(255,255,255,0.7)">
+      <input type="number" id="sPct${i}" value="${s.pct}" oninput="liveUpdatePct()" style="flex:1;padding:12px;border:1px solid rgba(0,0,0,0.1);border-radius:12px;font-size:13px; background:rgba(255,255,255,0.7)">
+    </div>`).join('');
+}
+
+window.applySubAlloc = function() {
+  let total=0;
+  const newSub=subAlloc.map((_,i)=>{
+    const pct=parseFloat(document.getElementById('sPct'+i).value)||0;
+    total+=pct;
+    return {nama:document.getElementById('sName'+i).value, pct};
+  });
+  if(total!==100){ alert(`Gagal: Total persentase saat ini adalah ${total}%. Harus pas 100%.`); return; }
+  subAlloc=newSub; renderAlokasi();
+}
+
+window.exportCSV = () => {
+  const rows=[['Tipe','Tanggal','Deskripsi','Kategori','Jenis','Status','Nominal','Catatan']];
+  km.forEach(r=>rows.push(['Masuk',r.tanggal,r.deskripsi,r.kategori,r.jenis,r.status,r.nominal,r.catatan||'']));
+  kk.forEach(r=>rows.push(['Keluar',r.tanggal,r.deskripsi,r.kategori,r.jenis,r.status,r.nominal,r.catatan||'']));
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv); a.download='omaji_keuangan.csv'; a.click();
+};
 </script>
 </body>
 </html>
