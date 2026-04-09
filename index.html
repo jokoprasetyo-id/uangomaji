@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>OMAJI - Liquid Glass</title>
+<title>OMAJI - Liquid Glass Fixed</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@ body {
     color: var(--text-main); 
     font-size: 14px; 
     min-height: 100vh;
-    padding-bottom: 90px;
+    padding-bottom: 100px;
     position: relative;
     overflow-x: hidden;
 }
@@ -79,21 +79,20 @@ body {
 
 .toolbar { display: flex; gap: 8px; margin-bottom: 16px; }
 .toolbar select, .toolbar input { flex: 1; padding: 12px; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 13px; background: rgba(255,255,255,0.5); color: var(--text-main); outline: none; }
-.badge { padding: 3px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; }
 
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
 .overlay.open { display: flex; }
 .modal { background: rgba(255,255,255,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 24px 24px 0 0; padding: 24px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.5); }
 .form-row { margin-bottom: 16px; }
 .form-row label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
-.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; font-size: 14px; background: rgba(255,255,255,0.9); outline: none; transition: 0.2s;}
-.form-row input:focus { border-color: var(--blue); }
-.modal-btns { display: flex; gap: 12px; margin-top: 24px; }
-.btn-save { flex: 2; padding: 14px; background: var(--blue); color: #fff; border: none; border-radius: 14px; font-weight: 700; font-size: 15px;}
-.btn-cancel { flex: 1; padding: 14px; background: rgba(0,0,0,0.05); color: var(--text-main); border: none; border-radius: 14px; font-weight: 600; }
+.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; font-size: 14px; background: rgba(255,255,255,0.9); outline: none; }
 
 .alloc-bar-bg { background: rgba(0,0,0,0.05); border-radius: 8px; height: 8px; margin-top: 8px; overflow: hidden; }
 .alloc-bar-fill { height: 100%; border-radius: 8px; transition: width 0.5s ease; }
+
+.edit-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; }
+.edit-row input[type="text"] { flex: 3; min-width: 0; padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); font-size: 13px; background: rgba(255,255,255,0.7); }
+.edit-row input[type="number"] { flex: 1.2; min-width: 60px; padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); font-size: 13px; text-align: center; background: rgba(255,255,255,0.7); }
 
 .page { display: none; animation: slideUp 0.3s ease; }
 .page.active { display: block; }
@@ -127,41 +126,26 @@ body {
 
 <div id="page-dashboard" class="page active">
   <div class="card glass" style="background: linear-gradient(135deg, rgba(0,122,255,0.1) 0%, rgba(52,199,89,0.1) 100%); border-color: rgba(0,122,255,0.2);">
-    <p style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Saldo Kas Laba Bersih</p>
-    <h2 id="m3" style="font-size: 28px; font-weight: 800; margin: 8px 0; color: var(--text-main);">Rp 0</h2>
-    <div style="font-size: 12px; color: var(--text-muted);" id="m4">Total 0 Transaksi</div>
+    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Saldo Kas Laba Bersih</p>
+    <h2 id="m3" style="font-size: 28px; font-weight: 800; margin: 8px 0;">Rp 0</h2>
+    <div style="font-size: 11px; color: var(--text-muted);" id="m4">Total 0 Transaksi</div>
   </div>
 
   <div class="metrics-grid">
-    <div class="metric glass">
-      <div class="lbl">Masuk (Bulan Ini)</div>
-      <div class="val" id="m1" style="color: var(--green);">Rp 0</div>
-    </div>
-    <div class="metric glass">
-      <div class="lbl">Keluar (Bulan Ini)</div>
-      <div class="val" id="m2" style="color: var(--red);">Rp 0</div>
-    </div>
+    <div class="metric glass"><div class="lbl">Masuk</div><div class="val" id="m1" style="color: var(--green);">Rp 0</div></div>
+    <div class="metric glass"><div class="lbl">Keluar</div><div class="val" id="m2" style="color: var(--red);">Rp 0</div></div>
   </div>
 
+  <div class="card glass"><h3><i data-lucide="bar-chart-3" style="width:16px"></i> Arus Kas</h3><div class="chart-container"><canvas id="cB"></canvas></div></div>
+  
+  <div class="card glass"><h3><i data-lucide="trending-up" style="width:16px"></i> Tren 14 Hari</h3><div class="chart-container"><canvas id="cH"></canvas></div></div>
+  
+  <div class="card glass"><h3><i data-lucide="pie-chart" style="width:16px"></i> Kategori Keluar</h3><div class="chart-container" style="height:200px"><canvas id="cK"></canvas></div></div>
+  
   <div class="card glass">
-    <h3><i data-lucide="bar-chart-3" style="width:16px"></i> Arus Kas Bulanan</h3>
-    <div class="chart-container"><canvas id="cB"></canvas></div>
-  </div>
-
-  <div class="card glass">
-    <h3><i data-lucide="trending-up" style="width:16px"></i> Tren Harian (14 Hari)</h3>
-    <div class="chart-container"><canvas id="cH"></canvas></div>
-  </div>
-
-  <div class="card glass">
-    <h3><i data-lucide="pie-chart" style="width:16px"></i> Distribusi Pengeluaran</h3>
-    <div class="chart-container" style="height: 200px;"><canvas id="cK"></canvas></div>
-  </div>
-
-  <div class="card glass">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-        <h3 style="margin:0;"><i data-lucide="history" style="width:16px"></i> Transaksi Terakhir</h3>
-        <button onclick="showPage('kas-masuk', document.querySelectorAll('.nav button')[1])" style="background:none; border:none; color:var(--blue); font-size:12px; font-weight:700; cursor:pointer;">Lihat Semua</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
+        <h3 style="margin:0"><i data-lucide="history" style="width:16px"></i> Terakhir</h3>
+        <button onclick="showPage('kas-masuk', document.querySelectorAll('.nav button')[1])" style="background:none; border:none; color:var(--blue); font-size:11px; font-weight:700;">Lihat Semua</button>
     </div>
     <div id="recentTrxList" class="trx-list"></div>
   </div>
@@ -172,9 +156,7 @@ body {
     <select id="fmB" onchange="renderKM()"><option value="">Bulan</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option></select>
     <select id="fmK" onchange="renderKM()"><option value="">Kategori</option></select>
   </div>
-  <div class="card glass" style="padding:16px 12px;">
-    <div id="listM" class="trx-list"></div>
-  </div>
+  <div class="card glass" style="padding:16px 12px;"><div id="listM" class="trx-list"></div></div>
 </div>
 
 <div id="page-kas-keluar" class="page">
@@ -182,87 +164,65 @@ body {
     <select id="fkB" onchange="renderKK()"><option value="">Bulan</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option></select>
     <select id="fkK" onchange="renderKK()"><option value="">Kategori</option></select>
   </div>
-  <div class="card glass" style="padding:16px 12px;">
-    <div id="listK" class="trx-list"></div>
-  </div>
+  <div class="card glass" style="padding:16px 12px;"><div id="listK" class="trx-list"></div></div>
 </div>
 
 <div id="page-laba-rugi" class="page">
-  <div class="card glass">
-    <h3 style="text-align: center;">Ringkasan Profit</h3>
-    <div id="labaC"></div>
-  </div>
+  <div class="card glass"><h3 style="text-align: center;">Ringkasan Profit</h3><div id="labaC"></div></div>
 </div>
 
 <div id="page-alokasi" class="page">
   <div class="card glass">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <div>
-        <p style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Laba Tersedia</p>
-        <div id="al-laba" style="font-size:22px; font-weight:800;">Rp 0</div>
-      </div>
-      <div id="al-margin" style="background:rgba(52,199,89,0.1); color:var(--green); padding:6px 12px; border-radius:12px; font-weight:700; font-size:12px;">0% Margin</div>
+      <div><p style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Laba Tersedia</p><div id="al-laba" style="font-size:22px; font-weight:800;">Rp 0</div></div>
+      <div id="al-margin" style="background:rgba(52,199,89,0.1); color:var(--green); padding:6px 12px; border-radius:12px; font-weight:700; font-size:11px;">0% Margin</div>
     </div>
-    
-    <div style="margin-bottom:16px;">
-      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;"><span>Omaji (20%)</span><span id="al-omaji">Rp 0</span></div>
-      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:20%; background:var(--blue);"></div></div>
-    </div>
-    <div style="margin-bottom:16px;">
-      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;"><span>Belanja (30%)</span><span id="al-belanja">Rp 0</span></div>
-      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:30%; background:var(--orange);"></div></div>
-    </div>
-    <div style="margin-bottom:16px;">
-      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;"><span>Gaji (50%)</span><span id="al-gaji">Rp 0</span></div>
-      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:50%; background:var(--green);"></div></div>
-    </div>
+    <div style="margin-bottom:16px;"><div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;"><span>Omaji (20%)</span><span id="al-omaji">Rp 0</span></div><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:20%; background:var(--blue);"></div></div></div>
+    <div style="margin-bottom:16px;"><div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;"><span>Belanja (30%)</span><span id="al-belanja">Rp 0</span></div><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:30%; background:var(--orange);"></div></div></div>
+    <div style="margin-bottom:16px;"><div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;"><span>Gaji (50%)</span><span id="al-gaji">Rp 0</span></div><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:50%; background:var(--green);"></div></div></div>
   </div>
 
   <div class="card glass">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <h3>Sub Alokasi Gaji</h3>
-      <div id="subAllocProgress" style="font-size:11px; font-weight:600; padding:4px 8px; border-radius:8px; background:rgba(0,0,0,0.05);">Total: 100% / 100%</div>
+      <h3>Sub Alokasi</h3>
+      <div id="subAllocProgress" style="font-size:10px; font-weight:700; padding:4px 8px; border-radius:8px; background:rgba(0,0,0,0.05);">Total: 0%</div>
     </div>
     <div id="subAllocDisplay" style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;"></div>
     
     <div style="border-top:1px solid var(--glass-border); padding-top:16px;">
-      <p style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:12px;">KUSTOMISASI PERSENTASE</p>
+      <p style="font-size:10px; font-weight:700; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase;">Atur Persentase</p>
       <div id="subEditRows"></div>
-      <button onclick="applySubAlloc()" style="width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1px solid var(--blue); color:var(--blue); background:transparent; font-weight:700; cursor:pointer;">Update Sub Alokasi</button>
+      <button onclick="applySubAlloc()" style="width:100%; margin-top:12px; padding:14px; border-radius:14px; border:none; background:var(--blue); color:white; font-weight:700;">Simpan Perubahan</button>
     </div>
   </div>
 </div>
 
 </div>
 
-<button class="fab" onclick="handleFabClick()">
-  <i data-lucide="plus" style="width:28px; height:28px;"></i>
-</button>
+<button class="fab" onclick="handleFabClick()"><i data-lucide="plus"></i></button>
 
 <div class="overlay" id="mOv">
   <div class="modal">
     <h2 id="mTitle">Tambah Transaksi</h2>
     <input type="hidden" id="mType"><input type="hidden" id="mIdx">
     <div class="form-row"><label>Tanggal</label><input type="date" id="fTgl"></div>
-    <div class="form-row"><label>Deskripsi</label><input type="text" id="fDes" placeholder="Contoh: Penjualan produk"></div>
+    <div class="form-row"><label>Deskripsi</label><input type="text" id="fDes" placeholder="Deskripsi"></div>
     <div class="form-row"><label>Kategori</label><select id="fKat"></select></div>
-    <div style="display:flex; gap:12px;">
-      <div class="form-row" style="flex:1"><label>Jenis Pembayaran</label><select id="fJen"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div>
+    <div style="display:flex; gap:10px;">
+      <div class="form-row" style="flex:1"><label>Jenis</label><select id="fJen"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div>
       <div class="form-row" style="flex:1"><label>Status</label><select id="fSts"><option>Lunas</option><option>Belum Bayar</option></select></div>
     </div>
-    
-    <div class="form-row"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="fNom" placeholder="0" oninput="formatInputNominal(this)"></div>
-    
+    <div class="form-row"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="fNom" oninput="formatInputNominal(this)"></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
-      <button class="btn-save" onclick="saveTrx()">Simpan Data</button>
+      <button class="btn-save" onclick="saveTrx()">Simpan</button>
     </div>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyCXRJDLQA86QMaFbEP5AFklcucIu_fAxHU",
@@ -312,59 +272,34 @@ window.showPage = function(id, btn) {
 
 window.handleFabClick = function() {
   const activePage = document.querySelector('.page.active').id;
-  if(activePage === 'page-kas-keluar') {
-    openModal('keluar', null);
-  } else {
-    openModal('masuk', null);
-  }
+  openModal(activePage === 'page-kas-keluar' ? 'keluar' : 'masuk', null);
 }
 
-// PERUBAHAN: Fungsi format real-time saat ngetik
 window.formatInputNominal = function(elem) {
-  // Hanya ambil angka
   let val = elem.value.replace(/[^0-9]/g, '');
-  if(val !== '') {
-    // Format dengan titik
-    elem.value = parseInt(val, 10).toLocaleString('id-ID');
-  } else {
-    elem.value = '';
-  }
+  elem.value = val !== '' ? parseInt(val, 10).toLocaleString('id-ID') : '';
 }
 
 function filtAndSort(data, type) {
   let b = type==='masuk' ? document.getElementById('fmB').value : document.getElementById('fkB').value;
   let k = type==='masuk' ? document.getElementById('fmK').value : document.getElementById('fkK').value;
-  
-  let filtered = data.filter(r => {
-    if(b && r.tanggal.slice(5,7) !== b) return false;
-    if(k && r.kategori !== k) return false;
-    return true;
-  });
-  return filtered.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+  return data.filter(r => (!b || r.tanggal.slice(5,7) === b) && (!k || r.kategori === k))
+             .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
 }
 
 function renderList(data, listId, type) {
   const isMasuk = type === 'masuk';
-  const color = isMasuk ? 'var(--green)' : 'var(--text-main)';
-  const sign = isMasuk ? '+' : '-';
-  
   document.getElementById(listId).innerHTML = data.map((r) => {
     const origIdx = (isMasuk ? km : kk).findIndex(item => item.id === r.id);
-    return `
-    <div class="trx-item">
-      <div class="trx-item-left">
-        <div class="trx-title">${r.deskripsi}</div>
-        <div class="trx-meta"><span>${r.tanggal.slice(5)}</span> • <span style="background:rgba(0,0,0,0.05); padding:2px 6px; border-radius:4px;">${r.kategori}</span></div>
-      </div>
-      <div class="trx-item-right">
-        <div class="trx-amt" style="color:${color}">${sign} ${IDR(r.nominal)}</div>
+    return `<div class="trx-item">
+      <div class="trx-item-left"><div class="trx-title">${r.deskripsi}</div><div class="trx-meta"><span>${r.tanggal.slice(5)}</span> • <span>${r.kategori}</span></div></div>
+      <div class="trx-item-right"><div class="trx-amt" style="color:${isMasuk?'var(--green)':'var(--text-main)'}">${isMasuk?'+':'-'} ${IDR(r.nominal)}</div>
         <div class="trx-actions">
           <button class="btn-icon" onclick="openModal('${type}',${origIdx})"><i data-lucide="edit-2" style="width:12px;height:12px"></i></button>
           <button class="btn-icon" onclick="doDelete('${type}','${r.id}')" style="color:var(--red)"><i data-lucide="trash" style="width:12px;height:12px"></i></button>
         </div>
       </div>
-    </div>
-    `;
+    </div>`;
   }).join('');
   lucide.createIcons();
 }
@@ -375,19 +310,13 @@ window.renderKK = () => renderList(filtAndSort(kk,'keluar'), 'listK', 'keluar');
 window.openModal = function(type, idx) {
   document.getElementById('mType').value = type;
   document.getElementById('mIdx').value = idx !== null ? idx : '';
-  document.getElementById('mTitle').textContent = idx !== null ? 'Edit Transaksi' : (type==='masuk'?'Tambah Pemasukan':'Tambah Pengeluaran');
+  document.getElementById('mTitle').textContent = idx !== null ? 'Edit Transaksi' : 'Tambah Transaksi';
   document.getElementById('fKat').innerHTML = (type==='masuk'?KM_KATS:KK_KATS).map(k=>`<option>${k}</option>`).join('');
-  
   if(idx !== null) {
     const r = (type==='masuk'?km:kk)[idx];
-    document.getElementById('fTgl').value = r.tanggal;
-    document.getElementById('fDes').value = r.deskripsi;
-    document.getElementById('fKat').value = r.kategori;
-    document.getElementById('fJen').value = r.jenis;
-    document.getElementById('fSts').value = r.status;
-    
-    // PERUBAHAN: Set value dengan titik saat mode Edit
-    document.getElementById('fNom').value = r.nominal.toLocaleString('id-ID');
+    document.getElementById('fTgl').value = r.tanggal; document.getElementById('fDes').value = r.deskripsi;
+    document.getElementById('fKat').value = r.kategori; document.getElementById('fJen').value = r.jenis;
+    document.getElementById('fSts').value = r.status; document.getElementById('fNom').value = r.nominal.toLocaleString('id-ID');
   } else {
     document.getElementById('fTgl').value = new Date().toISOString().slice(0,10);
     ['fDes','fNom'].forEach(id => document.getElementById(id).value = '');
@@ -400,67 +329,38 @@ window.closeModal = () => document.getElementById('mOv').classList.remove('open'
 window.saveTrx = async function() {
   const type = document.getElementById('mType').value;
   const idx  = document.getElementById('mIdx').value;
-  
-  // PERUBAHAN: Membersihkan titik sebelum disimpan sebagai angka (float)
-  let rawNominal = document.getElementById('fNom').value.replace(/\./g, '');
-  
+  const rawNominal = document.getElementById('fNom').value.replace(/\./g, '');
   const obj = {
-    tanggal: document.getElementById('fTgl').value,
-    deskripsi: document.getElementById('fDes').value.trim(),
-    kategori: document.getElementById('fKat').value,
-    jenis: document.getElementById('fJen').value,
-    status: document.getElementById('fSts').value,
-    nominal: parseFloat(rawNominal)
+    tanggal: document.getElementById('fTgl').value, deskripsi: document.getElementById('fDes').value.trim(),
+    kategori: document.getElementById('fKat').value, jenis: document.getElementById('fJen').value,
+    status: document.getElementById('fSts').value, nominal: parseFloat(rawNominal)
   };
-  
-  if(!obj.tanggal||!obj.deskripsi||isNaN(obj.nominal)||obj.nominal <= 0){ alert('Isi form dengan benar dan lengkap'); return; }
-  
+  if(!obj.tanggal||!obj.deskripsi||isNaN(obj.nominal)){ alert('Lengkapi data'); return; }
   const colName = type==='masuk' ? 'kas_masuk' : 'kas_keluar';
-  if(idx !== '') {
-    const docId = (type==='masuk'?km:kk)[parseInt(idx)].id;
-    await updateDoc(doc(db, colName, docId), obj);
-  } else {
-    await addDoc(collection(db, colName), obj);
-  }
+  idx !== '' ? await updateDoc(doc(db, colName, (type==='masuk'?km:kk)[parseInt(idx)].id), obj) : await addDoc(collection(db, colName), obj);
   closeModal();
 }
 
-window.doDelete = async function(type, id) {
-  if(confirm("Hapus transaksi ini?")) {
-    await deleteDoc(doc(db, type==='masuk'?'kas_masuk':'kas_keluar', id));
-  }
-}
+window.doDelete = async function(type, id) { if(confirm("Hapus?")) await deleteDoc(doc(db, type==='masuk'?'kas_masuk':'kas_keluar', id)); }
 
-function updChart(id, cfg) {
-  if(charts[id]) charts[id].destroy();
-  charts[id] = new Chart(document.getElementById(id), cfg);
-}
+function updChart(id, cfg) { if(charts[id]) charts[id].destroy(); charts[id] = new Chart(document.getElementById(id), cfg); }
 
 function refreshDash() {
   const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK;
-  document.getElementById('m1').textContent=IDR(tM);
-  document.getElementById('m2').textContent=IDR(tK);
-  document.getElementById('m3').textContent=IDR(lb);
-  document.getElementById('m4').textContent=`Total ${km.length+kk.length} Transaksi`;
+  document.getElementById('m1').textContent=IDR(tM); document.getElementById('m2').textContent=IDR(tK);
+  document.getElementById('m3').textContent=IDR(lb); document.getElementById('m4').textContent=`Total ${km.length+kk.length} Transaksi`;
 
-  Chart.defaults.color = '#8e8e93';
-  Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-
+  // 1. Chart Arus Kas Bulanan
   const ms={},ks={}; ['01','02','03','04','05'].forEach(m=>{ms[m]=0;ks[m]=0;});
-  km.forEach(r=>{const m=r.tanggal.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
-  kk.forEach(r=>{const m=r.tanggal.slice(5,7);if(ks[m]!==undefined)ks[m]+=r.nominal;});
-  
-  updChart('cB',{
-      type:'bar',
-      data:{labels:['Jan','Feb','Mar','Apr','Mei'],datasets:[{label:'Masuk',data:Object.values(ms),backgroundColor:'#34c759',borderRadius:6},{label:'Keluar',data:Object.values(ks),backgroundColor:'#ff3b30',borderRadius:6}]},
-      options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{border:{display:false},grid:{color:'rgba(0,0,0,0.05)'}}}}
-  });
+  km.forEach(r=>{const m=r.tanggal.slice(5,7); if(ms[m]!==undefined) ms[m]+=r.nominal;});
+  kk.forEach(r=>{const m=r.tanggal.slice(5,7); if(ks[m]!==undefined) ks[m]+=r.nominal;});
+  updChart('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','Mei'],datasets:[{label:'M',data:Object.values(ms),backgroundColor:'#34c759',borderRadius:4},{label:'K',data:Object.values(ks),backgroundColor:'#ff3b30',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
 
+  // 2. Chart Tren Harian (Line Chart)
   const allD=[...new Set([...km,...kk].map(r=>r.tanggal))].sort().slice(-14);
   const md={},kd={};
   km.forEach(r=>{md[r.tanggal]=(md[r.tanggal]||0)+r.nominal;});
   kk.forEach(r=>{kd[r.tanggal]=(kd[r.tanggal]||0)+r.nominal;});
-
   updChart('cH',{
       type:'line',
       data:{
@@ -473,114 +373,59 @@ function refreshDash() {
       options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{border:{display:false},grid:{color:'rgba(0,0,0,0.05)'}}}}
   });
 
+  // 3. Chart Donut Kategori
   const kke={}; kk.forEach(r=>{kke[r.kategori]=(kke[r.kategori]||0)+r.nominal;});
-  updChart('cK',{
-      type:'doughnut',
-      data:{labels:Object.keys(kke),datasets:[{data:Object.values(kke),backgroundColor:PIE_COLORS,borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false, cutout:'70%', plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:10}}}}}
-  });
+  updChart('cK',{type:'doughnut',data:{labels:Object.keys(kke),datasets:[{data:Object.values(kke),backgroundColor:PIE_COLORS,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'75%',plugins:{legend:{position:'bottom',labels:{boxWidth:8,font:{size:9}}}}}});
 
-  const allTrx = [...km.map(x=>({...x, type:'masuk'})), ...kk.map(x=>({...x, type:'keluar'}))];
-  allTrx.sort((a,b)=> new Date(b.tanggal) - new Date(a.tanggal));
-  const recentTrx = allTrx.slice(0, 3);
-
-  document.getElementById('recentTrxList').innerHTML = recentTrx.map(r => {
-      const isMasuk = r.type === 'masuk';
-      const color = isMasuk ? 'var(--green)' : 'var(--text-main)';
-      const sign = isMasuk ? '+' : '-';
-      const icon = isMasuk ? 'arrow-down-circle' : 'arrow-up-circle';
-      const iconColor = isMasuk ? 'var(--green)' : 'var(--red)';
-      
-      return `
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.05);">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <div style="background:rgba(0,0,0,0.05); padding:8px; border-radius:12px; color:${iconColor};"><i data-lucide="${icon}" style="width:16px;height:16px;"></i></div>
-            <div style="display:flex; flex-direction:column;">
-                <span style="font-weight:700; font-size:13px;">${r.deskripsi}</span>
-                <span style="font-size:10px; color:var(--text-muted);">${r.tanggal.slice(5)} • ${r.kategori}</span>
-            </div>
-        </div>
-        <div style="font-weight:800; font-size:13px; color:${color};">${sign} ${IDR(r.nominal)}</div>
-      </div>
-      `;
-  }).join('');
-  
-  lucide.createIcons();
+  const allTrx = [...km.map(x=>({...x,type:'m'})), ...kk.map(x=>({...x,type:'k'}))].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).slice(0,3);
+  document.getElementById('recentTrxList').innerHTML = allTrx.map(r => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.05);font-size:12px"><div><b>${r.deskripsi}</b><br><small>${r.tanggal.slice(5)}</small></div><div style="color:${r.type==='m'?'var(--green)':'var(--red)'}">${r.type==='m'?'+':'-'} ${IDR(r.nominal)}</div></div>`).join('');
 }
 
 function renderLaba() {
-  const kmE={},kkE={};
-  km.forEach(r=>{kmE[r.kategori]=(kmE[r.kategori]||0)+r.nominal;});
-  kk.forEach(r=>{kkE[r.kategori]=(kkE[r.kategori]||0)+r.nominal;});
-  let tM=0,tK=0;
-  
-  let h='<div style="font-size:11px; font-weight:700; color:var(--text-muted); margin:12px 0 8px;">PENDAPATAN</div>';
-  Object.entries(kmE).forEach(([k,v])=>{tM+=v; h+=`<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;"><span>${k}</span><span style="font-weight:600">${IDR(v)}</span></div>`;});
-  
-  h+='<div style="font-size:11px; font-weight:700; color:var(--text-muted); margin:20px 0 8px; border-top:1px solid rgba(0,0,0,0.1); padding-top:12px;">PENGELUARAN</div>';
-  Object.entries(kkE).forEach(([k,v])=>{tK+=v; h+=`<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;"><span>${k}</span><span style="font-weight:600">${IDR(v)}</span></div>`;});
-  
-  const lb=tM-tK;
-  h+=`<div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; padding:16px; background:rgba(0,122,255,0.1); border-radius:16px;">
-        <span style="font-weight:700;">Laba Bersih</span>
-        <span style="font-size:20px; font-weight:800; color:var(--blue);">${IDR(lb)}</span>
-      </div>`;
+  const kmE={},kkE={}; km.forEach(r=>{kmE[r.kategori]=(kmE[r.kategori]||0)+r.nominal;}); kk.forEach(r=>{kkE[r.kategori]=(kkE[r.kategori]||0)+r.nominal;});
+  let tM=0,tK=0,h=''; Object.entries(kmE).forEach(([k,v])=>{tM+=v; h+=`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${k}</span><b>${IDR(v)}</b></div>`;});
+  h+='<hr style="margin:8px 0;opacity:0.1">'; Object.entries(kkE).forEach(([k,v])=>{tK+=v; h+=`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${k}</span><b>${IDR(v)}</b></div>`;});
+  h+=`<div style="margin-top:12px;padding:12px;background:rgba(0,122,255,0.1);border-radius:12px;display:flex;justify-content:space-between"><b>Laba</b><b style="color:var(--blue)">${IDR(tM-tK)}</b></div>`;
   document.getElementById('labaC').innerHTML=h;
 }
 
 window.liveUpdatePct = function() {
     let total = 0;
-    for(let i=0; i<subAlloc.length; i++) {
-        let val = parseFloat(document.getElementById('sPct'+i).value) || 0;
-        total += val;
-    }
-    let pctColor = total === 100 ? 'var(--green)' : 'var(--red)';
-    document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${pctColor}">${total}%</span> / 100%`;
+    for(let i=0; i<subAlloc.length; i++) total += (parseFloat(document.getElementById('sPct'+i).value) || 0);
+    document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${total===100?'var(--green)':'var(--red)'}">${total}%</span>`;
 }
 
 window.renderAlokasi = function() {
-  const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK;
-  const gaji=lb*0.50;
+  const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK, gaji=lb*0.5;
   document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
   document.getElementById('al-margin').textContent = tM ? (lb/tM*100).toFixed(1)+'% Margin' : '0%';
-  document.getElementById('al-omaji').textContent=IDR(lb*0.20);
-  document.getElementById('al-belanja').textContent=IDR(lb*0.30);
-  document.getElementById('al-gaji').textContent=IDR(gaji);
+  document.getElementById('al-omaji').textContent=IDR(lb*0.2); document.getElementById('al-belanja').textContent=IDR(lb*0.3); document.getElementById('al-gaji').textContent=IDR(gaji);
+  
+  let totalPct = subAlloc.reduce((s,a)=>s+a.pct, 0);
+  document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${totalPct===100?'var(--green)':'var(--red)'}">${totalPct}%</span>`;
 
-  let currentTotalPct = subAlloc.reduce((sum, s) => sum + s.pct, 0);
-  let pctColor = currentTotalPct === 100 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${pctColor}">${currentTotalPct}%</span> / 100%`;
-
-  document.getElementById('subAllocDisplay').innerHTML=subAlloc.map((s,i)=>`
-    <div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px">
-        <span>${s.nama} (${s.pct}%)</span> <span>${IDR(gaji*(s.pct/100))}</span>
-      </div>
-      <div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${s.pct}%;background:var(--purple)"></div></div>
-    </div>`).join('');
+  document.getElementById('subAllocDisplay').innerHTML=subAlloc.map(s=>`<div><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700"><span>${s.nama} (${s.pct}%)</span><span>${IDR(gaji*(s.pct/100))}</span></div><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${s.pct}%;background:var(--purple)"></div></div></div>`).join('');
 
   document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`
-    <div style="display:flex;gap:8px;margin-bottom:8px">
-      <input type="text" id="sName${i}" value="${s.nama}" style="flex:2;padding:12px;border:1px solid rgba(0,0,0,0.1);border-radius:12px;font-size:13px; background:rgba(255,255,255,0.7)">
-      <input type="number" id="sPct${i}" value="${s.pct}" oninput="liveUpdatePct()" style="flex:1;padding:12px;border:1px solid rgba(0,0,0,0.1);border-radius:12px;font-size:13px; background:rgba(255,255,255,0.7)">
+    <div class="edit-row">
+      <input type="text" id="sName${i}" value="${s.nama}" placeholder="Nama">
+      <input type="number" id="sPct${i}" value="${s.pct}" oninput="liveUpdatePct()" placeholder="%">
     </div>`).join('');
 }
 
 window.applySubAlloc = function() {
-  let total=0;
-  const newSub=subAlloc.map((_,i)=>{
-    const pct=parseFloat(document.getElementById('sPct'+i).value)||0;
-    total+=pct;
+  let total=0; const newSub=subAlloc.map((_,i)=>{
+    const pct=parseFloat(document.getElementById('sPct'+i).value)||0; total+=pct;
     return {nama:document.getElementById('sName'+i).value, pct};
   });
-  if(total!==100){ alert(`Gagal: Total persentase saat ini adalah ${total}%. Harus pas 100%.`); return; }
+  if(total!==100){ alert(`Total ${total}%. Harus 100%.`); return; }
   subAlloc=newSub; renderAlokasi();
 }
 
 window.exportCSV = () => {
-  const rows=[['Tipe','Tanggal','Deskripsi','Kategori','Jenis','Status','Nominal','Catatan']];
-  km.forEach(r=>rows.push(['Masuk',r.tanggal,r.deskripsi,r.kategori,r.jenis,r.status,r.nominal,r.catatan||'']));
-  kk.forEach(r=>rows.push(['Keluar',r.tanggal,r.deskripsi,r.kategori,r.jenis,r.status,r.nominal,r.catatan||'']));
+  const rows=[['Tipe','Tanggal','Deskripsi','Kategori','Jenis','Status','Nominal']];
+  km.forEach(r=>rows.push(['Masuk',r.tanggal,r.deskripsi,r.kategori,r.jenis,r.status,r.nominal]));
+  kk.forEach(r=>rows.push(['Keluar',r.tanggal,r.deskripsi,r.kategori,r.jenis,r.status,r.nominal]));
   const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv); a.download='omaji_keuangan.csv'; a.click();
 };
