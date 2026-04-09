@@ -238,20 +238,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 /* --- PERBAIKAN CETAK NOTA --- */
 @media print {
-  /* Sembunyikan SEMUA elemen di body KECUALI overlay nota */
   body > *:not(#notaOv) { display: none !important; }
-  
-  /* Ubah overlay nota menjadi tampilan utama statis */
   #notaOv { display: block !important; position: static !important; background: transparent !important; }
-  
-  /* Bersihkan styling card agar terlihat seperti kertas biasa */
   .sheet { position: static !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; animation: none !important; min-height: auto !important; }
-  
-  /* Sembunyikan elemen UI kontrol */
   .sheethandle, .sheethead, .actrow, .btnclose { display: none !important; }
   .sheetbody { padding: 0 !important; }
-  
-  /* Hilangkan border card pada struktur cetak */
   .nota { border: none !important; padding: 0 !important; color: black; font-size: 11px; }
 }
 </style>
@@ -488,7 +479,7 @@ onSnapshot(query(collection(dR,'reservasi'),orderBy('createdAt','desc')),s=>{win
 window._saveKas=async(type,idx,obj)=>{const col=type==='masuk'?'kas_masuk':'kas_keluar';if(idx!==''){const arr=type==='masuk'?window._km:window._kk;await updateDoc(doc(dK,col,arr[+idx].id),obj);}else await addDoc(collection(dK,col),obj);};
 window._delKas=async(type,id)=>await deleteDoc(doc(dK,type==='masuk'?'kas_masuk':'kas_keluar',id));
 
-/* PERBAIKAN: Penambahan createdAt di transaksi otomatis untuk sorting akurat */
+/* PERBAIKAN: Mencegah error undefined dari Firebase */
 window._saveRes=async(obj)=>{
   showLoad(true);
   try{
@@ -501,8 +492,18 @@ window._saveRes=async(obj)=>{
       for(const d of k2.docs)await deleteDoc(doc(dK,'kas_keluar',d.id));
     }
     let docId=obj._docId;
-    if(docId){const{_docId,...u}=obj;await updateDoc(doc(dR,'reservasi',docId),{...u,updatedAt:now});}
-    else{const ref=await addDoc(collection(dR,'reservasi'),{...obj,_docId:undefined,createdAt:now});docId=ref.id;}
+    
+    // --- INI PERBAIKANNYA ---
+    const dataToSave = { ...obj };
+    delete dataToSave._docId; // Hapus properti ini supaya tidak terdeteksi 'undefined' oleh Firebase
+    // ------------------------
+
+    if(docId){
+        await updateDoc(doc(dR,'reservasi',docId),{...dataToSave,updatedAt:now});
+    }else{
+        const ref=await addDoc(collection(dR,'reservasi'),{...dataToSave,createdAt:now});
+        docId=ref.id;
+    }
     
     if(obj.status==='Lunas'&&omzet>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglLunas||obj.tanggal,deskripsi:`[Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:omzet,resId:docId,autoSync:true,createdAt:ts});
     else if(obj.status==='DP'&&dp>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglDp||obj.tanggal,deskripsi:`[DP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:dp,resId:docId,autoSync:true,createdAt:ts});
@@ -639,7 +640,7 @@ function refreshDash(){
     </div>`;
   }).join('') : '<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>Tidak ada reservasi mendatang</p></div>';
 
-  // TRANSAKSI TERAKHIR (DENGAN SORTING BARU)
+  // TRANSAKSI TERAKHIR
   const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>{
     const dA = new Date(a.tanggal).getTime(), dB = new Date(b.tanggal).getTime();
     if(dA !== dB) return dB - dA;
@@ -675,7 +676,6 @@ window.setKasType=function(type){
 window.closeKasM=()=>document.getElementById('kasOv').classList.remove('show');
 window.fmtNom=function(el){let v=el.value.replace(/[^0-9]/g,'');el.value=v?parseInt(v).toLocaleString('id-ID'):'';};
 
-/* PERBAIKAN: Penambahan parameter createdAt saat input manual */
 window.saveKas=async function(){
   const type=document.getElementById('kasTypeVal').value,idx=document.getElementById('kasIdxVal').value;
   const obj={tanggal:document.getElementById('kTgl').value,deskripsi:document.getElementById('kDes').value.trim(),kategori:document.getElementById('kKat').value,jenis:document.getElementById('kJen').value,status:document.getElementById('kSts').value,nominal:parseFloat(document.getElementById('kNom').value.replace(/\./g,'')), createdAt: Date.now()};
@@ -697,7 +697,6 @@ window.renderKas=function(){
   if(type!=='keluar')items.push(...(window._km||[]).map(x=>({...x,_t:'masuk'})));
   if(type!=='masuk')items.push(...(window._kk||[]).map(x=>({...x,_t:'keluar'})));
   
-  /* PERBAIKAN URUTAN TRANSAKSI (Sort by Date, then fallback to creation time) */
   items=items.filter(r=>
     (!bln||r.tanggal?.slice(5,7)===bln)&&
     (!thn||r.tanggal?.slice(0,4)===thn)&&
