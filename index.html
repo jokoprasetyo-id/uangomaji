@@ -17,30 +17,46 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 ::-webkit-scrollbar{display:none;}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);min-height:100svh;overflow-x:hidden;font-size:14px;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--nav-h)+20px);}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);min-height:100svh;overflow-x:hidden;font-size:14px;-webkit-font-smoothing:antialiased;padding-bottom:calc(62px + 14px + env(safe-area-inset-bottom,0px) + 40px);}
 .glass{background:var(--bg2);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid rgba(255,255,255,0.65);box-shadow:0 2px 20px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9);}
 .glass-sm{background:rgba(255,255,255,0.6);backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);border:1px solid rgba(255,255,255,0.55);}
 
 /* TOP BAR */
-.topbar{padding:14px 20px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;background:rgba(242,242,247,0.82);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-bottom:1px solid var(--border);}
+.topbar{padding:14px 16px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;background:rgba(242,242,247,0.82);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-bottom:1px solid var(--border);}
 .topbar-brand{font-size:19px;font-weight:700;letter-spacing:0.2px;}
-.topbar-right{display:flex;gap:8px;align-items:center;}
-.conn-pill{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,0.05);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--text3);font-weight:500;}
+.topbar-right{display:flex;gap:8px;align-items:center;min-width:0;}
+.conn-pill{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,0.05);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--text3);font-weight:500;white-space:nowrap;}
 .conn-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:blink 1.2s infinite;flex-shrink:0;}
 .conn-dot.on{background:var(--green);animation:none;}.conn-dot.off{background:var(--red);animation:none;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.topbtn{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--blue);}
+.topbtn{width:32px;height:32px;flex-shrink:0;border-radius:50%;background:rgba(0,0,0,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--blue);}
 .topbtn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;}
 
-/* NAV */
-.navbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:600px;height:var(--nav-h);background:rgba(242,242,247,0.88);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 12px env(safe-area-inset-bottom,10px);z-index:100;}
-.navbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 12px;border-radius:12px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;}
-.navbtn.active{color:var(--blue);}
-.navbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+/* NAV — iOS floating pill */
+.navbar{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:552px;height:62px;background:rgba(28,28,30,0.84);backdrop-filter:blur(32px) saturate(1.8);-webkit-backdrop-filter:blur(32px) saturate(1.8);border:1px solid rgba(255,255,255,0.11);border-radius:26px;display:flex;align-items:center;justify-content:space-around;padding:0 8px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+.navbtn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;border-radius:14px;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,0.42);transition:color .15s;flex:1;}
+.navbtn.active{color:#fff;}
+.navbtn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
 .navbtn span{font-size:10px;font-weight:500;}
-.navfab{width:52px;height:52px;border-radius:50%;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,122,255,.35);transition:transform .15s,opacity .15s;flex-shrink:0;margin-bottom:4px;}
-.navfab:active{transform:scale(.9);opacity:.85;}
+.navfab{width:48px;height:48px;border-radius:50%;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,122,255,.5);transition:transform .15s,background .2s;flex-shrink:0;}
+.navfab:active{transform:scale(.9);}
 .navfab svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;}
+.navfab.open{background:rgba(255,255,255,0.14);transform:rotate(45deg);}
+
+/* FAB MENU */
+.fab-menu{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 14px + 62px + 12px);left:50%;transform:translateX(-50%);z-index:99;display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none;opacity:0;transition:opacity .2s ease;}
+.fab-menu.show{pointer-events:auto;opacity:1;}
+.fab-option{display:flex;align-items:center;gap:10px;background:rgba(28,28,30,0.92);color:#fff;border:none;border-radius:20px;padding:11px 18px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 20px rgba(0,0,0,0.25);white-space:nowrap;transform:translateY(8px);transition:transform .2s ease, opacity .2s ease;}
+.fab-menu.show .fab-option{transform:translateY(0);}
+.fab-option:nth-child(1){transition-delay:.05s;}
+.fab-option:nth-child(2){transition-delay:.02s;}
+.fab-option:nth-child(3){transition-delay:0s;}
+.fab-option svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;}
+.fab-option.green{background:rgba(52,199,89,0.92);}
+.fab-option.red{background:rgba(255,59,48,0.92);}
+.fab-option.purple{background:rgba(88,86,214,0.92);}
+.fab-backdrop{position:fixed;inset:0;z-index:98;display:none;}
+.fab-backdrop.show{display:block;}
 
 /* PAGES */
 .page{display:none;animation:fadeUp .22s ease;}.page.active{display:block;}
@@ -67,18 +83,49 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .statlbl{font-size:11px;color:var(--text3);margin-top:2px;}
 .chartwrap{position:relative;height:165px;}
 
+/* CALENDAR */
+.cal-wrap{border-radius:var(--r-xl);padding:16px;margin-bottom:12px;}
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.cal-title{font-size:15px;font-weight:700;}
+.cal-nav{display:flex;gap:4px;}
+.cal-navbtn{width:28px;height:28px;border-radius:8px;background:rgba(0,0,0,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);}
+.cal-navbtn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;}
+.cal-days-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:6px;}
+.cal-days-head span{font-size:10px;font-weight:600;color:var(--text4);padding:4px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-cell{aspect-ratio:1;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:500;cursor:pointer;position:relative;transition:background .12s;padding:2px 0;}
+.cal-cell.empty{cursor:default;}
+.cal-cell.today{background:var(--blue);color:#fff;font-weight:700;}
+.cal-cell.today .cal-dot{background:rgba(255,255,255,0.75);}
+.cal-cell.has-res{color:var(--blue);font-weight:700;}
+.cal-cell.has-res:not(.today){background:rgba(0,122,255,0.1);}
+.cal-cell:not(.empty):not(.today):hover{background:rgba(0,0,0,0.06);}
+.cal-dot{width:4px;height:4px;border-radius:50%;background:var(--orange);flex-shrink:0;}
+.cal-popup{background:rgba(28,28,30,.94);color:#fff;border-radius:16px;padding:14px;margin-top:10px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;}
+.cal-popup.show{display:block;}
+.cal-popup-date{font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px;}
+.cal-popup-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);}
+.cal-popup-item:last-child{border-bottom:none;}
+.cal-popup-name{font-size:13px;font-weight:600;}
+.cal-popup-meta{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;}
+.cal-popup-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;}
+.cpb-lunas{background:rgba(52,199,89,.25);color:#4ade80;}
+.cpb-dp{background:rgba(255,149,0,.25);color:#ffa726;}
+.cpb-belum{background:rgba(255,59,48,.2);color:#ff6b6b;}
+
 /* TRANSACTIONS */
-.toolbar{display:flex;gap:8px;margin-bottom:12px;}
-.toolbar select{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:12px;background:var(--surface);color:var(--text);outline:none;font-family:inherit;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+.toolbar{display:flex;gap:6px;margin-bottom:12px;align-items:center;}
+.toolbar select{min-width:0;flex:1;padding:9px 28px 9px 10px;border:1px solid var(--border);border-radius:var(--r);font-size:12px;background:var(--surface);color:var(--text);outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
 .trxlist{display:flex;flex-direction:column;gap:6px;}
 .trxitem{display:flex;justify-content:space-between;align-items:center;padding:13px 14px;border-radius:14px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
-.trxleft{display:flex;align-items:center;gap:11px;}
+.trxleft{display:flex;align-items:center;gap:11px;min-width:0;flex:1;}
+.trxleft>div:last-child{min-width:0;flex:1;}
 .trxicon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .trxicon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;}
-.trxtitle{font-weight:600;font-size:13px;}
-.trxmeta{font-size:11px;color:var(--text3);margin-top:1px;}
+.trxtitle{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.trxmeta{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .trxtag{font-size:9px;font-weight:600;padding:1px 6px;border-radius:4px;display:inline-block;margin-top:2px;}
-.trxright{text-align:right;}
+.trxright{text-align:right;flex-shrink:0;margin-left:8px;}
 .trxamt{font-weight:700;font-size:13px;}
 .trxactions{display:flex;gap:5px;margin-top:4px;justify-content:flex-end;}
 .btnico{width:26px;height:26px;border-radius:7px;background:rgba(0,0,0,.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text3);}
@@ -119,9 +166,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .labarow:last-child{border-bottom:none;}
 .labakey{color:var(--text2);}.labaval{font-weight:600;}
 
-/* ALOKASI */
+/* ALOKASI — fixed layout */
 .allocbar-bg{background:rgba(0,0,0,.07);border-radius:6px;height:6px;margin-top:6px;overflow:hidden;}
 .allocbar-fill{height:100%;border-radius:6px;transition:width .5s ease;}
+.alloc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;flex-wrap:nowrap;gap:4px;}
+.alloc-row span:first-child{font-size:12px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.alloc-row span:last-child{font-size:12px;font-weight:600;flex-shrink:0;max-width:50%;text-align:right;}
+/* Sub-alokasi edit rows */
+.subeditrow{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
+.subeditrow input[type="text"]{flex:1;min-width:0;padding:9px 12px;border-radius:10px;border:1px solid var(--border);font-size:13px;background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text);}
+.subeditrow input[type="number"]{width:56px;flex-shrink:0;padding:9px 6px;border-radius:10px;border:1px solid var(--border);font-size:13px;text-align:center;background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text);}
+.subeditrow .pct-label{font-size:12px;color:var(--text3);flex-shrink:0;}
 
 /* OVERLAYS */
 .overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.32);overflow-y:auto;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
@@ -225,6 +280,25 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+<!-- FAB BACKDROP -->
+<div class="fab-backdrop" id="fabBackdrop" onclick="closeFab()"></div>
+
+<!-- FAB MENU -->
+<div class="fab-menu" id="fabMenu">
+  <button class="fab-option purple" onclick="fabAction('reservasi')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    Tambah Reservasi
+  </button>
+  <button class="fab-option green" onclick="fabAction('masuk')">
+    <svg viewBox="0 0 24 24"><polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/></svg>
+    Kas Masuk
+  </button>
+  <button class="fab-option red" onclick="fabAction('keluar')">
+    <svg viewBox="0 0 24 24"><polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/></svg>
+    Kas Keluar
+  </button>
+</div>
+
 <nav class="navbar">
   <button class="navbtn active" id="nav-dashboard" onclick="showPage('dashboard',this)">
     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
@@ -234,7 +308,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
     <span>Kas</span>
   </button>
-  <button class="navfab" onclick="handleFab()">
+  <button class="navfab" id="navFab" onclick="toggleFab()">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
   <button class="navbtn" id="nav-reservasi" onclick="showPage('reservasi',this)">
@@ -249,7 +323,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <!-- PAGE DASHBOARD -->
 <div id="page-dashboard" class="page active">
-<div class="container">
+<div class="container" style="padding-bottom:24px;">
   <div class="hero glass-sm">
     <div class="hero-lbl">Laba Bersih Total</div>
     <div class="hero-val" id="d-laba">Rp 0</div>
@@ -267,20 +341,33 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
   <div class="sec-label">Arus Kas Bulanan</div>
   <div class="card glass"><div class="chartwrap"><canvas id="cB"></canvas></div></div>
+  <div class="sec-label">Kalender Reservasi</div>
+  <div class="cal-wrap glass">
+    <div class="cal-header">
+      <div class="cal-title" id="calTitle">—</div>
+      <div class="cal-nav">
+        <button class="cal-navbtn" onclick="calMove(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="cal-navbtn" onclick="calMove(1)"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+    <div class="cal-days-head">
+      <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-popup" id="calPopup"></div>
+  </div>
   <div class="sec-label">Transaksi Terakhir</div>
   <div class="trxlist" id="recentList"></div>
-  <div class="sec-label">Reservasi Mendatang</div>
-  <div id="upcomingList"></div>
 </div>
 </div>
 
 <!-- PAGE KEUANGAN -->
 <div id="page-keuangan" class="page">
-<div class="container">
+<div class="container" style="padding-bottom:24px;">
   <div class="toolbar">
-    <select id="kasType" onchange="renderKas()"><option value="semua">Semua</option><option value="masuk">Kas Masuk</option><option value="keluar">Kas Keluar</option></select>
-    <select id="kasBulan" onchange="renderKas()"><option value="">Semua Bulan</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Agu</option><option value="09">Sep</option><option value="10">Okt</option><option value="11">Nov</option><option value="12">Des</option></select>
-    <select id="kasKat" onchange="renderKas()"><option value="">Semua Kat.</option></select>
+    <select id="kasType" onchange="renderKas()"><option value="semua">Semua</option><option value="masuk">Masuk</option><option value="keluar">Keluar</option></select>
+    <select id="kasBulan" onchange="renderKas()"><option value="">Semua</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Agu</option><option value="09">Sep</option><option value="10">Okt</option><option value="11">Nov</option><option value="12">Des</option></select>
+    <select id="kasKat" onchange="renderKas()"><option value="">Semua</option></select>
   </div>
   <div class="trxlist" id="kasList"></div>
 </div>
@@ -288,7 +375,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <!-- PAGE RESERVASI -->
 <div id="page-reservasi" class="page">
-<div class="container">
+<div class="container" style="padding-bottom:24px;">
   <div class="searchwrap"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input class="searchinput" id="resSearch" placeholder="Cari nama reservasi..." oninput="renderRes()"></div>
   <div class="filterrow">
     <div class="fchip active" data-val="" onclick="setResF(this)">Semua</div>
@@ -302,7 +389,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <!-- PAGE LAPORAN -->
 <div id="page-laporan" class="page">
-<div class="container">
+<div class="container" style="padding-bottom:24px;">
   <div class="sec-label">Laba Rugi</div>
   <div id="labaC"></div>
   <div class="sec-label">Alokasi Laba</div>
@@ -311,16 +398,28 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Laba Tersedia</div><div id="al-laba" style="font-size:22px;font-weight:700;">Rp 0</div></div>
       <div id="al-margin" style="background:rgba(52,199,89,.1);color:var(--green);padding:5px 11px;border-radius:10px;font-size:11px;font-weight:700;">0%</div>
     </div>
-    <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px;"><span>Omaji (20%)</span><span id="al-omaji" style="color:var(--blue)">Rp 0</span></div><div class="allocbar-bg"><div class="allocbar-fill" style="width:20%;background:var(--blue)"></div></div></div>
-    <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px;"><span>Belanja (30%)</span><span id="al-belanja" style="color:var(--orange)">Rp 0</span></div><div class="allocbar-bg"><div class="allocbar-fill" style="width:30%;background:var(--orange)"></div></div></div>
-    <div><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px;"><span>Gaji (50%)</span><span id="al-gaji" style="color:var(--green)">Rp 0</span></div><div class="allocbar-bg"><div class="allocbar-fill" style="width:50%;background:var(--green)"></div></div></div>
+    <div style="margin-bottom:12px;">
+      <div class="alloc-row"><span>Omaji (20%)</span><span id="al-omaji" style="color:var(--blue)">Rp 0</span></div>
+      <div class="allocbar-bg"><div class="allocbar-fill" style="width:20%;background:var(--blue)"></div></div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div class="alloc-row"><span>Belanja (30%)</span><span id="al-belanja" style="color:var(--orange)">Rp 0</span></div>
+      <div class="allocbar-bg"><div class="allocbar-fill" style="width:30%;background:var(--orange)"></div></div>
+    </div>
+    <div>
+      <div class="alloc-row"><span>Gaji (50%)</span><span id="al-gaji" style="color:var(--green)">Rp 0</span></div>
+      <div class="allocbar-bg"><div class="allocbar-fill" style="width:50%;background:var(--green)"></div></div>
+    </div>
   </div>
   <div class="sec-label">Sub Alokasi Gaji</div>
   <div class="card glass">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div style="font-size:12px;font-weight:600;color:var(--text2);">Pembagian</div><div id="subPct" style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;background:rgba(0,0,0,.05);">0%</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text2);">Pembagian</div>
+      <div id="subPct" style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;background:rgba(0,0,0,.05);">0%</div>
+    </div>
     <div id="subDisplay" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
     <div style="border-top:1px solid var(--border);padding-top:14px;">
-      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Atur</div>
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Atur Persentase</div>
       <div id="subEditRows"></div>
       <button onclick="applySubAlloc()" style="width:100%;margin-top:10px;padding:13px;border-radius:13px;border:none;background:var(--blue);color:white;font-weight:600;font-size:13px;font-family:inherit;cursor:pointer;box-shadow:0 4px 14px rgba(0,122,255,.22);">Simpan</button>
     </div>
@@ -465,6 +564,9 @@ const KM=['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uan
 const KK=['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
 let _ch={},subAlloc=[{nama:'Pemilik',pct:40},{nama:'Karyawan',pct:40},{nama:'Cadangan',pct:20}];
 let rMenuR=[],rHppR=[],editResId=null,resF='';
+let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
+let calSelectedDate=null;
+let fabOpen=false;
 
 const IDR=v=>'Rp '+Math.round(v||0).toLocaleString('id-ID');
 const IDRs=v=>{if(v>=1e9)return'Rp '+(v/1e9).toFixed(1)+'M';if(v>=1e6)return'Rp '+(v/1e6).toFixed(1)+'jt';if(v>=1e3)return'Rp '+(v/1e3).toFixed(0)+'rb';return IDR(v);};
@@ -476,20 +578,39 @@ function showLoad(v){document.getElementById('loading').classList.toggle('show',
 function showNotif(msg){const el=document.getElementById('notif');document.getElementById('notifTxt').textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2600);}
 function updC(id,cfg){if(_ch[id])_ch[id].destroy();const c=document.getElementById(id);if(!c)return;_ch[id]=new Chart(c,cfg);}
 
+/* FAB */
+window.toggleFab=function(){fabOpen?closeFab():openFab();};
+function openFab(){
+  fabOpen=true;
+  document.getElementById('fabMenu').classList.add('show');
+  document.getElementById('fabBackdrop').classList.add('show');
+  document.getElementById('navFab').classList.add('open');
+}
+function closeFab(){
+  fabOpen=false;
+  document.getElementById('fabMenu').classList.remove('show');
+  document.getElementById('fabBackdrop').classList.remove('show');
+  document.getElementById('navFab').classList.remove('open');
+}
+window.closeFab=closeFab;
+window.fabAction=function(type){
+  closeFab();
+  setTimeout(()=>{
+    if(type==='reservasi')openResM(null);
+    else openKasM(null,type);
+  },120);
+};
+
 window.showPage=function(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
+  closeFab();
   if(id==='dashboard')refreshDash();
   if(id==='keuangan')renderKas();
   if(id==='reservasi')renderRes();
   if(id==='laporan'){renderLaba();renderAlloc();}
-};
-window.handleFab=function(){
-  const pg=document.querySelector('.page.active')?.id;
-  if(pg==='page-reservasi')openResM(null);
-  else openKasM(null,'masuk');
 };
 function refreshAll(){const pg=document.querySelector('.page.active')?.id;refreshDash();if(pg==='keuangan')renderKas();if(pg==='reservasi')renderRes();if(pg==='laporan'){renderLaba();renderAlloc();}}
 
@@ -514,19 +635,75 @@ function refreshDash(){
     {label:'Masuk',data:MS.map(m=>ms[m]),backgroundColor:'rgba(52,199,89,0.72)',borderRadius:5,borderSkipped:false},
     {label:'Keluar',data:MS.map(m=>ks[m]),backgroundColor:'rgba(255,59,48,0.62)',borderRadius:5,borderSkipped:false}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,borderRadius:4,useBorderRadius:true,padding:12,font:{size:10},color:'#8e8e93'}}},scales:{x:{grid:{display:false},ticks:{color:'#aeaeb2',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.05)'},border:{display:false},ticks:{color:'#aeaeb2',font:{size:9},callback:v=>IDRs(v)}}}}});
+  renderCal();
   const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).slice(0,5);
   document.getElementById('recentList').innerHTML=all.length?all.map(r=>{
     const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
     const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi</span>`:'';
     return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div></div></div>`;
   }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg><p>Belum ada transaksi</p></div>';
-  const today=new Date().toISOString().split('T')[0];
-  const up=(window._res||[]).filter(r=>(r.tanggal||'')>=today).sort((a,b)=>(a.tanggal||'').localeCompare(b.tanggal||'')).slice(0,3);
-  document.getElementById('upcomingList').innerHTML=up.length?up.map(r=>{
-    const bc=r.status==='Lunas'?'badge-lunas':r.status==='DP'?'badge-dp':'badge-belum';
-    const bl=r.status==='Lunas'?'Lunas':r.status==='DP'?'DP':'Belum Bayar';
-    return`<div class="rescard"><div class="rctop"><div><div class="rcname">${r.nama||''}</div><div class="rctype">${r.acara||''}</div></div><span class="badge ${bc}">${bl}</span></div><div class="rcchips"><div class="rcchip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDH(r.tanggal)}</div><div class="rcchip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${r.waktu||''}</div><div class="rcchip"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>${r.jumlah||0} org</div></div><div class="rcbottom"><div class="rcmoney">${IDR(hitOmzet(r))}</div><div class="rcactions"><button class="btnico2" onclick="editRes('${r._docId}')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></div></div></div>`;
-  }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>Tidak ada reservasi mendatang</p></div>';
+}
+
+/* CALENDAR */
+const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+window.calMove=function(dir){
+  calMonth+=dir;
+  if(calMonth<0){calMonth=11;calYear--;}
+  if(calMonth>11){calMonth=0;calYear++;}
+  calSelectedDate=null;
+  renderCal();
+};
+function renderCal(){
+  const today=new Date(),todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  document.getElementById('calTitle').textContent=BULAN[calMonth]+' '+calYear;
+  const res=window._res||[];
+  const resDates={};
+  res.forEach(r=>{if(r.tanggal)resDates[r.tanggal]=(resDates[r.tanggal]||[]).concat(r);});
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  let html='';
+  for(let i=0;i<firstDay;i++)html+=`<div class="cal-cell empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const isToday=ds===todayStr,hasRes=resDates[ds]?.length>0,isSel=ds===calSelectedDate;
+    let cls='cal-cell';
+    if(isToday)cls+=' today';
+    else if(isSel)cls+=' has-res';
+    else if(hasRes)cls+=' has-res';
+    const dot=hasRes&&!isToday?`<div class="cal-dot"></div>`:'';
+    html+=`<div class="${cls}" onclick="calClick('${ds}')">${d}${dot}</div>`;
+  }
+  document.getElementById('calGrid').innerHTML=html;
+  if(calSelectedDate&&resDates[calSelectedDate]){
+    showCalPopup(calSelectedDate,resDates[calSelectedDate]);
+  } else {
+    document.getElementById('calPopup').classList.remove('show');
+  }
+}
+window.calClick=function(ds){
+  const res=window._res||[];
+  const dayRes=res.filter(r=>r.tanggal===ds);
+  if(!dayRes.length){calSelectedDate=null;document.getElementById('calPopup').classList.remove('show');renderCal();return;}
+  calSelectedDate=calSelectedDate===ds?null:ds;
+  renderCal();
+};
+function showCalPopup(ds,items){
+  const d=new Date(ds+'T00:00:00');
+  const dy=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const m=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const dtxt=dy[d.getDay()]+', '+d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();
+  const rows=items.map(r=>{
+    const bc=r.status==='Lunas'?'cpb-lunas':r.status==='DP'?'cpb-dp':'cpb-belum';
+    const bl=r.status==='Lunas'?'Lunas':r.status==='DP'?'DP':'Belum';
+    const sn=(r.nama||'').replace(/'/g,"\\'");
+    return`<div class="cal-popup-item" onclick="editRes('${r._docId}');document.getElementById('calPopup').classList.remove('show');calSelectedDate=null;renderCal();" style="cursor:pointer;">
+      <div><div class="cal-popup-name">${r.nama||''}</div><div class="cal-popup-meta">${r.acara||''} · ${r.jumlah||0} orang · ${r.waktu||''}</div></div>
+      <span class="cal-popup-badge ${bc}">${bl}</span>
+    </div>`;
+  }).join('');
+  const popup=document.getElementById('calPopup');
+  popup.innerHTML=`<div class="cal-popup-date">${dtxt} · ${items.length} reservasi</div>${rows}`;
+  popup.classList.add('show');
 }
 
 /* KAS MODAL */
@@ -562,8 +739,10 @@ window.delKas=async function(type,id){if(!confirm('Hapus?'))return;await window.
 /* KAS LIST */
 window.renderKas=function(){
   const type=document.getElementById('kasType').value,bln=document.getElementById('kasBulan').value,kat=document.getElementById('kasKat').value;
-  const katSel=document.getElementById('kasKat'),allK=[...new Set([...(type!=='keluar'?KM:[]),...(type!=='masuk'?KK:[])])],prev=katSel.value;
-  katSel.innerHTML='<option value="">Semua Kat.</option>'+allK.map(k=>`<option>${k}</option>`).join('');
+  const katSel=document.getElementById('kasKat');
+  const allK=[...new Set([...(type!=='keluar'?KM:[]),...(type!=='masuk'?KK:[])])];
+  const prev=katSel.value;
+  katSel.innerHTML='<option value="">Semua</option>'+allK.map(k=>`<option value="${k}">${k}</option>`).join('');
   if(allK.includes(prev))katSel.value=prev;
   let items=[];
   if(type!=='keluar')items.push(...(window._km||[]).map(x=>({...x,_t:'masuk'})));
@@ -574,7 +753,7 @@ window.renderKas=function(){
     const arr=isM?window._km:window._kk,idx=arr.findIndex(x=>x.id===r.id);
     const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi</span>`:'';
     const actions=!r.autoSync?`<div class="trxactions"><button class="btnico" onclick="editKas('${isM?'masuk':'keluar'}',${idx})"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="btnico del" onclick="delKas('${isM?'masuk':'keluar'}','${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div>`:`<div style="font-size:10px;color:var(--text4);margin-top:3px;">Auto sync</div>`;
-    return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori} · ${r.jenis||''}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div>${actions}</div></div>`;
+    return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div>${actions}</div></div>`;
   }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/></svg><p>Tidak ada transaksi</p></div>';
 };
 
@@ -668,12 +847,18 @@ function renderLaba(){
 function renderAlloc(){
   const km=window._km||[],kk=window._kk||[];
   const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0),lb=tM-tK,gaji=lb*0.5;
-  document.getElementById('al-laba').textContent=IDR(Math.abs(lb));document.getElementById('al-margin').textContent=tM?(lb/tM*100).toFixed(1)+'% Margin':'0%';
-  document.getElementById('al-omaji').textContent=IDR(lb*0.2);document.getElementById('al-belanja').textContent=IDR(lb*0.3);document.getElementById('al-gaji').textContent=IDR(gaji);
+  document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
+  document.getElementById('al-margin').textContent=tM?(lb/tM*100).toFixed(1)+'% Margin':'0%';
+  document.getElementById('al-omaji').textContent=IDRs(lb*0.2);
+  document.getElementById('al-belanja').textContent=IDRs(lb*0.3);
+  document.getElementById('al-gaji').textContent=IDRs(gaji);
   let tp=subAlloc.reduce((s,a)=>s+a.pct,0);
   document.getElementById('subPct').innerHTML=`<span style="color:${tp===100?'var(--green)':'var(--red)'}">${tp}%</span>`;
-  document.getElementById('subDisplay').innerHTML=subAlloc.map(s=>`<div><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px;"><span>${s.nama} (${s.pct}%)</span><span style="color:var(--blue)">${IDR(gaji*(s.pct/100))}</span></div><div class="allocbar-bg"><div class="allocbar-fill" style="width:${s.pct}%;background:var(--blue)"></div></div></div>`).join('');
-  document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`<div style="display:flex;gap:8px;margin-bottom:8px;"><input type="text" id="sN${i}" value="${s.nama}" placeholder="Nama" style="flex:3;padding:9px 12px;border-radius:10px;border:1px solid var(--border);font-size:13px;background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text)"><input type="number" id="sP${i}" value="${s.pct}" oninput="livePct()" placeholder="%" style="flex:1;padding:9px;border-radius:10px;border:1px solid var(--border);font-size:13px;text-align:center;background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text)"></div>`).join('');
+  document.getElementById('subDisplay').innerHTML=subAlloc.map(s=>{
+    const amt=IDRs(gaji*(s.pct/100));
+    return`<div><div class="alloc-row"><span>${s.nama} (${s.pct}%)</span><span style="color:var(--blue)">${amt}</span></div><div class="allocbar-bg"><div class="allocbar-fill" style="width:${s.pct}%;background:var(--blue)"></div></div></div>`;
+  }).join('');
+  document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`<div class="subeditrow"><input type="text" id="sN${i}" value="${s.nama}" placeholder="Nama"><input type="number" id="sP${i}" value="${s.pct}" oninput="livePct()" placeholder="%" min="0" max="100"><span class="pct-label">%</span></div>`).join('');
 }
 window.livePct=function(){let t=0;subAlloc.forEach((_,i)=>t+=parseFloat(document.getElementById('sP'+i)?.value)||0);document.getElementById('subPct').innerHTML=`<span style="color:${t===100?'var(--green)':'var(--red)'}">${t}%</span>`;};
 window.applySubAlloc=function(){let t=0;const n=subAlloc.map((_,i)=>{const p=parseFloat(document.getElementById('sP'+i)?.value)||0;t+=p;return{nama:document.getElementById('sN'+i)?.value,pct:p};});if(t!==100){showNotif('Total harus 100%');return;}subAlloc=n;renderAlloc();showNotif('Alokasi disimpan');};
