@@ -3,67 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>OMAJI - Liquid Glass Fixed</title>
+<title>OMAJI</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-
 :root {
-  --text-main: #1c1c1e;
-  --text-muted: #8e8e93;
-  --blue: #007aff;
-  --green: #34c759;
-  --red: #ff3b30;
-  --orange: #ff9500;
-  --purple: #af52de;
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+  --text-main: #1c1c1e; --text-muted: #8e8e93;
+  --blue: #007aff; --green: #34c759; --red: #ff3b30; --orange: #ff9500; --purple: #af52de;
+  --glass-bg: rgba(255,255,255,0.65); --glass-border: rgba(255,255,255,0.4); --glass-shadow: 0 8px 32px 0 rgba(31,38,135,0.05);
 }
-
-body { 
-    background-color: #f2f2f7; 
-    color: var(--text-main); 
-    font-size: 14px; 
-    min-height: 100vh;
-    padding-bottom: 100px;
-    position: relative;
-    overflow-x: hidden;
-}
-
+body { background-color: #f2f2f7; color: var(--text-main); font-size: 14px; min-height: 100vh; padding-bottom: 100px; position: relative; overflow-x: hidden; }
 .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 400px; height: 400px; background: var(--blue); border-radius: 50%; filter: blur(100px); opacity: 0.15; z-index: -1; }
 .bg-blob-2 { position: fixed; bottom: -10%; right: -10%; width: 400px; height: 400px; background: var(--green); border-radius: 50%; filter: blur(100px); opacity: 0.15; z-index: -1; }
-
-.glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-}
-
+.glass { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
 .header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.3); }
 .logo { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: #000; }
-.sync-pill { background: rgba(52, 199, 89, 0.15); color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 4px;}
-.btn-export { background: transparent; border: none; color: var(--blue); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;}
-
+.sync-pill { background: rgba(52,199,89,0.15); color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+.btn-export { background: transparent; border: none; color: var(--blue); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 .nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-around; padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); z-index: 100; border-top: 1px solid rgba(255,255,255,0.4); border-radius: 30px 30px 0 0; }
 .nav button { flex: 1; background: none; border: none; font-size: 10px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: 0.3s; }
 .nav button.active { color: var(--blue); }
-
 .container { max-width: 600px; margin: 0 auto; padding: 16px; }
-
 .card { border-radius: 24px; padding: 20px; margin-bottom: 16px; }
-.card h3 { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
-
+.card h3 { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
 .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
 .metric { border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 4px; }
 .metric .lbl { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
 .metric .val { font-size: 18px; font-weight: 800; }
-
 .trx-list { display: flex; flex-direction: column; gap: 12px; }
 .trx-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); }
 .trx-item-left { display: flex; flex-direction: column; gap: 4px; }
@@ -73,36 +41,77 @@ body {
 .trx-amt { font-weight: 800; font-size: 14px; }
 .trx-actions { display: flex; gap: 8px; margin-top: 4px; }
 .btn-icon { background: rgba(0,0,0,0.05); border: none; border-radius: 50%; width: 26px; height: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--text-muted); }
-
-.fab { position: fixed; bottom: 100px; right: 20px; width: 60px; height: 60px; border-radius: 30px; background: var(--blue); color: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3); border: none; cursor: pointer; z-index: 90; transition: transform 0.2s; }
+.fab { position: fixed; bottom: 100px; right: 20px; width: 60px; height: 60px; border-radius: 30px; background: var(--blue); color: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0,122,255,0.3); border: none; cursor: pointer; z-index: 90; transition: transform 0.2s; }
 .fab:active { transform: scale(0.9); }
-
 .toolbar { display: flex; gap: 8px; margin-bottom: 16px; }
 .toolbar select, .toolbar input { flex: 1; padding: 12px; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 13px; background: rgba(255,255,255,0.5); color: var(--text-main); outline: none; }
 
-.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+/* ─── MODAL ─── */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: flex-end; justify-content: center; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .overlay.open { display: flex; }
-.modal { background: rgba(255,255,255,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 24px 24px 0 0; padding: 24px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.5); }
+.modal { background: rgba(255,255,255,0.92); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 28px 28px 0 0; padding: 28px 24px 32px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.6); }
+.modal-handle { width: 40px; height: 4px; background: rgba(0,0,0,0.12); border-radius: 4px; margin: 0 auto 20px; }
+.modal h2 { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
 .form-row { margin-bottom: 16px; }
-.form-row label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
-.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; font-size: 14px; background: rgba(255,255,255,0.9); outline: none; }
+.form-row label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; font-size: 14px; background: rgba(255,255,255,0.9); outline: none; transition: border-color 0.2s; }
+.form-row input:focus, .form-row select:focus { border-color: var(--blue); }
+.form-row-half { display: flex; gap: 10px; }
+.form-row-half .form-row { flex: 1; }
+
+/* ─── TOMBOL MODAL BARU ─── */
+.modal-btns { display: flex; gap: 10px; margin-top: 24px; }
+.btn-cancel {
+  flex: 1; padding: 16px; border-radius: 16px;
+  background: rgba(0,0,0,0.05); border: none;
+  color: var(--text-main); font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s, transform 0.15s;
+}
+.btn-cancel:active { background: rgba(0,0,0,0.1); transform: scale(0.97); }
+.btn-save {
+  flex: 2; padding: 16px; border-radius: 16px;
+  background: var(--blue); border: none;
+  color: white; font-size: 15px; font-weight: 700;
+  cursor: pointer; box-shadow: 0 6px 20px rgba(0,122,255,0.3);
+  transition: opacity 0.2s, transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-save:active { opacity: 0.85; transform: scale(0.97); }
+
+/* ─── LABA RUGI ─── */
+.laba-section { border-radius: 20px; padding: 16px; margin-bottom: 14px; }
+.laba-section-masuk { background: rgba(52,199,89,0.08); border: 1px solid rgba(52,199,89,0.2); }
+.laba-section-keluar { background: rgba(255,59,48,0.06); border: 1px solid rgba(255,59,48,0.15); }
+.laba-section-total { background: rgba(0,122,255,0.08); border: 1px solid rgba(0,122,255,0.2); border-radius: 20px; padding: 16px; }
+.laba-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.laba-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+.laba-section-total-val { font-size: 13px; font-weight: 800; }
+.laba-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+.laba-row:last-child { border-bottom: none; margin-bottom: 0; }
+.laba-row-key { color: var(--text-muted); font-weight: 500; }
+.laba-row-val { font-weight: 700; }
+
+/* ─── RECENT TRX ─── */
+.recent-trx-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.recent-trx-item:last-child { border-bottom: none; }
+.recent-trx-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.recent-trx-info { flex: 1; min-width: 0; }
+.recent-trx-desc { font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recent-trx-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.recent-trx-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px; }
 
 .alloc-bar-bg { background: rgba(0,0,0,0.05); border-radius: 8px; height: 8px; margin-top: 8px; overflow: hidden; }
 .alloc-bar-fill { height: 100%; border-radius: 8px; transition: width 0.5s ease; }
-
 .edit-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; }
 .edit-row input[type="text"] { flex: 3; min-width: 0; padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); font-size: 13px; background: rgba(255,255,255,0.7); }
 .edit-row input[type="number"] { flex: 1.2; min-width: 60px; padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); font-size: 13px; text-align: center; background: rgba(255,255,255,0.7); }
-
 .page { display: none; animation: slideUp 0.3s ease; }
 .page.active { display: block; }
 @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
 .chart-container { position: relative; height: 180px; width: 100%; }
 </style>
 </head>
 <body>
-
 <div class="bg-blob-1"></div>
 <div class="bg-blob-2"></div>
 
@@ -137,17 +146,15 @@ body {
   </div>
 
   <div class="card glass"><h3><i data-lucide="bar-chart-3" style="width:16px"></i> Arus Kas</h3><div class="chart-container"><canvas id="cB"></canvas></div></div>
-  
   <div class="card glass"><h3><i data-lucide="trending-up" style="width:16px"></i> Tren 14 Hari</h3><div class="chart-container"><canvas id="cH"></canvas></div></div>
-  
   <div class="card glass"><h3><i data-lucide="pie-chart" style="width:16px"></i> Kategori Keluar</h3><div class="chart-container" style="height:200px"><canvas id="cK"></canvas></div></div>
-  
+
   <div class="card glass">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
-        <h3 style="margin:0"><i data-lucide="history" style="width:16px"></i> Terakhir</h3>
-        <button onclick="showPage('kas-masuk', document.querySelectorAll('.nav button')[1])" style="background:none; border:none; color:var(--blue); font-size:11px; font-weight:700;">Lihat Semua</button>
+      <h3 style="margin:0"><i data-lucide="history" style="width:16px"></i> Transaksi Terakhir</h3>
+      <button onclick="showPage('kas-masuk', document.querySelectorAll('.nav button')[1])" style="background:none; border:none; color:var(--blue); font-size:11px; font-weight:700;">Lihat Semua</button>
     </div>
-    <div id="recentTrxList" class="trx-list"></div>
+    <div id="recentTrxList"></div>
   </div>
 </div>
 
@@ -168,7 +175,10 @@ body {
 </div>
 
 <div id="page-laba-rugi" class="page">
-  <div class="card glass"><h3 style="text-align: center;">Ringkasan Profit</h3><div id="labaC"></div></div>
+  <div class="card glass">
+    <h3 style="text-align:center; margin-bottom:20px;"><i data-lucide="bar-chart-2" style="width:16px"></i> Ringkasan Laba Rugi</h3>
+    <div id="labaC"></div>
+  </div>
 </div>
 
 <div id="page-alokasi" class="page">
@@ -188,11 +198,10 @@ body {
       <div id="subAllocProgress" style="font-size:10px; font-weight:700; padding:4px 8px; border-radius:8px; background:rgba(0,0,0,0.05);">Total: 0%</div>
     </div>
     <div id="subAllocDisplay" style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;"></div>
-    
     <div style="border-top:1px solid var(--glass-border); padding-top:16px;">
       <p style="font-size:10px; font-weight:700; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase;">Atur Persentase</p>
       <div id="subEditRows"></div>
-      <button onclick="applySubAlloc()" style="width:100%; margin-top:12px; padding:14px; border-radius:14px; border:none; background:var(--blue); color:white; font-weight:700;">Simpan Perubahan</button>
+      <button onclick="applySubAlloc()" style="width:100%; margin-top:12px; padding:14px; border-radius:14px; border:none; background:var(--blue); color:white; font-weight:700; font-size:14px;">Simpan Perubahan</button>
     </div>
   </div>
 </div>
@@ -201,21 +210,23 @@ body {
 
 <button class="fab" onclick="handleFabClick()"><i data-lucide="plus"></i></button>
 
+<!-- MODAL -->
 <div class="overlay" id="mOv">
   <div class="modal">
+    <div class="modal-handle"></div>
     <h2 id="mTitle">Tambah Transaksi</h2>
     <input type="hidden" id="mType"><input type="hidden" id="mIdx">
     <div class="form-row"><label>Tanggal</label><input type="date" id="fTgl"></div>
-    <div class="form-row"><label>Deskripsi</label><input type="text" id="fDes" placeholder="Deskripsi"></div>
+    <div class="form-row"><label>Deskripsi</label><input type="text" id="fDes" placeholder="Nama transaksi..."></div>
     <div class="form-row"><label>Kategori</label><select id="fKat"></select></div>
-    <div style="display:flex; gap:10px;">
-      <div class="form-row" style="flex:1"><label>Jenis</label><select id="fJen"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div>
-      <div class="form-row" style="flex:1"><label>Status</label><select id="fSts"><option>Lunas</option><option>Belum Bayar</option></select></div>
+    <div class="form-row-half">
+      <div class="form-row"><label>Jenis</label><select id="fJen"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div>
+      <div class="form-row"><label>Status</label><select id="fSts"><option>Lunas</option><option>Belum Bayar</option></select></div>
     </div>
-    <div class="form-row"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="fNom" oninput="formatInputNominal(this)"></div>
+    <div class="form-row"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="fNom" placeholder="0" oninput="formatInputNominal(this)"></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
-      <button class="btn-save" onclick="saveTrx()">Simpan</button>
+      <button class="btn-save" onclick="saveTrx()"><i data-lucide="check" style="width:16px;height:16px"></i> Simpan</button>
     </div>
   </div>
 </div>
@@ -237,7 +248,7 @@ const db = getFirestore(app);
 const IDR = v => 'Rp ' + Math.round(v).toLocaleString('id-ID');
 const KM_KATS = ['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uang Belanja'];
 const KK_KATS = ['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
-const PIE_COLORS = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#5ac8fa', '#007aff', '#5856d6', '#af52de'];
+const PIE_COLORS = ['#ff3b30','#ff9500','#ffcc00','#34c759','#5ac8fa','#007aff','#5856d6','#af52de'];
 
 let km = [], kk = [];
 let charts = {};
@@ -251,12 +262,11 @@ const selFkK = document.getElementById('fkK');
 KK_KATS.forEach(k => selFkK.innerHTML += `<option>${k}</option>`);
 
 onSnapshot(collection(db,'kas_masuk'), snap => {
-  km = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  km = snap.docs.map(d => ({id:d.id,...d.data()}));
   refreshDash(); renderKM(); renderAlokasi();
 });
-
 onSnapshot(collection(db,'kas_keluar'), snap => {
-  kk = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  kk = snap.docs.map(d => ({id:d.id,...d.data()}));
   refreshDash(); renderKK(); renderAlokasi();
 });
 
@@ -289,7 +299,7 @@ function filtAndSort(data, type) {
 
 function renderList(data, listId, type) {
   const isMasuk = type === 'masuk';
-  document.getElementById(listId).innerHTML = data.map((r) => {
+  document.getElementById(listId).innerHTML = data.map(r => {
     const origIdx = (isMasuk ? km : kk).findIndex(item => item.id === r.id);
     return `<div class="trx-item">
       <div class="trx-item-left"><div class="trx-title">${r.deskripsi}</div><div class="trx-meta"><span>${r.tanggal.slice(5)}</span> • <span>${r.kategori}</span></div></div>
@@ -310,18 +320,26 @@ window.renderKK = () => renderList(filtAndSort(kk,'keluar'), 'listK', 'keluar');
 window.openModal = function(type, idx) {
   document.getElementById('mType').value = type;
   document.getElementById('mIdx').value = idx !== null ? idx : '';
-  document.getElementById('mTitle').textContent = idx !== null ? 'Edit Transaksi' : 'Tambah Transaksi';
+  const isEdit = idx !== null;
+  document.getElementById('mTitle').textContent = isEdit ? 'Edit Transaksi' : (type==='masuk' ? 'Tambah Pemasukan' : 'Tambah Pengeluaran');
   document.getElementById('fKat').innerHTML = (type==='masuk'?KM_KATS:KK_KATS).map(k=>`<option>${k}</option>`).join('');
-  if(idx !== null) {
+  const saveBtn = document.querySelector('.btn-save');
+  saveBtn.style.background = type==='masuk' ? 'var(--green)' : 'var(--blue)';
+  saveBtn.style.boxShadow = type==='masuk' ? '0 6px 20px rgba(52,199,89,0.3)' : '0 6px 20px rgba(0,122,255,0.3)';
+  if(isEdit) {
     const r = (type==='masuk'?km:kk)[idx];
-    document.getElementById('fTgl').value = r.tanggal; document.getElementById('fDes').value = r.deskripsi;
-    document.getElementById('fKat').value = r.kategori; document.getElementById('fJen').value = r.jenis;
-    document.getElementById('fSts').value = r.status; document.getElementById('fNom').value = r.nominal.toLocaleString('id-ID');
+    document.getElementById('fTgl').value = r.tanggal;
+    document.getElementById('fDes').value = r.deskripsi;
+    document.getElementById('fKat').value = r.kategori;
+    document.getElementById('fJen').value = r.jenis;
+    document.getElementById('fSts').value = r.status;
+    document.getElementById('fNom').value = r.nominal.toLocaleString('id-ID');
   } else {
     document.getElementById('fTgl').value = new Date().toISOString().slice(0,10);
     ['fDes','fNom'].forEach(id => document.getElementById(id).value = '');
   }
   document.getElementById('mOv').classList.add('open');
+  lucide.createIcons();
 }
 
 window.closeModal = () => document.getElementById('mOv').classList.remove('open');
@@ -331,9 +349,12 @@ window.saveTrx = async function() {
   const idx  = document.getElementById('mIdx').value;
   const rawNominal = document.getElementById('fNom').value.replace(/\./g, '');
   const obj = {
-    tanggal: document.getElementById('fTgl').value, deskripsi: document.getElementById('fDes').value.trim(),
-    kategori: document.getElementById('fKat').value, jenis: document.getElementById('fJen').value,
-    status: document.getElementById('fSts').value, nominal: parseFloat(rawNominal)
+    tanggal: document.getElementById('fTgl').value,
+    deskripsi: document.getElementById('fDes').value.trim(),
+    kategori: document.getElementById('fKat').value,
+    jenis: document.getElementById('fJen').value,
+    status: document.getElementById('fSts').value,
+    nominal: parseFloat(rawNominal)
   };
   if(!obj.tanggal||!obj.deskripsi||isNaN(obj.nominal)){ alert('Lengkapi data'); return; }
   const colName = type==='masuk' ? 'kas_masuk' : 'kas_keluar';
@@ -341,71 +362,136 @@ window.saveTrx = async function() {
   closeModal();
 }
 
-window.doDelete = async function(type, id) { if(confirm("Hapus?")) await deleteDoc(doc(db, type==='masuk'?'kas_masuk':'kas_keluar', id)); }
+window.doDelete = async function(type, id) {
+  if(confirm("Hapus transaksi ini?")) await deleteDoc(doc(db, type==='masuk'?'kas_masuk':'kas_keluar', id));
+}
 
 function updChart(id, cfg) { if(charts[id]) charts[id].destroy(); charts[id] = new Chart(document.getElementById(id), cfg); }
 
 function refreshDash() {
   const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK;
-  document.getElementById('m1').textContent=IDR(tM); document.getElementById('m2').textContent=IDR(tK);
-  document.getElementById('m3').textContent=IDR(lb); document.getElementById('m4').textContent=`Total ${km.length+kk.length} Transaksi`;
+  document.getElementById('m1').textContent=IDR(tM);
+  document.getElementById('m2').textContent=IDR(tK);
+  document.getElementById('m3').textContent=IDR(lb);
+  document.getElementById('m4').textContent=`Total ${km.length+kk.length} Transaksi`;
 
-  // 1. Chart Arus Kas Bulanan
   const ms={},ks={}; ['01','02','03','04','05'].forEach(m=>{ms[m]=0;ks[m]=0;});
   km.forEach(r=>{const m=r.tanggal.slice(5,7); if(ms[m]!==undefined) ms[m]+=r.nominal;});
   kk.forEach(r=>{const m=r.tanggal.slice(5,7); if(ks[m]!==undefined) ks[m]+=r.nominal;});
-  updChart('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','Mei'],datasets:[{label:'M',data:Object.values(ms),backgroundColor:'#34c759',borderRadius:4},{label:'K',data:Object.values(ks),backgroundColor:'#ff3b30',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  updChart('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','Mei'],datasets:[{label:'Masuk',data:Object.values(ms),backgroundColor:'#34c759',borderRadius:4},{label:'Keluar',data:Object.values(ks),backgroundColor:'#ff3b30',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
 
-  // 2. Chart Tren Harian (Line Chart)
   const allD=[...new Set([...km,...kk].map(r=>r.tanggal))].sort().slice(-14);
   const md={},kd={};
   km.forEach(r=>{md[r.tanggal]=(md[r.tanggal]||0)+r.nominal;});
   kk.forEach(r=>{kd[r.tanggal]=(kd[r.tanggal]||0)+r.nominal;});
-  updChart('cH',{
-      type:'line',
-      data:{
-          labels:allD.map(d=>d.slice(5)),
-          datasets:[
-              {label:'Masuk',data:allD.map(d=>md[d]||0),borderColor:'#34c759',backgroundColor:'rgba(52, 199, 89, 0.1)',tension:0.4,fill:true,pointRadius:2},
-              {label:'Keluar',data:allD.map(d=>kd[d]||0),borderColor:'#ff3b30',backgroundColor:'rgba(255, 59, 48, 0.1)',tension:0.4,fill:true,pointRadius:2}
-          ]
-      },
-      options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{border:{display:false},grid:{color:'rgba(0,0,0,0.05)'}}}}
-  });
+  updChart('cH',{type:'line',data:{labels:allD.map(d=>d.slice(5)),datasets:[{label:'Masuk',data:allD.map(d=>md[d]||0),borderColor:'#34c759',backgroundColor:'rgba(52,199,89,0.1)',tension:0.4,fill:true,pointRadius:2},{label:'Keluar',data:allD.map(d=>kd[d]||0),borderColor:'#ff3b30',backgroundColor:'rgba(255,59,48,0.1)',tension:0.4,fill:true,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{border:{display:false},grid:{color:'rgba(0,0,0,0.05)'}}}}});
 
-  // 3. Chart Donut Kategori
   const kke={}; kk.forEach(r=>{kke[r.kategori]=(kke[r.kategori]||0)+r.nominal;});
   updChart('cK',{type:'doughnut',data:{labels:Object.keys(kke),datasets:[{data:Object.values(kke),backgroundColor:PIE_COLORS,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'75%',plugins:{legend:{position:'bottom',labels:{boxWidth:8,font:{size:9}}}}}});
 
-  const allTrx = [...km.map(x=>({...x,type:'m'})), ...kk.map(x=>({...x,type:'k'}))].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).slice(0,3);
-  document.getElementById('recentTrxList').innerHTML = allTrx.map(r => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.05);font-size:12px"><div><b>${r.deskripsi}</b><br><small>${r.tanggal.slice(5)}</small></div><div style="color:${r.type==='m'?'var(--green)':'var(--red)'}">${r.type==='m'?'+':'-'} ${IDR(r.nominal)}</div></div>`).join('');
+  // RECENT TRX — masuk & keluar, 5 terbaru
+  const allTrx = [
+    ...km.map(x=>({...x,type:'masuk'})),
+    ...kk.map(x=>({...x,type:'keluar'}))
+  ].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).slice(0,5);
+
+  document.getElementById('recentTrxList').innerHTML = allTrx.map(r => {
+    const isMasuk = r.type === 'masuk';
+    const bgColor = isMasuk ? 'rgba(52,199,89,0.12)' : 'rgba(255,59,48,0.1)';
+    const iconColor = isMasuk ? 'var(--green)' : 'var(--red)';
+    const iconName = isMasuk ? 'arrow-down' : 'arrow-up';
+    const badgeBg = isMasuk ? 'rgba(52,199,89,0.12)' : 'rgba(255,59,48,0.1)';
+    const badgeColor = isMasuk ? 'var(--green)' : 'var(--red)';
+    return `<div class="recent-trx-item">
+      <div class="recent-trx-icon" style="background:${bgColor}; color:${iconColor}">
+        <i data-lucide="${iconName}" style="width:16px;height:16px"></i>
+      </div>
+      <div class="recent-trx-info">
+        <div class="recent-trx-desc">${r.deskripsi}</div>
+        <div class="recent-trx-meta">${r.tanggal.slice(5)} · ${r.kategori}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:800; font-size:13px; color:${iconColor}">${isMasuk?'+':'-'} ${IDR(r.nominal)}</div>
+        <span class="recent-trx-badge" style="background:${badgeBg}; color:${badgeColor}">${isMasuk?'Masuk':'Keluar'}</span>
+      </div>
+    </div>`;
+  }).join('');
+  lucide.createIcons();
 }
 
 function renderLaba() {
-  const kmE={},kkE={}; km.forEach(r=>{kmE[r.kategori]=(kmE[r.kategori]||0)+r.nominal;}); kk.forEach(r=>{kkE[r.kategori]=(kkE[r.kategori]||0)+r.nominal;});
-  let tM=0,tK=0,h=''; Object.entries(kmE).forEach(([k,v])=>{tM+=v; h+=`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${k}</span><b>${IDR(v)}</b></div>`;});
-  h+='<hr style="margin:8px 0;opacity:0.1">'; Object.entries(kkE).forEach(([k,v])=>{tK+=v; h+=`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${k}</span><b>${IDR(v)}</b></div>`;});
-  h+=`<div style="margin-top:12px;padding:12px;background:rgba(0,122,255,0.1);border-radius:12px;display:flex;justify-content:space-between"><b>Laba</b><b style="color:var(--blue)">${IDR(tM-tK)}</b></div>`;
-  document.getElementById('labaC').innerHTML=h;
+  const kmE={}, kkE={};
+  km.forEach(r=>{kmE[r.kategori]=(kmE[r.kategori]||0)+r.nominal;});
+  kk.forEach(r=>{kkE[r.kategori]=(kkE[r.kategori]||0)+r.nominal;});
+  const tM = Object.values(kmE).reduce((s,v)=>s+v,0);
+  const tK = Object.values(kkE).reduce((s,v)=>s+v,0);
+  const laba = tM - tK;
+  const labaColor = laba >= 0 ? 'var(--green)' : 'var(--red)';
+
+  const masukRows = Object.entries(kmE).map(([k,v])=>`
+    <div class="laba-row">
+      <span class="laba-row-key">${k}</span>
+      <span class="laba-row-val" style="color:var(--green)">+ ${IDR(v)}</span>
+    </div>`).join('') || '<div style="color:var(--text-muted); font-size:12px; text-align:center; padding:8px 0;">Tidak ada data</div>';
+
+  const keluarRows = Object.entries(kkE).map(([k,v])=>`
+    <div class="laba-row">
+      <span class="laba-row-key">${k}</span>
+      <span class="laba-row-val" style="color:var(--red)">- ${IDR(v)}</span>
+    </div>`).join('') || '<div style="color:var(--text-muted); font-size:12px; text-align:center; padding:8px 0;">Tidak ada data</div>';
+
+  document.getElementById('labaC').innerHTML = `
+    <div class="laba-section laba-section-masuk">
+      <div class="laba-section-header">
+        <div class="laba-section-title" style="color:var(--green)">
+          <i data-lucide="arrow-down-circle" style="width:14px;height:14px"></i> Pemasukan
+        </div>
+        <div class="laba-section-total-val" style="color:var(--green)">${IDR(tM)}</div>
+      </div>
+      ${masukRows}
+    </div>
+
+    <div class="laba-section laba-section-keluar">
+      <div class="laba-section-header">
+        <div class="laba-section-title" style="color:var(--red)">
+          <i data-lucide="arrow-up-circle" style="width:14px;height:14px"></i> Pengeluaran
+        </div>
+        <div class="laba-section-total-val" style="color:var(--red)">${IDR(tK)}</div>
+      </div>
+      ${keluarRows}
+    </div>
+
+    <div class="laba-section-total">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase; margin-bottom:4px;">Laba Bersih</div>
+          <div style="font-size:22px; font-weight:800; color:${labaColor}">${IDR(laba)}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase; margin-bottom:4px;">Margin</div>
+          <div style="font-size:16px; font-weight:800; color:${labaColor}">${tM ? (laba/tM*100).toFixed(1) : 0}%</div>
+        </div>
+      </div>
+    </div>`;
+  lucide.createIcons();
 }
 
 window.liveUpdatePct = function() {
-    let total = 0;
-    for(let i=0; i<subAlloc.length; i++) total += (parseFloat(document.getElementById('sPct'+i).value) || 0);
-    document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${total===100?'var(--green)':'var(--red)'}">${total}%</span>`;
+  let total = 0;
+  for(let i=0; i<subAlloc.length; i++) total += (parseFloat(document.getElementById('sPct'+i).value) || 0);
+  document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${total===100?'var(--green)':'var(--red)'}">${total}%</span>`;
 }
 
 window.renderAlokasi = function() {
   const tM=km.reduce((s,r)=>s+r.nominal,0), tK=kk.reduce((s,r)=>s+r.nominal,0), lb=tM-tK, gaji=lb*0.5;
   document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
   document.getElementById('al-margin').textContent = tM ? (lb/tM*100).toFixed(1)+'% Margin' : '0%';
-  document.getElementById('al-omaji').textContent=IDR(lb*0.2); document.getElementById('al-belanja').textContent=IDR(lb*0.3); document.getElementById('al-gaji').textContent=IDR(gaji);
-  
-  let totalPct = subAlloc.reduce((s,a)=>s+a.pct, 0);
+  document.getElementById('al-omaji').textContent=IDR(lb*0.2);
+  document.getElementById('al-belanja').textContent=IDR(lb*0.3);
+  document.getElementById('al-gaji').textContent=IDR(gaji);
+  let totalPct = subAlloc.reduce((s,a)=>s+a.pct,0);
   document.getElementById('subAllocProgress').innerHTML = `Total: <span style="color:${totalPct===100?'var(--green)':'var(--red)'}">${totalPct}%</span>`;
-
   document.getElementById('subAllocDisplay').innerHTML=subAlloc.map(s=>`<div><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700"><span>${s.nama} (${s.pct}%)</span><span>${IDR(gaji*(s.pct/100))}</span></div><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${s.pct}%;background:var(--purple)"></div></div></div>`).join('');
-
   document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`
     <div class="edit-row">
       <input type="text" id="sName${i}" value="${s.nama}" placeholder="Nama">
