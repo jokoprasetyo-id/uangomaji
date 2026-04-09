@@ -235,7 +235,25 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .empty{text-align:center;padding:40px 20px;color:var(--text4);}
 .empty svg{width:32px;height:32px;margin-bottom:10px;opacity:.4;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;display:block;margin-left:auto;margin-right:auto;}
 .empty p{font-size:12px;}
-@media print{body *{visibility:hidden;}.print-target,.print-target *{visibility:visible;}.print-target{position:fixed;top:0;left:0;width:100%;padding:20px;background:white;}}
+
+/* --- PERBAIKAN CETAK NOTA --- */
+@media print {
+  /* Sembunyikan SEMUA elemen di body KECUALI overlay nota */
+  body > *:not(#notaOv) { display: none !important; }
+  
+  /* Ubah overlay nota menjadi tampilan utama statis */
+  #notaOv { display: block !important; position: static !important; background: transparent !important; }
+  
+  /* Bersihkan styling card agar terlihat seperti kertas biasa */
+  .sheet { position: static !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; animation: none !important; min-height: auto !important; }
+  
+  /* Sembunyikan elemen UI kontrol */
+  .sheethandle, .sheethead, .actrow, .btnclose { display: none !important; }
+  .sheetbody { padding: 0 !important; }
+  
+  /* Hilangkan border card pada struktur cetak */
+  .nota { border: none !important; padding: 0 !important; color: black; font-size: 11px; }
+}
 </style>
 </head>
 <body>
@@ -320,9 +338,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <div class="container" style="padding-bottom:24px;">
   <div class="toolbar">
     <select id="kasType" onchange="renderKas()"><option value="semua">Semua Transaksi</option><option value="masuk">Masuk</option><option value="keluar">Keluar</option></select>
-    <select id="kasBulan" onchange="renderKas()"><option value="">Bulan (Semua)</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Agu</option><option value="09">Sep</option><option value="10">Okt</option><option value="11">Nov</option><option value="12">Des</option></select>
-    <select id="kasTahun" onchange="renderKas()"><option value="">Tahun (Semua)</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select>
     <select id="kasKat" onchange="renderKas()"><option value="">Kategori (Semua)</option></select>
+    <select id="kasBulan" onchange="renderKas()"><option value="">Bulan (Semua)</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Agu</option><option value="09">Sep</option><option value="10">Okt</option><option value="11">Nov</option><option value="12">Des</option></select>
+    <select id="kasTahun" onchange="renderKas()"><option value="">Tahun (Semua)</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
   </div>
   <div class="trxlist" id="kasList"></div>
 </div>
@@ -469,10 +487,13 @@ onSnapshot(collection(dK,'kas_keluar'),s=>{window._kk=s.docs.map(d=>({id:d.id,..
 onSnapshot(query(collection(dR,'reservasi'),orderBy('createdAt','desc')),s=>{window._res=s.docs.map(d=>({...d.data(),_docId:d.id}));rOk=true;sc(kOk,rOk);refreshAll();},()=>{rOk=false;sc(kOk,rOk);});
 window._saveKas=async(type,idx,obj)=>{const col=type==='masuk'?'kas_masuk':'kas_keluar';if(idx!==''){const arr=type==='masuk'?window._km:window._kk;await updateDoc(doc(dK,col,arr[+idx].id),obj);}else await addDoc(collection(dK,col),obj);};
 window._delKas=async(type,id)=>await deleteDoc(doc(dK,type==='masuk'?'kas_masuk':'kas_keluar',id));
+
+/* PERBAIKAN: Penambahan createdAt di transaksi otomatis untuk sorting akurat */
 window._saveRes=async(obj)=>{
   showLoad(true);
   try{
     const omzet=hitOmzet(obj),hpp=hitHpp(obj),dp=obj.dp||0,now=new Date().toISOString();
+    const ts=Date.now(); 
     if(obj._docId){
       const k1=await getDocs(query(collection(dK,'kas_masuk'),where('resId','==',obj._docId)));
       for(const d of k1.docs)await deleteDoc(doc(dK,'kas_masuk',d.id));
@@ -482,9 +503,12 @@ window._saveRes=async(obj)=>{
     let docId=obj._docId;
     if(docId){const{_docId,...u}=obj;await updateDoc(doc(dR,'reservasi',docId),{...u,updatedAt:now});}
     else{const ref=await addDoc(collection(dR,'reservasi'),{...obj,_docId:undefined,createdAt:now});docId=ref.id;}
-    if(obj.status==='Lunas'&&omzet>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglLunas||obj.tanggal,deskripsi:`[Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:omzet,resId:docId,autoSync:true});
-    else if(obj.status==='DP'&&dp>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglDp||obj.tanggal,deskripsi:`[DP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:dp,resId:docId,autoSync:true});
-    if(hpp>0)await addDoc(collection(dK,'kas_keluar'),{tanggal:obj.tanggal,deskripsi:`[HPP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Bahan Baku / Stok',jenis:'Tunai',status:'Lunas',nominal:hpp,resId:docId,autoSync:true});
+    
+    if(obj.status==='Lunas'&&omzet>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglLunas||obj.tanggal,deskripsi:`[Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:omzet,resId:docId,autoSync:true,createdAt:ts});
+    else if(obj.status==='DP'&&dp>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglDp||obj.tanggal,deskripsi:`[DP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:dp,resId:docId,autoSync:true,createdAt:ts});
+    
+    if(hpp>0)await addDoc(collection(dK,'kas_keluar'),{tanggal:obj.tanggal,deskripsi:`[HPP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Bahan Baku / Stok',jenis:'Tunai',status:'Lunas',nominal:hpp,resId:docId,autoSync:true,createdAt:ts});
+    
     showNotif('Tersimpan & kas diperbarui');closeResM();
   }catch(e){showNotif('Error: '+e.message);}
   finally{showLoad(false);document.getElementById('btnSimpanRes').disabled=false;}
@@ -588,12 +612,12 @@ function refreshDash(){
     {label:'Keluar',data:MS.map(m=>ks[m]),backgroundColor:'rgba(255,59,48,0.62)',borderRadius:5,borderSkipped:false}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,borderRadius:4,useBorderRadius:true,padding:12,font:{size:10},color:'#8e8e93'}}},scales:{x:{grid:{display:false},ticks:{color:'#aeaeb2',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.05)'},border:{display:false},ticks:{color:'#aeaeb2',font:{size:9},callback:v=>IDRs(v)}}}}});
   
-  // RESERVASI MENDATANG (Menggantikan Kalender)
+  // RESERVASI MENDATANG
   const todayStr = new Date().toISOString().slice(0, 10);
   const upcomingRes = res
     .filter(r => (r.tanggal || '') >= todayStr)
     .sort((a,b) => new Date(a.tanggal) - new Date(b.tanggal))
-    .slice(0, 5); // Tampilkan 5 teratas
+    .slice(0, 5);
     
   document.getElementById('upcomingList').innerHTML = upcomingRes.length ? upcomingRes.map(r => {
     const bc = r.status==='Lunas'?'badge-lunas':r.status==='DP'?'badge-dp':'badge-belum';
@@ -615,8 +639,13 @@ function refreshDash(){
     </div>`;
   }).join('') : '<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>Tidak ada reservasi mendatang</p></div>';
 
-  // TRANSAKSI TERAKHIR
-  const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).slice(0,5);
+  // TRANSAKSI TERAKHIR (DENGAN SORTING BARU)
+  const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>{
+    const dA = new Date(a.tanggal).getTime(), dB = new Date(b.tanggal).getTime();
+    if(dA !== dB) return dB - dA;
+    return (b.createdAt||0) - (a.createdAt||0);
+  }).slice(0,5);
+  
   document.getElementById('recentList').innerHTML=all.length?all.map(r=>{
     const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
     const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi</span>`:'';
@@ -645,9 +674,11 @@ window.setKasType=function(type){
 };
 window.closeKasM=()=>document.getElementById('kasOv').classList.remove('show');
 window.fmtNom=function(el){let v=el.value.replace(/[^0-9]/g,'');el.value=v?parseInt(v).toLocaleString('id-ID'):'';};
+
+/* PERBAIKAN: Penambahan parameter createdAt saat input manual */
 window.saveKas=async function(){
   const type=document.getElementById('kasTypeVal').value,idx=document.getElementById('kasIdxVal').value;
-  const obj={tanggal:document.getElementById('kTgl').value,deskripsi:document.getElementById('kDes').value.trim(),kategori:document.getElementById('kKat').value,jenis:document.getElementById('kJen').value,status:document.getElementById('kSts').value,nominal:parseFloat(document.getElementById('kNom').value.replace(/\./g,''))};
+  const obj={tanggal:document.getElementById('kTgl').value,deskripsi:document.getElementById('kDes').value.trim(),kategori:document.getElementById('kKat').value,jenis:document.getElementById('kJen').value,status:document.getElementById('kSts').value,nominal:parseFloat(document.getElementById('kNom').value.replace(/\./g,'')), createdAt: Date.now()};
   if(!obj.tanggal||!obj.deskripsi||isNaN(obj.nominal)){showNotif('Lengkapi data');return;}
   await window._saveKas(type,idx,obj);closeKasM();showNotif('Tersimpan');
 };
@@ -666,11 +697,16 @@ window.renderKas=function(){
   if(type!=='keluar')items.push(...(window._km||[]).map(x=>({...x,_t:'masuk'})));
   if(type!=='masuk')items.push(...(window._kk||[]).map(x=>({...x,_t:'keluar'})));
   
+  /* PERBAIKAN URUTAN TRANSAKSI (Sort by Date, then fallback to creation time) */
   items=items.filter(r=>
     (!bln||r.tanggal?.slice(5,7)===bln)&&
     (!thn||r.tanggal?.slice(0,4)===thn)&&
     (!kat||r.kategori===kat)
-  ).sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+  ).sort((a,b)=>{
+    const dA = new Date(a.tanggal).getTime(), dB = new Date(b.tanggal).getTime();
+    if(dA !== dB) return dB - dA;
+    return (b.createdAt||0) - (a.createdAt||0);
+  });
   
   document.getElementById('kasList').innerHTML=items.length?items.map(r=>{
     const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
