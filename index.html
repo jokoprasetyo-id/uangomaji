@@ -32,7 +32,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .topbtn{width:32px;height:32px;flex-shrink:0;border-radius:50%;background:rgba(0,0,0,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--blue);}
 .topbtn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;}
 
-/* NAV — iOS floating pill */
+/* NAV */
 .navbar{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:552px;height:62px;background:rgba(28,28,30,0.84);backdrop-filter:blur(32px) saturate(1.8);-webkit-backdrop-filter:blur(32px) saturate(1.8);border:1px solid rgba(255,255,255,0.11);border-radius:26px;display:flex;align-items:center;justify-content:space-around;padding:0 8px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
 .navbtn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;border-radius:14px;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,0.42);transition:color .15s;flex:1;}
 .navbtn.active{color:#fff;}
@@ -83,25 +83,25 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .statlbl{font-size:11px;color:var(--text3);margin-top:2px;}
 .chartwrap{position:relative;height:165px;}
 
-/* CALENDAR */
-.cal-wrap{border-radius:var(--r-xl);padding:16px;margin-bottom:12px;}
-.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-.cal-title{font-size:15px;font-weight:700;}
+/* CALENDAR - Compact for mobile */
+.cal-wrap{border-radius:var(--r-xl);padding:12px;margin-bottom:12px;}
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.cal-title{font-size:14px;font-weight:700;}
 .cal-nav{display:flex;gap:4px;}
-.cal-navbtn{width:28px;height:28px;border-radius:8px;background:rgba(0,0,0,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);}
+.cal-navbtn{width:26px;height:26px;border-radius:6px;background:rgba(0,0,0,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);}
 .cal-navbtn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;}
-.cal-days-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:6px;}
-.cal-days-head span{font-size:10px;font-weight:600;color:var(--text4);padding:4px 0;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cal-cell{aspect-ratio:1;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:500;cursor:pointer;position:relative;transition:background .12s;padding:2px 0;}
+.cal-days-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:4px;}
+.cal-days-head span{font-size:9px;font-weight:600;color:var(--text4);padding:2px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-cell{aspect-ratio:1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;font-weight:500;cursor:pointer;position:relative;transition:background .12s;padding:1px 0;}
 .cal-cell.empty{cursor:default;}
 .cal-cell.today{background:var(--blue);color:#fff;font-weight:700;}
 .cal-cell.today .cal-dot{background:rgba(255,255,255,0.75);}
 .cal-cell.has-res{color:var(--blue);font-weight:700;}
 .cal-cell.has-res:not(.today){background:rgba(0,122,255,0.1);}
 .cal-cell:not(.empty):not(.today):hover{background:rgba(0,0,0,0.06);}
-.cal-dot{width:4px;height:4px;border-radius:50%;background:var(--orange);flex-shrink:0;}
-.cal-popup{background:rgba(28,28,30,.94);color:#fff;border-radius:16px;padding:14px;margin-top:10px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;}
+.cal-dot{width:3px;height:3px;border-radius:50%;background:var(--orange);flex-shrink:0;}
+.cal-popup{background:rgba(28,28,30,.94);color:#fff;border-radius:14px;padding:12px;margin-top:10px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;}
 .cal-popup.show{display:block;}
 .cal-popup-date{font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px;}
 .cal-popup-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);}
@@ -114,8 +114,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .cpb-belum{background:rgba(255,59,48,.2);color:#ff6b6b;}
 
 /* TRANSACTIONS */
-.toolbar{display:flex;gap:6px;margin-bottom:12px;align-items:center;}
-.toolbar select{min-width:0;flex:1;padding:9px 28px 9px 10px;border:1px solid var(--border);border-radius:var(--r);font-size:12px;background:var(--surface);color:var(--text);outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;align-items:center;}
+.toolbar select{flex:1 1 calc(50% - 3px); min-width:80px; padding:9px 28px 9px 10px; border:1px solid var(--border);border-radius:var(--r);font-size:12px;background:var(--surface);color:var(--text);outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
 .trxlist{display:flex;flex-direction:column;gap:6px;}
 .trxitem{display:flex;justify-content:space-between;align-items:center;padding:13px 14px;border-radius:14px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
 .trxleft{display:flex;align-items:center;gap:11px;min-width:0;flex:1;}
@@ -166,13 +166,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .labarow:last-child{border-bottom:none;}
 .labakey{color:var(--text2);}.labaval{font-weight:600;}
 
-/* ALOKASI — fixed layout */
+/* ALOKASI */
 .allocbar-bg{background:rgba(0,0,0,.07);border-radius:6px;height:6px;margin-top:6px;overflow:hidden;}
 .allocbar-fill{height:100%;border-radius:6px;transition:width .5s ease;}
 .alloc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;flex-wrap:nowrap;gap:4px;}
 .alloc-row span:first-child{font-size:12px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .alloc-row span:last-child{font-size:12px;font-weight:600;flex-shrink:0;max-width:50%;text-align:right;}
-/* Sub-alokasi edit rows */
 .subeditrow{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
 .subeditrow input[type="text"]{flex:1;min-width:0;padding:9px 12px;border-radius:10px;border:1px solid var(--border);font-size:13px;background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text);}
 .subeditrow input[type="number"]{width:56px;flex-shrink:0;padding:9px 6px;border-radius:10px;border:1px solid var(--border);font-size:13px;text-align:center;background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text);}
@@ -239,13 +238,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .syncnote svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;flex-shrink:0;margin-top:1px;}
 
 /* BTNS */
-.actrow{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:14px;}
+.actrow{display:grid;gap:8px;margin-top:14px;}
 .btnprim{padding:14px;border-radius:14px;background:var(--blue);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(0,122,255,.28);display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;}
 .btnprim:active{opacity:.85;}.btnprim:disabled{opacity:.5;cursor:not-allowed;}
 .btnprim.green{background:var(--green);box-shadow:0 4px 14px rgba(52,199,89,.28);}
 .btnsec{padding:14px;border-radius:14px;background:rgba(0,0,0,.06);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
 
-/* NOTA */
+/* NOTA PENGUNJUNG */
 .nota{font-family:'Courier New',monospace;background:white;border:1px solid var(--border);border-radius:var(--r);padding:16px;font-size:12px;line-height:1.9;}
 .notahdr{text-align:center;border-bottom:1px dashed var(--border2);padding-bottom:10px;margin-bottom:10px;}
 .notaname{font-size:15px;font-weight:700;color:var(--blue);letter-spacing:2px;}
@@ -253,7 +252,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .notarow{display:flex;justify-content:space-between;color:var(--text2);}
 .notadiv{border:none;border-top:1px dashed var(--border2);margin:7px 0;}
 .notatotal{display:flex;justify-content:space-between;font-weight:700;font-size:13px;}
-.notaprofit{text-align:center;color:var(--green);font-weight:700;margin-top:5px;}
 .notasec{font-size:10px;font-weight:700;color:var(--text3);margin-bottom:3px;text-transform:uppercase;}
 
 /* LOADING / NOTIF */
@@ -280,10 +278,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
-<!-- FAB BACKDROP -->
 <div class="fab-backdrop" id="fabBackdrop" onclick="closeFab()"></div>
 
-<!-- FAB MENU -->
 <div class="fab-menu" id="fabMenu">
   <button class="fab-option purple" onclick="fabAction('reservasi')">
     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
@@ -321,7 +317,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </button>
 </nav>
 
-<!-- PAGE DASHBOARD -->
 <div id="page-dashboard" class="page active">
 <div class="container" style="padding-bottom:24px;">
   <div class="hero glass-sm">
@@ -361,19 +356,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 </div>
 
-<!-- PAGE KEUANGAN -->
 <div id="page-keuangan" class="page">
 <div class="container" style="padding-bottom:24px;">
   <div class="toolbar">
-    <select id="kasType" onchange="renderKas()"><option value="semua">Semua</option><option value="masuk">Masuk</option><option value="keluar">Keluar</option></select>
-    <select id="kasBulan" onchange="renderKas()"><option value="">Semua</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Agu</option><option value="09">Sep</option><option value="10">Okt</option><option value="11">Nov</option><option value="12">Des</option></select>
-    <select id="kasKat" onchange="renderKas()"><option value="">Semua</option></select>
+    <select id="kasType" onchange="renderKas()"><option value="semua">Semua Transaksi</option><option value="masuk">Masuk</option><option value="keluar">Keluar</option></select>
+    <select id="kasBulan" onchange="renderKas()"><option value="">Bulan (Semua)</option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mei</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Agu</option><option value="09">Sep</option><option value="10">Okt</option><option value="11">Nov</option><option value="12">Des</option></select>
+    <select id="kasTahun" onchange="renderKas()"><option value="">Tahun (Semua)</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+    <select id="kasKat" onchange="renderKas()"><option value="">Kategori (Semua)</option></select>
   </div>
   <div class="trxlist" id="kasList"></div>
 </div>
 </div>
 
-<!-- PAGE RESERVASI -->
 <div id="page-reservasi" class="page">
 <div class="container" style="padding-bottom:24px;">
   <div class="searchwrap"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input class="searchinput" id="resSearch" placeholder="Cari nama reservasi..." oninput="renderRes()"></div>
@@ -387,7 +381,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 </div>
 
-<!-- PAGE LAPORAN -->
 <div id="page-laporan" class="page">
 <div class="container" style="padding-bottom:24px;">
   <div class="sec-label">Laba Rugi</div>
@@ -427,7 +420,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 </div>
 
-<!-- KAS MODAL -->
 <div class="kasoverlay" id="kasOv">
   <div class="kassheet">
     <div class="kashandle"></div>
@@ -443,14 +435,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="fg"><label>Kategori</label><select id="kKat" class="fs"></select></div>
     <div class="frow2"><div class="fg"><label>Jenis</label><select id="kJen" class="fs"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div><div class="fg"><label>Status</label><select id="kSts" class="fs"><option>Lunas</option><option>Belum Bayar</option></select></div></div>
     <div class="fg"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="kNom" class="fi" placeholder="0" oninput="fmtNom(this)"></div>
-    <div class="actrow">
+    <div class="actrow" style="grid-template-columns:1fr 2fr;">
       <button class="btnsec" onclick="closeKasM()">Batal</button>
       <button class="btnprim" id="btnKasSave" onclick="saveKas()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan</button>
     </div>
   </div>
 </div>
 
-<!-- RESERVASI FORM -->
 <div class="overlay" id="resOv">
   <div class="sheet">
     <div class="sheethandle"></div>
@@ -477,15 +468,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sumtotal"><span>Pendapatan Bersih</span><span id="rs-profit">Rp 0</span></div>
       </div>
       <div class="syncnote"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg><span>Pembayaran &amp; HPP otomatis tercatat di Kas.</span></div>
-      <div class="actrow" style="grid-template-columns:1fr 2fr;">
-        <button class="btnsec" onclick="cetakNota()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Nota</button>
-        <button class="btnprim" id="btnSimpanRes" onclick="simpanRes()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan Reservasi</button>
+      
+      <div class="actrow" style="grid-template-columns:1fr 1fr 2fr;">
+        <button class="btnsec" style="padding:14px 8px;" onclick="closeResM()">Batal</button>
+        <button class="btnsec" style="padding:14px 8px;" onclick="cetakNota()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Nota</button>
+        <button class="btnprim" id="btnSimpanRes" style="padding:14px 8px;" onclick="simpanRes()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan</button>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- NOTA MODAL -->
 <div class="overlay" id="notaOv">
   <div class="sheet" style="min-height:auto;">
     <div class="sheethandle"></div>
@@ -738,16 +731,22 @@ window.delKas=async function(type,id){if(!confirm('Hapus?'))return;await window.
 
 /* KAS LIST */
 window.renderKas=function(){
-  const type=document.getElementById('kasType').value,bln=document.getElementById('kasBulan').value,kat=document.getElementById('kasKat').value;
+  const type=document.getElementById('kasType').value,bln=document.getElementById('kasBulan').value,thn=document.getElementById('kasTahun').value,kat=document.getElementById('kasKat').value;
   const katSel=document.getElementById('kasKat');
   const allK=[...new Set([...(type!=='keluar'?KM:[]),...(type!=='masuk'?KK:[])])];
   const prev=katSel.value;
-  katSel.innerHTML='<option value="">Semua</option>'+allK.map(k=>`<option value="${k}">${k}</option>`).join('');
+  katSel.innerHTML='<option value="">Kategori (Semua)</option>'+allK.map(k=>`<option value="${k}">${k}</option>`).join('');
   if(allK.includes(prev))katSel.value=prev;
   let items=[];
   if(type!=='keluar')items.push(...(window._km||[]).map(x=>({...x,_t:'masuk'})));
   if(type!=='masuk')items.push(...(window._kk||[]).map(x=>({...x,_t:'keluar'})));
-  items=items.filter(r=>(!bln||r.tanggal?.slice(5,7)===bln)&&(!kat||r.kategori===kat)).sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+  
+  items=items.filter(r=>
+    (!bln||r.tanggal?.slice(5,7)===bln)&&
+    (!thn||r.tanggal?.slice(0,4)===thn)&&
+    (!kat||r.kategori===kat)
+  ).sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+  
   document.getElementById('kasList').innerHTML=items.length?items.map(r=>{
     const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
     const arr=isM?window._km:window._kk,idx=arr.findIndex(x=>x.id===r.id);
@@ -825,11 +824,11 @@ window.simpanRes=function(){const obj=getResData();if(!obj.nama)return showNotif
 window.cetakNota=function(){const obj=getResData();if(!obj.nama)return showNotif('Isi data dulu');obj.omzet=hitOmzet(obj);obj.profit=obj.omzet-hitHpp(obj);obj.kurang=obj.omzet-(obj.dp||0);buatNota(obj);};
 window.lihatNota=function(docId){const r=(window._res||[]).find(x=>x._docId===docId);if(!r)return;r.omzet=hitOmzet(r);r.profit=r.omzet-hitHpp(r);r.kurang=r.omzet-(r.dp||0);buatNota(r);};
 window.closeNota=()=>document.getElementById('notaOv').classList.remove('show');
+
+/* PEMBARUAN NOTA: Hapus referensi HPP/Laba Bersih dari struk pengunjung */
 function buatNota(r){
   const mH=(r.menu||[]).map(m=>{const q=m.qty!=null?m.qty:r.jumlah,tot=m.tipe==='Free'?0:m.harga*q;return`<div class="notarow"><span>${m.nama} (${m.tipe}) x${q}</span><span>${m.tipe==='Free'?'Free':IDR(tot)}</span></div>`;}).join('');
-  const hH=(r.hpp||[]).map(h=>{const q=h.qty!=null?h.qty:r.jumlah,tot=h.tipe==='Total'?h.biaya:h.biaya*q;return`<div class="notarow"><span>${h.nama} (${h.tipe==='Total'?'Total':'x'+q})</span><span>${IDR(tot)}</span></div>`;}).join('');
-  const ht=(r.hpp||[]).reduce((s,h)=>{const q=h.qty!=null?h.qty:r.jumlah;return s+(h.tipe==='Total'?h.biaya:h.biaya*q);},0);
-  document.getElementById('notaContent').innerHTML=`<div class="nota"><div class="notahdr"><div class="notaname">OMAJI</div><div class="notasub">NOTA RESERVASI - ${r.acara||''}</div><div class="notasub" style="font-size:10px;margin-top:2px;">Dicetak: ${fmtD(new Date().toISOString().split('T')[0])}</div></div><div class="notarow"><span>Nama</span><span><b>${r.nama}</b></span></div><div class="notarow"><span>Jumlah</span><span><b>${r.jumlah} Orang</b></span></div><div class="notarow"><span>Tanggal</span><span>${fmtDH(r.tanggal)}</span></div><div class="notarow"><span>Pukul</span><span>${r.waktu||''}-Selesai</span></div>${r.hp?`<div class="notarow"><span>WA</span><span>${r.hp}</span></div>`:''}<hr class="notadiv"><div class="notasec">MENU</div>${mH}<hr class="notadiv"><div class="notatotal"><span>TOTAL</span><span>${IDR(r.omzet)}</span></div><div class="notarow" style="margin-top:4px;"><span>DP${r.tglDp?' ('+fmtD(r.tglDp)+')':''}</span><span>${IDR(r.dp||0)}</span></div><div class="notarow"><span>Kekurangan</span><span><b>${IDR(r.kurang>0?r.kurang:0)}</b></span></div>${r.status==='Lunas'?`<div class="notarow" style="color:var(--green);font-weight:600;"><span>LUNAS${r.tglLunas?' ('+fmtD(r.tglLunas)+')':''}</span><span>&#10003;</span></div>`:''}${hH?`<hr class="notadiv"><div class="notasec">HPP</div>${hH}<hr class="notadiv"><div class="notatotal"><span>OMZET</span><span>${IDR(r.omzet)}</span></div><div class="notarow"><span>HPP</span><span>- ${IDR(ht)}</span></div><div class="notaprofit">BERSIH: ${IDR(r.profit)}</div>`:''}${r.catatan?`<hr class="notadiv"><div class="notarow"><span>Catatan</span><span>${r.catatan}</span></div>`:''}<hr class="notadiv"><div style="text-align:center;font-size:10px;color:var(--text3);">Terima kasih atas kepercayaan Anda</div></div>`;
+  document.getElementById('notaContent').innerHTML=`<div class="nota"><div class="notahdr"><div class="notaname">OMAJI</div><div class="notasub">NOTA RESERVASI - ${r.acara||''}</div><div class="notasub" style="font-size:10px;margin-top:2px;">Dicetak: ${fmtD(new Date().toISOString().split('T')[0])}</div></div><div class="notarow"><span>Nama</span><span><b>${r.nama}</b></span></div><div class="notarow"><span>Jumlah</span><span><b>${r.jumlah} Orang</b></span></div><div class="notarow"><span>Tanggal</span><span>${fmtDH(r.tanggal)}</span></div><div class="notarow"><span>Pukul</span><span>${r.waktu||''}-Selesai</span></div>${r.hp?`<div class="notarow"><span>WA</span><span>${r.hp}</span></div>`:''}<hr class="notadiv"><div class="notasec">PESANAN</div>${mH}<hr class="notadiv"><div class="notatotal"><span>TOTAL</span><span>${IDR(r.omzet)}</span></div><div class="notarow" style="margin-top:4px;"><span>DP${r.tglDp?' ('+fmtD(r.tglDp)+')':''}</span><span>${IDR(r.dp||0)}</span></div><div class="notarow"><span>Kekurangan</span><span><b>${IDR(r.kurang>0?r.kurang:0)}</b></span></div>${r.status==='Lunas'?`<div class="notarow" style="color:var(--green);font-weight:600;"><span>LUNAS${r.tglLunas?' ('+fmtD(r.tglLunas)+')':''}</span><span>&#10003;</span></div>`:''}${r.catatan?`<hr class="notadiv"><div class="notarow"><span>Catatan</span><span>${r.catatan}</span></div>`:''}<hr class="notadiv"><div style="text-align:center;font-size:10px;color:var(--text3);">Terima kasih atas kunjungan Anda</div></div>`;
   document.getElementById('notaOv').classList.add('show');
 }
 
