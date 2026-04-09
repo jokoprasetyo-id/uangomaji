@@ -83,36 +83,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .statlbl{font-size:11px;color:var(--text3);margin-top:2px;}
 .chartwrap{position:relative;height:165px;}
 
-/* CALENDAR - Compact for mobile */
-.cal-wrap{border-radius:var(--r-xl);padding:12px;margin-bottom:12px;}
-.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.cal-title{font-size:14px;font-weight:700;}
-.cal-nav{display:flex;gap:4px;}
-.cal-navbtn{width:26px;height:26px;border-radius:6px;background:rgba(0,0,0,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);}
-.cal-navbtn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;}
-.cal-days-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:4px;}
-.cal-days-head span{font-size:9px;font-weight:600;color:var(--text4);padding:2px 0;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
-.cal-cell{aspect-ratio:1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;font-weight:500;cursor:pointer;position:relative;transition:background .12s;padding:1px 0;}
-.cal-cell.empty{cursor:default;}
-.cal-cell.today{background:var(--blue);color:#fff;font-weight:700;}
-.cal-cell.today .cal-dot{background:rgba(255,255,255,0.75);}
-.cal-cell.has-res{color:var(--blue);font-weight:700;}
-.cal-cell.has-res:not(.today){background:rgba(0,122,255,0.1);}
-.cal-cell:not(.empty):not(.today):hover{background:rgba(0,0,0,0.06);}
-.cal-dot{width:3px;height:3px;border-radius:50%;background:var(--orange);flex-shrink:0;}
-.cal-popup{background:rgba(28,28,30,.94);color:#fff;border-radius:14px;padding:12px;margin-top:10px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;}
-.cal-popup.show{display:block;}
-.cal-popup-date{font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px;}
-.cal-popup-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);}
-.cal-popup-item:last-child{border-bottom:none;}
-.cal-popup-name{font-size:13px;font-weight:600;}
-.cal-popup-meta{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;}
-.cal-popup-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;}
-.cpb-lunas{background:rgba(52,199,89,.25);color:#4ade80;}
-.cpb-dp{background:rgba(255,149,0,.25);color:#ffa726;}
-.cpb-belum{background:rgba(255,59,48,.2);color:#ff6b6b;}
-
 /* TRANSACTIONS */
 .toolbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;align-items:center;}
 .toolbar select{flex:1 1 calc(50% - 3px); min-width:80px; padding:9px 28px 9px 10px; border:1px solid var(--border);border-radius:var(--r);font-size:12px;background:var(--surface);color:var(--text);outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
@@ -334,23 +304,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--green)"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg><div class="statval" id="d-omzet">Rp 0</div><div class="statlbl">Omzet Reservasi</div></div>
     <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--purple)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div class="statval" id="d-tamu">0</div><div class="statlbl">Total Tamu</div></div>
   </div>
+  
   <div class="sec-label">Arus Kas Bulanan</div>
   <div class="card glass"><div class="chartwrap"><canvas id="cB"></canvas></div></div>
-  <div class="sec-label">Kalender Reservasi</div>
-  <div class="cal-wrap glass">
-    <div class="cal-header">
-      <div class="cal-title" id="calTitle">—</div>
-      <div class="cal-nav">
-        <button class="cal-navbtn" onclick="calMove(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button class="cal-navbtn" onclick="calMove(1)"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
-    </div>
-    <div class="cal-days-head">
-      <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
-    </div>
-    <div class="cal-grid" id="calGrid"></div>
-    <div class="cal-popup" id="calPopup"></div>
-  </div>
+  
+  <div class="sec-label">Reservasi Mendatang</div>
+  <div class="trxlist" id="upcomingList"></div>
+  
   <div class="sec-label">Transaksi Terakhir</div>
   <div class="trxlist" id="recentList"></div>
 </div>
@@ -557,8 +517,6 @@ const KM=['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uan
 const KK=['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
 let _ch={},subAlloc=[{nama:'Pemilik',pct:40},{nama:'Karyawan',pct:40},{nama:'Cadangan',pct:20}];
 let rMenuR=[],rHppR=[],editResId=null,resF='';
-let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
-let calSelectedDate=null;
 let fabOpen=false;
 
 const IDR=v=>'Rp '+Math.round(v||0).toLocaleString('id-ID');
@@ -620,6 +578,7 @@ function refreshDash(){
   document.getElementById('d-belum').textContent=res.filter(r=>r.status!=='Lunas').length;
   document.getElementById('d-omzet').textContent=IDRs(res.reduce((s,r)=>s+hitOmzet(r),0));
   document.getElementById('d-tamu').textContent=res.reduce((s,r)=>s+(r.jumlah||0),0);
+  
   const MS=['01','02','03','04','05','06','07','08','09','10','11','12'];
   const ms={},ks={};MS.forEach(m=>{ms[m]=0;ks[m]=0;});
   km.forEach(r=>{const m=r.tanggal?.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
@@ -628,75 +587,41 @@ function refreshDash(){
     {label:'Masuk',data:MS.map(m=>ms[m]),backgroundColor:'rgba(52,199,89,0.72)',borderRadius:5,borderSkipped:false},
     {label:'Keluar',data:MS.map(m=>ks[m]),backgroundColor:'rgba(255,59,48,0.62)',borderRadius:5,borderSkipped:false}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,borderRadius:4,useBorderRadius:true,padding:12,font:{size:10},color:'#8e8e93'}}},scales:{x:{grid:{display:false},ticks:{color:'#aeaeb2',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.05)'},border:{display:false},ticks:{color:'#aeaeb2',font:{size:9},callback:v=>IDRs(v)}}}}});
-  renderCal();
+  
+  // RESERVASI MENDATANG (Menggantikan Kalender)
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const upcomingRes = res
+    .filter(r => (r.tanggal || '') >= todayStr)
+    .sort((a,b) => new Date(a.tanggal) - new Date(b.tanggal))
+    .slice(0, 5); // Tampilkan 5 teratas
+    
+  document.getElementById('upcomingList').innerHTML = upcomingRes.length ? upcomingRes.map(r => {
+    const bc = r.status==='Lunas'?'badge-lunas':r.status==='DP'?'badge-dp':'badge-belum';
+    const bl = r.status==='Lunas'?'Lunas':r.status==='DP'?'Sudah DP':'Belum Bayar';
+    return `<div class="trxitem" onclick="editRes('${r._docId}')" style="cursor:pointer; transition:background .15s;" onmouseover="this.style.background='rgba(0,0,0,0.03)'" onmouseout="this.style.background='rgba(255,255,255,0.72)'">
+      <div class="trxleft">
+        <div class="trxicon" style="background:rgba(0,122,255,0.1);color:var(--blue)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <div>
+          <div class="trxtitle">${r.nama || ''} <span style="font-size:10px;font-weight:500;color:var(--text3)">(${r.acara || ''})</span></div>
+          <div class="trxmeta">${fmtDH(r.tanggal)} · Pukul ${r.waktu||'-'} · ${r.jumlah||0} Pax</div>
+        </div>
+      </div>
+      <div class="trxright" style="display:flex;align-items:center;">
+        <span class="badge ${bc}" style="position:static;">${bl}</span>
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:var(--text4);stroke-width:2;stroke-linecap:round;margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>Tidak ada reservasi mendatang</p></div>';
+
+  // TRANSAKSI TERAKHIR
   const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).slice(0,5);
   document.getElementById('recentList').innerHTML=all.length?all.map(r=>{
     const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
     const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi</span>`:'';
     return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div></div></div>`;
   }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg><p>Belum ada transaksi</p></div>';
-}
-
-/* CALENDAR */
-const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-window.calMove=function(dir){
-  calMonth+=dir;
-  if(calMonth<0){calMonth=11;calYear--;}
-  if(calMonth>11){calMonth=0;calYear++;}
-  calSelectedDate=null;
-  renderCal();
-};
-function renderCal(){
-  const today=new Date(),todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-  document.getElementById('calTitle').textContent=BULAN[calMonth]+' '+calYear;
-  const res=window._res||[];
-  const resDates={};
-  res.forEach(r=>{if(r.tanggal)resDates[r.tanggal]=(resDates[r.tanggal]||[]).concat(r);});
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  let html='';
-  for(let i=0;i<firstDay;i++)html+=`<div class="cal-cell empty"></div>`;
-  for(let d=1;d<=daysInMonth;d++){
-    const ds=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const isToday=ds===todayStr,hasRes=resDates[ds]?.length>0,isSel=ds===calSelectedDate;
-    let cls='cal-cell';
-    if(isToday)cls+=' today';
-    else if(isSel)cls+=' has-res';
-    else if(hasRes)cls+=' has-res';
-    const dot=hasRes&&!isToday?`<div class="cal-dot"></div>`:'';
-    html+=`<div class="${cls}" onclick="calClick('${ds}')">${d}${dot}</div>`;
-  }
-  document.getElementById('calGrid').innerHTML=html;
-  if(calSelectedDate&&resDates[calSelectedDate]){
-    showCalPopup(calSelectedDate,resDates[calSelectedDate]);
-  } else {
-    document.getElementById('calPopup').classList.remove('show');
-  }
-}
-window.calClick=function(ds){
-  const res=window._res||[];
-  const dayRes=res.filter(r=>r.tanggal===ds);
-  if(!dayRes.length){calSelectedDate=null;document.getElementById('calPopup').classList.remove('show');renderCal();return;}
-  calSelectedDate=calSelectedDate===ds?null:ds;
-  renderCal();
-};
-function showCalPopup(ds,items){
-  const d=new Date(ds+'T00:00:00');
-  const dy=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const m=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  const dtxt=dy[d.getDay()]+', '+d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();
-  const rows=items.map(r=>{
-    const bc=r.status==='Lunas'?'cpb-lunas':r.status==='DP'?'cpb-dp':'cpb-belum';
-    const bl=r.status==='Lunas'?'Lunas':r.status==='DP'?'DP':'Belum';
-    const sn=(r.nama||'').replace(/'/g,"\\'");
-    return`<div class="cal-popup-item" onclick="editRes('${r._docId}');document.getElementById('calPopup').classList.remove('show');calSelectedDate=null;renderCal();" style="cursor:pointer;">
-      <div><div class="cal-popup-name">${r.nama||''}</div><div class="cal-popup-meta">${r.acara||''} · ${r.jumlah||0} orang · ${r.waktu||''}</div></div>
-      <span class="cal-popup-badge ${bc}">${bl}</span>
-    </div>`;
-  }).join('');
-  const popup=document.getElementById('calPopup');
-  popup.innerHTML=`<div class="cal-popup-date">${dtxt} · ${items.length} reservasi</div>${rows}`;
-  popup.classList.add('show');
 }
 
 /* KAS MODAL */
@@ -825,7 +750,6 @@ window.cetakNota=function(){const obj=getResData();if(!obj.nama)return showNotif
 window.lihatNota=function(docId){const r=(window._res||[]).find(x=>x._docId===docId);if(!r)return;r.omzet=hitOmzet(r);r.profit=r.omzet-hitHpp(r);r.kurang=r.omzet-(r.dp||0);buatNota(r);};
 window.closeNota=()=>document.getElementById('notaOv').classList.remove('show');
 
-/* PEMBARUAN NOTA: Hapus referensi HPP/Laba Bersih dari struk pengunjung */
 function buatNota(r){
   const mH=(r.menu||[]).map(m=>{const q=m.qty!=null?m.qty:r.jumlah,tot=m.tipe==='Free'?0:m.harga*q;return`<div class="notarow"><span>${m.nama} (${m.tipe}) x${q}</span><span>${m.tipe==='Free'?'Free':IDR(tot)}</span></div>`;}).join('');
   document.getElementById('notaContent').innerHTML=`<div class="nota"><div class="notahdr"><div class="notaname">OMAJI</div><div class="notasub">NOTA RESERVASI - ${r.acara||''}</div><div class="notasub" style="font-size:10px;margin-top:2px;">Dicetak: ${fmtD(new Date().toISOString().split('T')[0])}</div></div><div class="notarow"><span>Nama</span><span><b>${r.nama}</b></span></div><div class="notarow"><span>Jumlah</span><span><b>${r.jumlah} Orang</b></span></div><div class="notarow"><span>Tanggal</span><span>${fmtDH(r.tanggal)}</span></div><div class="notarow"><span>Pukul</span><span>${r.waktu||''}-Selesai</span></div>${r.hp?`<div class="notarow"><span>WA</span><span>${r.hp}</span></div>`:''}<hr class="notadiv"><div class="notasec">PESANAN</div>${mH}<hr class="notadiv"><div class="notatotal"><span>TOTAL</span><span>${IDR(r.omzet)}</span></div><div class="notarow" style="margin-top:4px;"><span>DP${r.tglDp?' ('+fmtD(r.tglDp)+')':''}</span><span>${IDR(r.dp||0)}</span></div><div class="notarow"><span>Kekurangan</span><span><b>${IDR(r.kurang>0?r.kurang:0)}</b></span></div>${r.status==='Lunas'?`<div class="notarow" style="color:var(--green);font-weight:600;"><span>LUNAS${r.tglLunas?' ('+fmtD(r.tglLunas)+')':''}</span><span>&#10003;</span></div>`:''}${r.catatan?`<hr class="notadiv"><div class="notarow"><span>Catatan</span><span>${r.catatan}</span></div>`:''}<hr class="notadiv"><div style="text-align:center;font-size:10px;color:var(--text3);">Terima kasih atas kunjungan Anda</div></div>`;
