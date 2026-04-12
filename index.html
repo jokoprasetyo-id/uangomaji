@@ -479,7 +479,6 @@ onSnapshot(query(collection(dR,'reservasi'),orderBy('createdAt','desc')),s=>{win
 window._saveKas=async(type,idx,obj)=>{const col=type==='masuk'?'kas_masuk':'kas_keluar';if(idx!==''){const arr=type==='masuk'?window._km:window._kk;await updateDoc(doc(dK,col,arr[+idx].id),obj);}else await addDoc(collection(dK,col),obj);};
 window._delKas=async(type,id)=>await deleteDoc(doc(dK,type==='masuk'?'kas_masuk':'kas_keluar',id));
 
-/* PERBAIKAN: Mencegah error undefined dari Firebase */
 window._saveRes=async(obj)=>{
   showLoad(true);
   try{
@@ -492,24 +491,17 @@ window._saveRes=async(obj)=>{
       for(const d of k2.docs)await deleteDoc(doc(dK,'kas_keluar',d.id));
     }
     let docId=obj._docId;
-    
-    // --- INI PERBAIKANNYA ---
     const dataToSave = { ...obj };
-    delete dataToSave._docId; // Hapus properti ini supaya tidak terdeteksi 'undefined' oleh Firebase
-    // ------------------------
-
+    delete dataToSave._docId;
     if(docId){
         await updateDoc(doc(dR,'reservasi',docId),{...dataToSave,updatedAt:now});
     }else{
         const ref=await addDoc(collection(dR,'reservasi'),{...dataToSave,createdAt:now});
         docId=ref.id;
     }
-    
     if(obj.status==='Lunas'&&omzet>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglLunas||obj.tanggal,deskripsi:`[Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:omzet,resId:docId,autoSync:true,createdAt:ts});
     else if(obj.status==='DP'&&dp>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglDp||obj.tanggal,deskripsi:`[DP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:dp,resId:docId,autoSync:true,createdAt:ts});
-    
     if(hpp>0)await addDoc(collection(dK,'kas_keluar'),{tanggal:obj.tanggal,deskripsi:`[HPP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Bahan Baku / Stok',jenis:'Tunai',status:'Lunas',nominal:hpp,resId:docId,autoSync:true,createdAt:ts});
-    
     showNotif('Tersimpan & kas diperbarui');closeResM();
   }catch(e){showNotif('Error: '+e.message);}
   finally{showLoad(false);document.getElementById('btnSimpanRes').disabled=false;}
@@ -540,12 +532,27 @@ window.exportCSV=()=>{
 window._km=[];window._kk=[];window._res=[];
 const KM=['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uang Belanja'];
 const KK=['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
-let _ch={},subAlloc=[{nama:'Pemilik',pct:40},{nama:'Karyawan',pct:40},{nama:'Cadangan',pct:20}];
+let _ch={};
+
+// [PERBAIKAN 4] Default sub-alokasi: Bapak 36%, Dani 34%, Dias 30%
+let subAlloc=[{nama:'Bapak',pct:36},{nama:'Dani',pct:34},{nama:'Dias',pct:30}];
+
 let rMenuR=[],rHppR=[],editResId=null,resF='';
 let fabOpen=false;
 
+// [PERBAIKAN 1] Format uang lengkap, tidak disingkat
 const IDR=v=>'Rp '+Math.round(v||0).toLocaleString('id-ID');
-const IDRs=v=>{if(v>=1e9)return'Rp '+(v/1e9).toFixed(1)+'M';if(v>=1e6)return'Rp '+(v/1e6).toFixed(1)+'jt';if(v>=1e3)return'Rp '+(v/1e3).toFixed(0)+'rb';return IDR(v);};
+
+
+// Haptic feedback helper (iPhone-style)
+function haptic(type='light'){
+  if(!navigator.vibrate)return;
+  if(type==='light')navigator.vibrate(8);
+  else if(type==='medium')navigator.vibrate(15);
+  else if(type==='heavy')navigator.vibrate([20,10,20]);
+  else if(type==='success')navigator.vibrate([8,50,8]);
+  else if(type==='error')navigator.vibrate([20,30,20,30,20]);
+}
 const fmtD=s=>{if(!s)return'-';const m=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],d=new Date(s+'T00:00:00');return d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();};
 const fmtDH=s=>{if(!s)return'-';const dy=['Min','Sen','Sel','Rab','Kam','Jum','Sab'],m=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],d=new Date(s+'T00:00:00');return dy[d.getDay()]+', '+d.getDate()+' '+m[d.getMonth()];};
 function hitOmzet(r){return(r.menu||[]).reduce((s,m)=>s+(m.tipe==='Free'?0:(m.harga||0)*(m.qty!=null?m.qty:r.jumlah||0)),0);}
@@ -555,7 +562,7 @@ function showNotif(msg){const el=document.getElementById('notif');document.getEl
 function updC(id,cfg){if(_ch[id])_ch[id].destroy();const c=document.getElementById(id);if(!c)return;_ch[id]=new Chart(c,cfg);}
 
 /* FAB */
-window.toggleFab=function(){fabOpen?closeFab():openFab();};
+window.toggleFab=function(){haptic('medium');fabOpen?closeFab():openFab();};
 function openFab(){
   fabOpen=true;
   document.getElementById('fabMenu').classList.add('show');
@@ -569,7 +576,7 @@ function closeFab(){
   document.getElementById('navFab').classList.remove('open');
 }
 window.closeFab=closeFab;
-window.fabAction=function(type){
+window.fabAction=function(type){haptic('medium');
   closeFab();
   setTimeout(()=>{
     if(type==='reservasi')openResM(null);
@@ -577,7 +584,7 @@ window.fabAction=function(type){
   },120);
 };
 
-window.showPage=function(id,btn){
+window.showPage=function(id,btn){haptic('light');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -594,14 +601,16 @@ function refreshAll(){const pg=document.querySelector('.page.active')?.id;refres
 function refreshDash(){
   const km=window._km||[],kk=window._kk||[],res=window._res||[];
   const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0),lb=tM-tK;
+
+  // [PERBAIKAN 1] Gunakan IDR (lengkap) bukan IDRs (singkat) di hero dan stats
   document.getElementById('d-laba').textContent=IDR(lb);
   document.getElementById('d-laba').style.color=lb>=0?'var(--text)':'var(--red)';
-  document.getElementById('d-masuk').textContent=IDRs(tM);
-  document.getElementById('d-keluar').textContent=IDRs(tK);
+  document.getElementById('d-masuk').textContent=IDR(tM);
+  document.getElementById('d-keluar').textContent=IDR(tK);
   document.getElementById('d-trxtot').textContent=km.length+kk.length+' transaksi kas';
   document.getElementById('d-rescount').textContent=res.length;
   document.getElementById('d-belum').textContent=res.filter(r=>r.status!=='Lunas').length;
-  document.getElementById('d-omzet').textContent=IDRs(res.reduce((s,r)=>s+hitOmzet(r),0));
+  document.getElementById('d-omzet').textContent=IDR(res.reduce((s,r)=>s+hitOmzet(r),0));
   document.getElementById('d-tamu').textContent=res.reduce((s,r)=>s+(r.jumlah||0),0);
   
   const MS=['01','02','03','04','05','06','07','08','09','10','11','12'];
@@ -611,9 +620,9 @@ function refreshDash(){
   updC('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],datasets:[
     {label:'Masuk',data:MS.map(m=>ms[m]),backgroundColor:'rgba(52,199,89,0.72)',borderRadius:5,borderSkipped:false},
     {label:'Keluar',data:MS.map(m=>ks[m]),backgroundColor:'rgba(255,59,48,0.62)',borderRadius:5,borderSkipped:false}
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,borderRadius:4,useBorderRadius:true,padding:12,font:{size:10},color:'#8e8e93'}}},scales:{x:{grid:{display:false},ticks:{color:'#aeaeb2',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.05)'},border:{display:false},ticks:{color:'#aeaeb2',font:{size:9},callback:v=>IDRs(v)}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,borderRadius:4,useBorderRadius:true,padding:12,font:{size:10},color:'#8e8e93'}}},scales:{x:{grid:{display:false},ticks:{color:'#aeaeb2',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.05)'},border:{display:false},ticks:{color:'#aeaeb2',font:{size:9},callback:v=>IDR(v)}}}}});
   
-  // RESERVASI MENDATANG
+  // [PERBAIKAN 2] Reservasi mendatang: hanya tampil hari ini ke depan (sudah lewat = tidak muncul)
   const todayStr = new Date().toISOString().slice(0, 10);
   const upcomingRes = res
     .filter(r => (r.tanggal || '') >= todayStr)
@@ -680,10 +689,10 @@ window.saveKas=async function(){
   const type=document.getElementById('kasTypeVal').value,idx=document.getElementById('kasIdxVal').value;
   const obj={tanggal:document.getElementById('kTgl').value,deskripsi:document.getElementById('kDes').value.trim(),kategori:document.getElementById('kKat').value,jenis:document.getElementById('kJen').value,status:document.getElementById('kSts').value,nominal:parseFloat(document.getElementById('kNom').value.replace(/\./g,'')), createdAt: Date.now()};
   if(!obj.tanggal||!obj.deskripsi||isNaN(obj.nominal)){showNotif('Lengkapi data');return;}
-  await window._saveKas(type,idx,obj);closeKasM();showNotif('Tersimpan');
+  await window._saveKas(type,idx,obj);haptic('success');closeKasM();showNotif('Tersimpan');
 };
 window.editKas=function(type,idx){openKasM(idx,type);};
-window.delKas=async function(type,id){if(!confirm('Hapus?'))return;await window._delKas(type,id);showNotif('Dihapus');};
+window.delKas=async function(type,id){if(!confirm('Hapus?'))return;haptic('heavy');await window._delKas(type,id);showNotif('Dihapus');};
 
 /* KAS LIST */
 window.renderKas=function(){
@@ -717,10 +726,15 @@ window.renderKas=function(){
 };
 
 /* RESERVASI */
-window.setResF=function(el){document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));el.classList.add('active');resF=el.dataset.val;renderRes();};
+window.setResF=function(el){haptic('light');document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));el.classList.add('active');resF=el.dataset.val;renderRes();};
+
+// [PERBAIKAN 3] Reservasi diurutkan dari yang terbaru (createdAt desc)
 window.renderRes=function(){
   const q=(document.getElementById('resSearch')?.value||'').toLowerCase();
-  const data=window._res||[],f=data.filter(r=>((r.nama||'').toLowerCase().includes(q))&&(!resF||r.status===resF));
+  const data=window._res||[];
+  const f=data
+    .filter(r=>((r.nama||'').toLowerCase().includes(q))&&(!resF||r.status===resF))
+    .sort((a,b)=>{const tA=new Date(a.tanggal||'1970-01-01').getTime(),tB=new Date(b.tanggal||'1970-01-01').getTime();if(tB!==tA)return tB-tA;return(b.createdAt||0)-(a.createdAt||0);});
   document.getElementById('resList').innerHTML=f.length?f.map(r=>{
     const omzet=hitOmzet(r),kurang=omzet-(r.dp||0);
     const bc=r.status==='Lunas'?'badge-lunas':r.status==='DP'?'badge-dp':'badge-belum';
@@ -780,8 +794,8 @@ function getResData(){
   const hpp=[];rHppR.forEach((_,i)=>{const idx=i+100,n=document.getElementById(`rhn${idx}`);if(n?.value.trim())hpp.push({nama:n.value.trim(),tipe:document.getElementById(`rht${idx}`)?.value||'Per Orang',qty:parseInt(document.getElementById(`rhq${idx}`)?.value)||jml,biaya:parseInt(document.getElementById(`rhb${idx}`)?.value)||0});});
   return{_docId:editResId||null,id:'RES-'+Date.now(),nama:document.getElementById('r-nama').value.trim(),acara:document.getElementById('r-acara').value,jumlah:jml,tanggal:document.getElementById('r-tanggal').value,waktu:document.getElementById('r-waktu').value||'10:00',hp:document.getElementById('r-hp').value.trim(),catatan:document.getElementById('r-catatan').value.trim(),menu,hpp,dp:parseInt(document.getElementById('r-dp').value)||0,tglDp:document.getElementById('r-tgl-dp').value,tglLunas:document.getElementById('r-tgl-lunas').value,status:document.getElementById('r-status').value,metode:document.getElementById('r-metode').value};
 }
-window.simpanRes=function(){const obj=getResData();if(!obj.nama)return showNotif('Nama grup wajib');if(!obj.acara)return showNotif('Pilih jenis acara');if(!obj.jumlah)return showNotif('Jumlah wajib');if(!obj.tanggal)return showNotif('Tanggal wajib');document.getElementById('btnSimpanRes').disabled=true;window._saveRes(obj);};
-window.cetakNota=function(){const obj=getResData();if(!obj.nama)return showNotif('Isi data dulu');obj.omzet=hitOmzet(obj);obj.profit=obj.omzet-hitHpp(obj);obj.kurang=obj.omzet-(obj.dp||0);buatNota(obj);};
+window.simpanRes=function(){const obj=getResData();if(!obj.nama)return showNotif('Nama grup wajib');if(!obj.acara)return showNotif('Pilih jenis acara');if(!obj.jumlah)return showNotif('Jumlah wajib');if(!obj.tanggal)return showNotif('Tanggal wajib');haptic('medium');document.getElementById('btnSimpanRes').disabled=true;window._saveRes(obj);};
+window.cetakNota=function(){haptic('light');const obj=getResData();if(!obj.nama)return showNotif('Isi data dulu');obj.omzet=hitOmzet(obj);obj.profit=obj.omzet-hitHpp(obj);obj.kurang=obj.omzet-(obj.dp||0);buatNota(obj);};
 window.lihatNota=function(docId){const r=(window._res||[]).find(x=>x._docId===docId);if(!r)return;r.omzet=hitOmzet(r);r.profit=r.omzet-hitHpp(r);r.kurang=r.omzet-(r.dp||0);buatNota(r);};
 window.closeNota=()=>document.getElementById('notaOv').classList.remove('show');
 
@@ -805,21 +819,22 @@ function renderLaba(){
 function renderAlloc(){
   const km=window._km||[],kk=window._kk||[];
   const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0),lb=tM-tK,gaji=lb*0.5;
+  // [PERBAIKAN 1] Gunakan IDR lengkap di laporan alokasi
   document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
   document.getElementById('al-margin').textContent=tM?(lb/tM*100).toFixed(1)+'% Margin':'0%';
-  document.getElementById('al-omaji').textContent=IDRs(lb*0.2);
-  document.getElementById('al-belanja').textContent=IDRs(lb*0.3);
-  document.getElementById('al-gaji').textContent=IDRs(gaji);
+  document.getElementById('al-omaji').textContent=IDR(lb*0.2);
+  document.getElementById('al-belanja').textContent=IDR(lb*0.3);
+  document.getElementById('al-gaji').textContent=IDR(gaji);
   let tp=subAlloc.reduce((s,a)=>s+a.pct,0);
   document.getElementById('subPct').innerHTML=`<span style="color:${tp===100?'var(--green)':'var(--red)'}">${tp}%</span>`;
   document.getElementById('subDisplay').innerHTML=subAlloc.map(s=>{
-    const amt=IDRs(gaji*(s.pct/100));
+    const amt=IDR(gaji*(s.pct/100));
     return`<div><div class="alloc-row"><span>${s.nama} (${s.pct}%)</span><span style="color:var(--blue)">${amt}</span></div><div class="allocbar-bg"><div class="allocbar-fill" style="width:${s.pct}%;background:var(--blue)"></div></div></div>`;
   }).join('');
   document.getElementById('subEditRows').innerHTML=subAlloc.map((s,i)=>`<div class="subeditrow"><input type="text" id="sN${i}" value="${s.nama}" placeholder="Nama"><input type="number" id="sP${i}" value="${s.pct}" oninput="livePct()" placeholder="%" min="0" max="100"><span class="pct-label">%</span></div>`).join('');
 }
 window.livePct=function(){let t=0;subAlloc.forEach((_,i)=>t+=parseFloat(document.getElementById('sP'+i)?.value)||0);document.getElementById('subPct').innerHTML=`<span style="color:${t===100?'var(--green)':'var(--red)'}">${t}%</span>`;};
-window.applySubAlloc=function(){let t=0;const n=subAlloc.map((_,i)=>{const p=parseFloat(document.getElementById('sP'+i)?.value)||0;t+=p;return{nama:document.getElementById('sN'+i)?.value,pct:p};});if(t!==100){showNotif('Total harus 100%');return;}subAlloc=n;renderAlloc();showNotif('Alokasi disimpan');};
+window.applySubAlloc=function(){let t=0;const n=subAlloc.map((_,i)=>{const p=parseFloat(document.getElementById('sP'+i)?.value)||0;t+=p;return{nama:document.getElementById('sN'+i)?.value,pct:p};});if(t!==100){haptic('error');showNotif('Total harus 100%');return;}haptic('success');subAlloc=n;renderAlloc();showNotif('Alokasi disimpan');};
 
 document.getElementById('resOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeResM();});
 document.getElementById('notaOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeNota();});
