@@ -485,8 +485,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="frow2"><div class="fg"><label>Jenis</label><select id="kJen" class="fs"><option>Tunai</option><option>QRIS</option><option>Transfer</option><option>ShopeeFood</option></select></div><div class="fg"><label>Status</label><select id="kSts" class="fs"><option>Lunas</option><option>Belum Bayar</option></select></div></div>
     <div class="fg"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="kNom" class="fi" placeholder="0" oninput="fmtNom(this)"></div>
     <div class="actrow" style="grid-template-columns:1fr 2fr;">
-      <button class="btnsec" onclick="closeKasM()">Batal</button>
-      <button class="btnprim" id="btnKasSave" onclick="saveKas()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan</button>
+      <button type="button" class="btnsec" onclick="closeKasM()">Batal</button>
+      <button type="button" class="btnprim" id="btnKasSave" onclick="saveKas()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan</button>
     </div>
   </div>
 </div>
@@ -496,7 +496,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="kashandle"></div>
     <div class="kastitle" id="belanjaTitle">Catat Belanja</div>
     <input type="hidden" id="belanjaTypeVal" value="belanja">
-    <input type="hidden" id="belanjaIdxVal">
+    <input type="hidden" id="belanjaIdVal">
     
     <div id="pinjamStatusRow" style="display:none;margin-bottom:16px;">
       <div class="typetoggle">
@@ -521,8 +521,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="fg" id="bCatatanRow"><label>Catatan</label><textarea id="bCatatan" class="fta" rows="2" placeholder="Opsional..."></textarea></div>
 
     <div class="actrow" style="grid-template-columns:1fr 2fr;">
-      <button class="btnsec" onclick="closeBelanjaM()">Batal</button>
-      <button class="btnprim orange" id="btnBelanjaSave" onclick="saveBelanja()">
+      <button type="button" class="btnsec" onclick="closeBelanjaM()">Batal</button>
+      <button type="button" class="btnprim orange" id="btnBelanjaSave" onclick="saveBelanja()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan
       </button>
     </div>
@@ -556,9 +556,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
       <div class="syncnote"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg><span>Pembayaran &amp; HPP otomatis tercatat di Kas.</span></div>
       <div class="actrow" style="grid-template-columns:1fr 1fr 2fr;">
-        <button class="btnsec" style="padding:14px 8px;" onclick="closeResM()">Batal</button>
-        <button class="btnsec" style="padding:14px 8px;" onclick="cetakNota()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Nota</button>
-        <button class="btnprim" id="btnSimpanRes" style="padding:14px 8px;" onclick="simpanRes()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan</button>
+        <button type="button" class="btnsec" style="padding:14px 8px;" onclick="closeResM()">Batal</button>
+        <button type="button" class="btnsec" style="padding:14px 8px;" onclick="cetakNota()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Nota</button>
+        <button type="button" class="btnprim" id="btnSimpanRes" style="padding:14px 8px;" onclick="simpanRes()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan</button>
       </div>
     </div>
   </div>
@@ -571,8 +571,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="sheetbody">
       <div class="print-target" id="notaContent"></div>
       <div class="actrow" style="margin-top:14px;grid-template-columns:1fr 1fr;">
-        <button class="btnsec" onclick="closeNota()">Tutup</button>
-        <button class="btnprim" onclick="window.print()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+        <button type="button" class="btnsec" onclick="closeNota()">Tutup</button>
+        <button type="button" class="btnprim" onclick="window.print()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
       </div>
     </div>
   </div>
@@ -602,10 +602,10 @@ onSnapshot(query(collection(dK,'dana_belanja'),orderBy('createdAt','desc')),s=>{
 window._saveKas=async(type,idx,obj)=>{const col=type==='masuk'?'kas_masuk':'kas_keluar';if(idx!==''){const arr=type==='masuk'?window._km:window._kk;await updateDoc(doc(dK,col,arr[+idx].id),obj);}else await addDoc(collection(dK,col),obj);};
 window._delKas=async(type,id)=>await deleteDoc(doc(dK,type==='masuk'?'kas_masuk':'kas_keluar',id));
 
-// DANA BELANJA CRUD
-window._saveBelanja=async(idx,obj)=>{
-  if(idx!==''&&idx!=null){
-    await updateDoc(doc(dK,'dana_belanja',window._belanja[+idx].id),obj);
+// DANA BELANJA CRUD (UPDATE: Menggunakan ID langsung untuk Edit)
+window._saveBelanja=async(id,obj)=>{
+  if(id){
+    await updateDoc(doc(dK,'dana_belanja',id),obj);
   } else {
     await addDoc(collection(dK,'dana_belanja'),obj);
   }
@@ -904,7 +904,7 @@ window.livePct=function(){let t=0;subAlloc.forEach((_,i)=>t+=parseFloat(document
 window.applySubAlloc=function(){let t=0;const n=subAlloc.map((_,i)=>{const p=parseFloat(document.getElementById('sP'+i)?.value)||0;t+=p;return{nama:document.getElementById('sN'+i)?.value,pct:p};});if(t!==100){haptic('error');showNotif('Total harus 100%');return;}haptic('success');subAlloc=n;renderAlloc();showNotif('Alokasi disimpan');};
 
 /* ========================
-   DANA BELANJA (HYBRID)
+   DANA BELANJA (HYBRID) + FITUR EDIT
 ======================== */
 function hitungLabaBersih(){
   const km=window._km||[],kk=window._kk||[];
@@ -917,12 +917,10 @@ function renderBelanjaSaldo(){
   const alokasi=lb*0.3;
   const bl=window._belanja||[];
   
-  // Hitung Top Up Manual, Terpakai, dan Pinjaman
   const topup=bl.filter(x=>x.tipe==='topup').reduce((s,x)=>s+x.nominal,0);
   const terpakai=bl.filter(x=>x.tipe==='belanja').reduce((s,x)=>s+x.nominal,0);
   const dipinjam=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas').reduce((s,x)=>s+x.nominal,0);
   
-  // Rumus Saldo Baru
   const saldo = alokasi + topup - terpakai - dipinjam;
   
   document.getElementById('bl-alokasi').textContent=IDR(alokasi);
@@ -985,6 +983,7 @@ function renderBelanjaList(){
         <div class="trxamt" style="color:${c}">${operator} ${IDR(r.nominal)}</div>
         <div class="trxactions">
           ${lunasbtn}
+          <button class="btnico" onclick="editBelanjaItem('${r.id}')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
           <button class="btnico del" onclick="delBelanjaItem('${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
         </div>
       </div>
@@ -992,26 +991,31 @@ function renderBelanjaList(){
   }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p>Belum ada catatan</p></div>';
 }
 
-window.openBelanjaM=function(mode='belanja'){
+// FUNGSI BUKA MODAL
+window.openBelanjaM=function(mode='belanja', isEdit=false){
   currentBelanjaMode=mode;
   const isPinjam=mode==='pinjam';
   const isTopup=mode==='topup';
   
-  if (isTopup) document.getElementById('belanjaTitle').textContent='Tambah Saldo Awal / Top Up';
-  else if (isPinjam) document.getElementById('belanjaTitle').textContent='Pinjam Dana Belanja';
-  else document.getElementById('belanjaTitle').textContent='Catat Belanja';
+  if(!isEdit){
+    document.getElementById('belanjaIdVal').value='';
+    document.getElementById('bTgl').value=new Date().toISOString().slice(0,10);
+    document.getElementById('bDes').value='';
+    document.getElementById('bNom').value='';
+    document.getElementById('bCatatan').value='';
+    document.getElementById('pinjamStatus').value='belum';
+    document.getElementById('btnPinjamBelum').classList.add('active');
+    document.getElementById('btnPinjamLunas').classList.remove('active');
+    if(!isTopup) document.getElementById('bKat').selectedIndex = 0;
+  }
+
+  if (isTopup) document.getElementById('belanjaTitle').textContent=isEdit?'Edit Top Up':'Tambah Saldo Awal / Top Up';
+  else if (isPinjam) document.getElementById('belanjaTitle').textContent=isEdit?'Edit Pinjaman':'Pinjam Dana Belanja';
+  else document.getElementById('belanjaTitle').textContent=isEdit?'Edit Belanja':'Catat Belanja';
   
   document.getElementById('belanjaTypeVal').value=mode;
   document.getElementById('pinjamStatusRow').style.display=isPinjam?'block':'none';
   document.getElementById('bKatRow').style.display=isTopup?'none':'block'; 
-  
-  document.getElementById('bTgl').value=new Date().toISOString().slice(0,10);
-  document.getElementById('bDes').value='';
-  document.getElementById('bNom').value='';
-  document.getElementById('bCatatan').value='';
-  document.getElementById('pinjamStatus').value='belum';
-  document.getElementById('btnPinjamBelum').classList.add('active');
-  document.getElementById('btnPinjamLunas').classList.remove('active');
   
   const saveBtn=document.getElementById('btnBelanjaSave');
   if (isTopup) { saveBtn.className='btnprim green'; saveBtn.style.boxShadow='0 4px 14px rgba(52,199,89,.28)'; }
@@ -1021,14 +1025,42 @@ window.openBelanjaM=function(mode='belanja'){
   document.getElementById('belanjaOv').classList.add('show');
 };
 
+// FUNGSI TUTUP EKSPLISIT
+window.closeBelanjaM = function() {
+  document.getElementById('belanjaOv').classList.remove('show');
+};
+
+// FUNGSI PANGGIL EDIT
+window.editBelanjaItem = function(id) {
+  const r = window._belanja.find(x => x.id === id);
+  if(!r) return;
+  
+  document.getElementById('belanjaIdVal').value = id;
+  document.getElementById('bTgl').value = r.tanggal || '';
+  document.getElementById('bDes').value = r.deskripsi || '';
+  document.getElementById('bNom').value = r.nominal ? r.nominal.toLocaleString('id-ID') : '';
+  document.getElementById('bCatatan').value = r.catatan || '';
+  
+  if(r.tipe === 'pinjam'){
+    setPinjamStatus(r.statusPinjam || 'belum');
+  }
+  if(r.tipe !== 'topup'){
+      document.getElementById('bKat').value = r.kategori || 'Belanja Harian';
+  }
+
+  openBelanjaM(r.tipe, true);
+};
+
 window.saveBelanja=async function(){
   const mode=document.getElementById('belanjaTypeVal').value;
+  const id=document.getElementById('belanjaIdVal').value;
   const nom=parseFloat((document.getElementById('bNom').value||'').replace(/\./g,''));
   const tgl=document.getElementById('bTgl').value;
   const des=document.getElementById('bDes').value.trim();
+  
   if(!tgl||!des||isNaN(nom)||nom<=0){showNotif('Lengkapi data');return;}
   
-  if (mode !== 'topup') {
+  if (mode !== 'topup' && !id) {
       const lb=hitungLabaBersih();
       const alokasi=lb*0.3;
       const bl=window._belanja||[];
@@ -1048,9 +1080,11 @@ window.saveBelanja=async function(){
     deskripsi:des,
     kategori:mode==='topup'?'Saldo Awal / Manual':document.getElementById('bKat').value,
     nominal:nom,
-    catatan:document.getElementById('bCatatan').value.trim(),
-    createdAt:Date.now()
+    catatan:document.getElementById('bCatatan').value.trim()
   };
+  
+  if(!id) obj.createdAt = Date.now();
+  
   if(mode==='pinjam'){
     obj.statusPinjam=document.getElementById('pinjamStatus').value;
     if(obj.statusPinjam==='lunas')obj.tglLunas=tgl;
@@ -1058,23 +1092,17 @@ window.saveBelanja=async function(){
   
   showLoad(true);
   try{
-    await window._saveBelanja('',obj);
-    haptic('success');closeBelanjaM();showNotif('Tersimpan');
+    await window._saveBelanja(id, obj);
+    haptic('success');
+    closeBelanjaM();
+    showNotif('Tersimpan');
+    
+    // TRIGGER FILTER UNTUK AUTO-REFRESH HISTORY
+    const filterSemuaBtn = document.querySelector('.fchip[data-blf=""]');
+    if (filterSemuaBtn) filterSemuaBtn.click();
+    
   }catch(e){showNotif('Error: '+e.message);}
   finally{showLoad(false);}
-};
-
-window.lunasPinjam=async function(id){
-  if(!confirm('Tandai pinjaman ini sebagai lunas?'))return;
-  haptic('success');
-  await window._lunasPinjam(id);
-};
-
-window.delBelanjaItem=async function(id){
-  if(!confirm('Hapus catatan ini?'))return;
-  haptic('heavy');
-  await window._delBelanja(id);
-  showNotif('Dihapus');
 };
 
 document.getElementById('resOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeResM();});
