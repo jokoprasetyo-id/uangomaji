@@ -315,7 +315,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </button>
 </nav>
 
-<!-- ===== PAGES ===== -->
 <div id="page-dashboard" class="page active">
 <div class="container" style="padding-bottom:24px;">
   <div class="hero glass-sm">
@@ -373,19 +372,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <div id="page-laporan" class="page">
 <div class="container" style="padding-bottom:24px;">
 
-  <!-- TAB BAR -->
   <div class="tab-bar">
     <button class="tab-btn active" id="tab-labarugi" onclick="switchTab('labarugi')">Laba Rugi</button>
     <button class="tab-btn" id="tab-alokasi" onclick="switchTab('alokasi')">Alokasi</button>
     <button class="tab-btn" id="tab-belanja" onclick="switchTab('belanja')">Dana Belanja</button>
   </div>
 
-  <!-- TAB: LABA RUGI -->
   <div id="tabcontent-labarugi">
     <div id="labaC"></div>
   </div>
 
-  <!-- TAB: ALOKASI -->
   <div id="tabcontent-alokasi" style="display:none;">
     <div class="card glass">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -420,16 +416,19 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     </div>
   </div>
 
-  <!-- TAB: DANA BELANJA 30% -->
   <div id="tabcontent-belanja" style="display:none;">
-    <!-- HERO SALDO -->
     <div class="belanja-hero">
-      <div class="belanja-hero-lbl">Saldo Dana Belanja (30% Laba)</div>
+      <div class="belanja-hero-lbl">Total Saldo Dana Belanja</div>
       <div class="belanja-hero-val" id="bl-saldo">Rp 0</div>
-      <div class="belanja-row">
+      
+      <div class="belanja-row" style="grid-template-columns: 1fr 1fr; margin-top:14px; gap:8px;">
         <div class="belanja-mini">
-          <div class="belanja-mini-lbl">Alokasi</div>
-          <div class="belanja-mini-val" id="bl-alokasi" style="color:var(--orange)">Rp 0</div>
+          <div class="belanja-mini-lbl">Alokasi (30% Laba)</div>
+          <div class="belanja-mini-val" id="bl-alokasi" style="color:var(--blue)">Rp 0</div>
+        </div>
+        <div class="belanja-mini">
+          <div class="belanja-mini-lbl">Top Up Manual</div>
+          <div class="belanja-mini-val" id="bl-topup" style="color:var(--green)">Rp 0</div>
         </div>
         <div class="belanja-mini">
           <div class="belanja-mini-lbl">Terpakai</div>
@@ -442,24 +441,26 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
     </div>
 
-    <!-- TOMBOL AKSI -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
-      <button class="btnprim orange" onclick="openBelanjaM('belanja')" style="padding:12px 8px;font-size:13px;">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+      <button class="btnprim green" onclick="openBelanjaM('topup')" style="padding:12px 4px;font-size:12px;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Top Up Saldo
+      </button>
+      <button class="btnprim orange" onclick="openBelanjaM('belanja')" style="padding:12px 4px;font-size:12px;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         Catat Belanja
       </button>
-      <button class="btnprim purple" onclick="openBelanjaM('pinjam')" style="padding:12px 8px;font-size:13px;">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <button class="btnprim purple" onclick="openBelanjaM('pinjam')" style="padding:12px 4px;font-size:12px;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         Pinjam Dana
       </button>
     </div>
 
-    <!-- FILTER -->
     <div class="filterrow" style="margin-bottom:12px;">
       <div class="fchip active" data-blf="" onclick="setBelanjaF(this)">Semua</div>
+      <div class="fchip" data-blf="topup" onclick="setBelanjaF(this)">Top Up</div>
       <div class="fchip" data-blf="belanja" onclick="setBelanjaF(this)">Belanja</div>
       <div class="fchip" data-blf="pinjam" onclick="setBelanjaF(this)">Pinjam</div>
-      <div class="fchip" data-blf="pinjam-lunas" onclick="setBelanjaF(this)">Lunas</div>
     </div>
 
     <div id="belanjaList" class="trxlist"></div>
@@ -468,7 +469,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 </div>
 
-<!-- ===== KAS MODAL ===== -->
 <div class="kasoverlay" id="kasOv">
   <div class="kassheet">
     <div class="kashandle"></div>
@@ -491,7 +491,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
-<!-- ===== BELANJA MODAL ===== -->
 <div class="kasoverlay" id="belanjaOv">
   <div class="kassheet">
     <div class="kashandle"></div>
@@ -499,7 +498,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <input type="hidden" id="belanjaTypeVal" value="belanja">
     <input type="hidden" id="belanjaIdxVal">
     
-    <!-- Pinjam toggle (hanya tampil saat mode pinjam) -->
     <div id="pinjamStatusRow" style="display:none;margin-bottom:16px;">
       <div class="typetoggle">
         <button id="btnPinjamBelum" class="active" onclick="setPinjamStatus('belum')">💰 Belum Lunas</button>
@@ -509,7 +507,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     </div>
 
     <div class="fg"><label>Tanggal</label><input type="date" id="bTgl" class="fi"></div>
-    <div class="fg"><label>Keterangan</label><input type="text" id="bDes" class="fi" placeholder="Deskripsi belanja..."></div>
+    <div class="fg"><label>Keterangan</label><input type="text" id="bDes" class="fi" placeholder="Deskripsi transaksi..."></div>
     <div class="fg" id="bKatRow"><label>Kategori</label>
       <select id="bKat" class="fs">
         <option>Belanja Harian</option>
@@ -531,7 +529,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
-<!-- ===== RESERVASI MODAL ===== -->
 <div class="overlay" id="resOv">
   <div class="sheet">
     <div class="sheethandle"></div>
@@ -907,7 +904,7 @@ window.livePct=function(){let t=0;subAlloc.forEach((_,i)=>t+=parseFloat(document
 window.applySubAlloc=function(){let t=0;const n=subAlloc.map((_,i)=>{const p=parseFloat(document.getElementById('sP'+i)?.value)||0;t+=p;return{nama:document.getElementById('sN'+i)?.value,pct:p};});if(t!==100){haptic('error');showNotif('Total harus 100%');return;}haptic('success');subAlloc=n;renderAlloc();showNotif('Alokasi disimpan');};
 
 /* ========================
-   DANA BELANJA 30%
+   DANA BELANJA (HYBRID)
 ======================== */
 function hitungLabaBersih(){
   const km=window._km||[],kk=window._kk||[];
@@ -920,18 +917,20 @@ function renderBelanjaSaldo(){
   const alokasi=lb*0.3;
   const bl=window._belanja||[];
   
-  // Hitung terpakai (belanja aktual) & dipinjam (belum lunas)
+  // Hitung Top Up Manual, Terpakai, dan Pinjaman
+  const topup=bl.filter(x=>x.tipe==='topup').reduce((s,x)=>s+x.nominal,0);
   const terpakai=bl.filter(x=>x.tipe==='belanja').reduce((s,x)=>s+x.nominal,0);
   const dipinjam=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas').reduce((s,x)=>s+x.nominal,0);
-  const pinjamanLunas=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam==='lunas').reduce((s,x)=>s+x.nominal,0);
   
-  const saldo=alokasi-terpakai-dipinjam;
+  // Rumus Saldo Baru
+  const saldo = alokasi + topup - terpakai - dipinjam;
   
   document.getElementById('bl-alokasi').textContent=IDR(alokasi);
+  document.getElementById('bl-topup').textContent=IDR(topup);
   document.getElementById('bl-terpakai').textContent=IDR(terpakai);
   document.getElementById('bl-dipinjam').textContent=IDR(dipinjam);
   document.getElementById('bl-saldo').textContent=IDR(Math.max(0,saldo));
-  document.getElementById('bl-saldo').style.color=saldo<0?'var(--red)':'var(--orange)';
+  document.getElementById('bl-saldo').style.color=saldo<0?'var(--red)':'var(--text)';
 
   renderBelanjaList();
 }
@@ -947,31 +946,43 @@ function renderBelanjaList(){
   const bl=window._belanja||[];
   let f=bl;
   if(belanjaF==='belanja') f=bl.filter(x=>x.tipe==='belanja');
+  else if(belanjaF==='topup') f=bl.filter(x=>x.tipe==='topup');
   else if(belanjaF==='pinjam') f=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas');
   else if(belanjaF==='pinjam-lunas') f=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam==='lunas');
   
   document.getElementById('belanjaList').innerHTML=f.length?f.map(r=>{
     const isPinjam=r.tipe==='pinjam';
+    const isTopup=r.tipe==='topup';
     const isLunas=r.statusPinjam==='lunas';
-    const ic=isPinjam?'rgba(175,82,222,0.1)':'rgba(255,149,0,0.1)';
-    const c=isPinjam?'var(--purple)':'var(--orange)';
-    const badge=isPinjam?(isLunas?`<span class="trxtag badge-lunas-pinjam">Lunas</span>`:`<span class="trxtag badge-pinjam">Pinjam</span>`):`<span class="trxtag" style="background:rgba(255,149,0,0.1);color:var(--orange)">Belanja</span>`;
+    
+    let ic='rgba(255,149,0,0.1)'; let c='var(--orange)'; let icon='<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>';
+    let badge='<span class="trxtag" style="background:rgba(255,149,0,0.1);color:var(--orange)">Belanja</span>';
+    let operator='–';
+
+    if (isPinjam) {
+      ic='rgba(175,82,222,0.1)'; c='var(--purple)'; icon='<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>';
+      badge=isLunas?`<span class="trxtag badge-lunas-pinjam">Lunas</span>`:`<span class="trxtag badge-pinjam">Pinjam</span>`;
+    } else if (isTopup) {
+      ic='rgba(52,199,89,0.1)'; c='var(--green)'; icon='<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>';
+      badge='<span class="trxtag" style="background:rgba(52,199,89,0.1);color:var(--green)">Top Up</span>';
+      operator='+';
+    }
+
     const lunasbtn=isPinjam&&!isLunas?`<button class="btnico" onclick="lunasPinjam('${r.id}')" title="Tandai Lunas" style="color:var(--green)"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>`:'';
+    
     return`<div class="trxitem">
       <div class="trxleft">
-        <div class="trxicon" style="background:${ic};color:${c}">
-          <svg viewBox="0 0 24 24">${isPinjam?'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>':'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>'}</svg>
-        </div>
+        <div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${icon}</svg></div>
         <div>
           <div class="trxtitle">${r.deskripsi}</div>
-          <div class="trxmeta">${r.tanggal||''} · ${r.kategori||''}</div>
+          <div class="trxmeta">${r.tanggal||''} ${r.kategori?'· '+r.kategori:''}</div>
           ${badge}
           ${r.catatan?`<div style="font-size:10px;color:var(--text3);margin-top:2px;">${r.catatan}</div>`:''}
           ${isLunas&&r.tglLunas?`<div style="font-size:10px;color:var(--green);margin-top:1px;">Dilunasi ${fmtD(r.tglLunas)}</div>`:''}
         </div>
       </div>
       <div class="trxright">
-        <div class="trxamt" style="color:${c}">– ${IDR(r.nominal)}</div>
+        <div class="trxamt" style="color:${c}">${operator} ${IDR(r.nominal)}</div>
         <div class="trxactions">
           ${lunasbtn}
           <button class="btnico del" onclick="delBelanjaItem('${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
@@ -984,9 +995,16 @@ function renderBelanjaList(){
 window.openBelanjaM=function(mode='belanja'){
   currentBelanjaMode=mode;
   const isPinjam=mode==='pinjam';
-  document.getElementById('belanjaTitle').textContent=isPinjam?'Pinjam Dana Belanja':'Catat Belanja';
+  const isTopup=mode==='topup';
+  
+  if (isTopup) document.getElementById('belanjaTitle').textContent='Tambah Saldo Awal / Top Up';
+  else if (isPinjam) document.getElementById('belanjaTitle').textContent='Pinjam Dana Belanja';
+  else document.getElementById('belanjaTitle').textContent='Catat Belanja';
+  
   document.getElementById('belanjaTypeVal').value=mode;
   document.getElementById('pinjamStatusRow').style.display=isPinjam?'block':'none';
+  document.getElementById('bKatRow').style.display=isTopup?'none':'block'; 
+  
   document.getElementById('bTgl').value=new Date().toISOString().slice(0,10);
   document.getElementById('bDes').value='';
   document.getElementById('bNom').value='';
@@ -996,17 +1014,11 @@ window.openBelanjaM=function(mode='belanja'){
   document.getElementById('btnPinjamLunas').classList.remove('active');
   
   const saveBtn=document.getElementById('btnBelanjaSave');
-  if(isPinjam){saveBtn.style.background='var(--purple)';saveBtn.style.boxShadow='0 4px 14px rgba(175,82,222,.28)';}
-  else{saveBtn.style.background='var(--orange)';saveBtn.style.boxShadow='0 4px 14px rgba(255,149,0,.28)';}
+  if (isTopup) { saveBtn.className='btnprim green'; saveBtn.style.boxShadow='0 4px 14px rgba(52,199,89,.28)'; }
+  else if (isPinjam) { saveBtn.className='btnprim purple'; saveBtn.style.boxShadow='0 4px 14px rgba(175,82,222,.28)'; }
+  else { saveBtn.className='btnprim orange'; saveBtn.style.boxShadow='0 4px 14px rgba(255,149,0,.28)'; }
   
   document.getElementById('belanjaOv').classList.add('show');
-};
-window.closeBelanjaM=()=>document.getElementById('belanjaOv').classList.remove('show');
-
-window.setPinjamStatus=function(s){
-  document.getElementById('pinjamStatus').value=s;
-  document.getElementById('btnPinjamBelum').classList.toggle('active',s==='belum');
-  document.getElementById('btnPinjamLunas').classList.toggle('active',s==='lunas');
 };
 
 window.saveBelanja=async function(){
@@ -1016,23 +1028,25 @@ window.saveBelanja=async function(){
   const des=document.getElementById('bDes').value.trim();
   if(!tgl||!des||isNaN(nom)||nom<=0){showNotif('Lengkapi data');return;}
   
-  // Cek saldo cukup
-  const lb=hitungLabaBersih();
-  const alokasi=lb*0.3;
-  const bl=window._belanja||[];
-  const terpakai=bl.filter(x=>x.tipe==='belanja').reduce((s,x)=>s+x.nominal,0);
-  const dipinjam=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas').reduce((s,x)=>s+x.nominal,0);
-  const saldo=alokasi-terpakai-dipinjam;
-  
-  if(nom>saldo){
-    if(!confirm(`Saldo dana belanja hanya ${IDR(saldo)}. Tetap simpan?`))return;
+  if (mode !== 'topup') {
+      const lb=hitungLabaBersih();
+      const alokasi=lb*0.3;
+      const bl=window._belanja||[];
+      const topup=bl.filter(x=>x.tipe==='topup').reduce((s,x)=>s+x.nominal,0);
+      const terpakai=bl.filter(x=>x.tipe==='belanja').reduce((s,x)=>s+x.nominal,0);
+      const dipinjam=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas').reduce((s,x)=>s+x.nominal,0);
+      const saldo=alokasi+topup-terpakai-dipinjam;
+      
+      if(nom>saldo){
+        if(!confirm(`Saldo dana belanja hanya ${IDR(saldo)}. Tetap simpan?`))return;
+      }
   }
   
   const obj={
     tipe:mode,
     tanggal:tgl,
     deskripsi:des,
-    kategori:document.getElementById('bKat').value,
+    kategori:mode==='topup'?'Saldo Awal / Manual':document.getElementById('bKat').value,
     nominal:nom,
     catatan:document.getElementById('bCatatan').value.trim(),
     createdAt:Date.now()
