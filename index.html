@@ -147,6 +147,24 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .subeditrow input[type="number"]{width:56px;flex-shrink:0;padding:9px 6px;border-radius:10px;border:1px solid var(--border);font-size:13px;text-align:center;background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text);}
 .subeditrow .pct-label{font-size:12px;color:var(--text3);flex-shrink:0;}
 
+/* BELANJA TAB SYSTEM */
+.tab-bar{display:flex;background:rgba(0,0,0,.06);border-radius:12px;padding:3px;margin-bottom:16px;}
+.tab-btn{flex:1;padding:9px 6px;border:none;border-radius:9px;background:transparent;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);transition:all .15s;}
+.tab-btn.active{background:white;box-shadow:0 1px 4px rgba(0,0,0,.12);color:var(--text);}
+
+/* DANA BELANJA HERO */
+.belanja-hero{border-radius:var(--r-xl);padding:20px;margin-bottom:12px;background:linear-gradient(145deg,rgba(255,149,0,.12) 0%,rgba(255,149,0,.05) 100%);border:1px solid rgba(255,149,0,.22);}
+.belanja-hero-lbl{font-size:11px;color:var(--text3);font-weight:500;margin-bottom:4px;}
+.belanja-hero-val{font-size:28px;font-weight:700;color:var(--orange);letter-spacing:-.5px;}
+.belanja-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;}
+.belanja-mini{background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.9);border-radius:12px;padding:10px;text-align:center;}
+.belanja-mini-lbl{font-size:9px;color:var(--text3);font-weight:500;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;}
+.belanja-mini-val{font-size:13px;font-weight:700;}
+
+/* PINJAM BADGE */
+.badge-pinjam{background:rgba(175,82,222,.1);color:var(--purple);}
+.badge-lunas-pinjam{background:rgba(52,199,89,.12);color:var(--green);}
+
 /* OVERLAYS */
 .overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.32);overflow-y:auto;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
 .overlay.show{display:block;}
@@ -212,6 +230,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .btnprim{padding:14px;border-radius:14px;background:var(--blue);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(0,122,255,.28);display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;}
 .btnprim:active{opacity:.85;}.btnprim:disabled{opacity:.5;cursor:not-allowed;}
 .btnprim.green{background:var(--green);box-shadow:0 4px 14px rgba(52,199,89,.28);}
+.btnprim.orange{background:var(--orange);box-shadow:0 4px 14px rgba(255,149,0,.28);}
+.btnprim.purple{background:var(--purple);box-shadow:0 4px 14px rgba(175,82,222,.28);}
 .btnsec{padding:14px;border-radius:14px;background:rgba(0,0,0,.06);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
 
 /* NOTA PENGUNJUNG */
@@ -236,7 +256,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .empty svg{width:32px;height:32px;margin-bottom:10px;opacity:.4;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;display:block;margin-left:auto;margin-right:auto;}
 .empty p{font-size:12px;}
 
-/* --- PERBAIKAN CETAK NOTA --- */
 @media print {
   body > *:not(#notaOv) { display: none !important; }
   #notaOv { display: block !important; position: static !important; background: transparent !important; }
@@ -296,6 +315,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </button>
 </nav>
 
+<!-- ===== PAGES ===== -->
 <div id="page-dashboard" class="page active">
 <div class="container" style="padding-bottom:24px;">
   <div class="hero glass-sm">
@@ -352,43 +372,103 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <div id="page-laporan" class="page">
 <div class="container" style="padding-bottom:24px;">
-  <div class="sec-label">Laba Rugi</div>
-  <div id="labaC"></div>
-  <div class="sec-label">Alokasi Laba</div>
-  <div class="card glass">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Laba Tersedia</div><div id="al-laba" style="font-size:22px;font-weight:700;">Rp 0</div></div>
-      <div id="al-margin" style="background:rgba(52,199,89,.1);color:var(--green);padding:5px 11px;border-radius:10px;font-size:11px;font-weight:700;">0%</div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-labarugi" onclick="switchTab('labarugi')">Laba Rugi</button>
+    <button class="tab-btn" id="tab-alokasi" onclick="switchTab('alokasi')">Alokasi</button>
+    <button class="tab-btn" id="tab-belanja" onclick="switchTab('belanja')">Dana Belanja</button>
+  </div>
+
+  <!-- TAB: LABA RUGI -->
+  <div id="tabcontent-labarugi">
+    <div id="labaC"></div>
+  </div>
+
+  <!-- TAB: ALOKASI -->
+  <div id="tabcontent-alokasi" style="display:none;">
+    <div class="card glass">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Laba Tersedia</div><div id="al-laba" style="font-size:22px;font-weight:700;">Rp 0</div></div>
+        <div id="al-margin" style="background:rgba(52,199,89,.1);color:var(--green);padding:5px 11px;border-radius:10px;font-size:11px;font-weight:700;">0%</div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div class="alloc-row"><span>Omaji (20%)</span><span id="al-omaji" style="color:var(--blue)">Rp 0</span></div>
+        <div class="allocbar-bg"><div class="allocbar-fill" style="width:20%;background:var(--blue)"></div></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div class="alloc-row"><span>Belanja (30%)</span><span id="al-belanja" style="color:var(--orange)">Rp 0</span></div>
+        <div class="allocbar-bg"><div class="allocbar-fill" style="width:30%;background:var(--orange)"></div></div>
+      </div>
+      <div>
+        <div class="alloc-row"><span>Gaji (50%)</span><span id="al-gaji" style="color:var(--green)">Rp 0</span></div>
+        <div class="allocbar-bg"><div class="allocbar-fill" style="width:50%;background:var(--green)"></div></div>
+      </div>
     </div>
-    <div style="margin-bottom:12px;">
-      <div class="alloc-row"><span>Omaji (20%)</span><span id="al-omaji" style="color:var(--blue)">Rp 0</span></div>
-      <div class="allocbar-bg"><div class="allocbar-fill" style="width:20%;background:var(--blue)"></div></div>
-    </div>
-    <div style="margin-bottom:12px;">
-      <div class="alloc-row"><span>Belanja (30%)</span><span id="al-belanja" style="color:var(--orange)">Rp 0</span></div>
-      <div class="allocbar-bg"><div class="allocbar-fill" style="width:30%;background:var(--orange)"></div></div>
-    </div>
-    <div>
-      <div class="alloc-row"><span>Gaji (50%)</span><span id="al-gaji" style="color:var(--green)">Rp 0</span></div>
-      <div class="allocbar-bg"><div class="allocbar-fill" style="width:50%;background:var(--green)"></div></div>
+    <div class="sec-label">Sub Alokasi Gaji</div>
+    <div class="card glass">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text2);">Pembagian</div>
+        <div id="subPct" style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;background:rgba(0,0,0,.05);">0%</div>
+      </div>
+      <div id="subDisplay" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+      <div style="border-top:1px solid var(--border);padding-top:14px;">
+        <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Atur Persentase</div>
+        <div id="subEditRows"></div>
+        <button onclick="applySubAlloc()" style="width:100%;margin-top:10px;padding:13px;border-radius:13px;border:none;background:var(--blue);color:white;font-weight:600;font-size:13px;font-family:inherit;cursor:pointer;box-shadow:0 4px 14px rgba(0,122,255,.22);">Simpan</button>
+      </div>
     </div>
   </div>
-  <div class="sec-label">Sub Alokasi Gaji</div>
-  <div class="card glass">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:600;color:var(--text2);">Pembagian</div>
-      <div id="subPct" style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;background:rgba(0,0,0,.05);">0%</div>
+
+  <!-- TAB: DANA BELANJA 30% -->
+  <div id="tabcontent-belanja" style="display:none;">
+    <!-- HERO SALDO -->
+    <div class="belanja-hero">
+      <div class="belanja-hero-lbl">Saldo Dana Belanja (30% Laba)</div>
+      <div class="belanja-hero-val" id="bl-saldo">Rp 0</div>
+      <div class="belanja-row">
+        <div class="belanja-mini">
+          <div class="belanja-mini-lbl">Alokasi</div>
+          <div class="belanja-mini-val" id="bl-alokasi" style="color:var(--orange)">Rp 0</div>
+        </div>
+        <div class="belanja-mini">
+          <div class="belanja-mini-lbl">Terpakai</div>
+          <div class="belanja-mini-val" id="bl-terpakai" style="color:var(--red)">Rp 0</div>
+        </div>
+        <div class="belanja-mini">
+          <div class="belanja-mini-lbl">Dipinjam</div>
+          <div class="belanja-mini-val" id="bl-dipinjam" style="color:var(--purple)">Rp 0</div>
+        </div>
+      </div>
     </div>
-    <div id="subDisplay" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
-    <div style="border-top:1px solid var(--border);padding-top:14px;">
-      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Atur Persentase</div>
-      <div id="subEditRows"></div>
-      <button onclick="applySubAlloc()" style="width:100%;margin-top:10px;padding:13px;border-radius:13px;border:none;background:var(--blue);color:white;font-weight:600;font-size:13px;font-family:inherit;cursor:pointer;box-shadow:0 4px 14px rgba(0,122,255,.22);">Simpan</button>
+
+    <!-- TOMBOL AKSI -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <button class="btnprim orange" onclick="openBelanjaM('belanja')" style="padding:12px 8px;font-size:13px;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Catat Belanja
+      </button>
+      <button class="btnprim purple" onclick="openBelanjaM('pinjam')" style="padding:12px 8px;font-size:13px;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Pinjam Dana
+      </button>
     </div>
+
+    <!-- FILTER -->
+    <div class="filterrow" style="margin-bottom:12px;">
+      <div class="fchip active" data-blf="" onclick="setBelanjaF(this)">Semua</div>
+      <div class="fchip" data-blf="belanja" onclick="setBelanjaF(this)">Belanja</div>
+      <div class="fchip" data-blf="pinjam" onclick="setBelanjaF(this)">Pinjam</div>
+      <div class="fchip" data-blf="pinjam-lunas" onclick="setBelanjaF(this)">Lunas</div>
+    </div>
+
+    <div id="belanjaList" class="trxlist"></div>
   </div>
+
 </div>
 </div>
 
+<!-- ===== KAS MODAL ===== -->
 <div class="kasoverlay" id="kasOv">
   <div class="kassheet">
     <div class="kashandle"></div>
@@ -411,6 +491,47 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+<!-- ===== BELANJA MODAL ===== -->
+<div class="kasoverlay" id="belanjaOv">
+  <div class="kassheet">
+    <div class="kashandle"></div>
+    <div class="kastitle" id="belanjaTitle">Catat Belanja</div>
+    <input type="hidden" id="belanjaTypeVal" value="belanja">
+    <input type="hidden" id="belanjaIdxVal">
+    
+    <!-- Pinjam toggle (hanya tampil saat mode pinjam) -->
+    <div id="pinjamStatusRow" style="display:none;margin-bottom:16px;">
+      <div class="typetoggle">
+        <button id="btnPinjamBelum" class="active" onclick="setPinjamStatus('belum')">💰 Belum Lunas</button>
+        <button id="btnPinjamLunas" onclick="setPinjamStatus('lunas')">✓ Sudah Lunas</button>
+      </div>
+      <input type="hidden" id="pinjamStatus" value="belum">
+    </div>
+
+    <div class="fg"><label>Tanggal</label><input type="date" id="bTgl" class="fi"></div>
+    <div class="fg"><label>Keterangan</label><input type="text" id="bDes" class="fi" placeholder="Deskripsi belanja..."></div>
+    <div class="fg" id="bKatRow"><label>Kategori</label>
+      <select id="bKat" class="fs">
+        <option>Belanja Harian</option>
+        <option>Stok Bahan</option>
+        <option>Peralatan</option>
+        <option>Kebutuhan Dapur</option>
+        <option>Lainnya</option>
+      </select>
+    </div>
+    <div class="fg"><label>Nominal (Rp)</label><input type="text" inputmode="numeric" id="bNom" class="fi" placeholder="0" oninput="fmtNom(this)"></div>
+    <div class="fg" id="bCatatanRow"><label>Catatan</label><textarea id="bCatatan" class="fta" rows="2" placeholder="Opsional..."></textarea></div>
+
+    <div class="actrow" style="grid-template-columns:1fr 2fr;">
+      <button class="btnsec" onclick="closeBelanjaM()">Batal</button>
+      <button class="btnprim orange" id="btnBelanjaSave" onclick="saveBelanja()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESERVASI MODAL ===== -->
 <div class="overlay" id="resOv">
   <div class="sheet">
     <div class="sheethandle"></div>
@@ -437,13 +558,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sumtotal"><span>Pendapatan Bersih</span><span id="rs-profit">Rp 0</span></div>
       </div>
       <div class="syncnote"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg><span>Pembayaran &amp; HPP otomatis tercatat di Kas.</span></div>
-      
       <div class="actrow" style="grid-template-columns:1fr 1fr 2fr;">
         <button class="btnsec" style="padding:14px 8px;" onclick="closeResM()">Batal</button>
         <button class="btnsec" style="padding:14px 8px;" onclick="cetakNota()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Nota</button>
         <button class="btnprim" id="btnSimpanRes" style="padding:14px 8px;" onclick="simpanRes()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Simpan</button>
       </div>
-
     </div>
   </div>
 </div>
@@ -476,14 +595,35 @@ function sc(k,r){const dot=document.getElementById('connDot'),txt=document.getEl
 onSnapshot(collection(dK,'kas_masuk'),s=>{window._km=s.docs.map(d=>({id:d.id,...d.data()}));kOk=true;sc(kOk,rOk);refreshAll();},()=>{kOk=false;sc(kOk,rOk);});
 onSnapshot(collection(dK,'kas_keluar'),s=>{window._kk=s.docs.map(d=>({id:d.id,...d.data()}));refreshAll();});
 onSnapshot(query(collection(dR,'reservasi'),orderBy('createdAt','desc')),s=>{window._res=s.docs.map(d=>({...d.data(),_docId:d.id}));rOk=true;sc(kOk,rOk);refreshAll();},()=>{rOk=false;sc(kOk,rOk);});
+
+// Listen dana belanja collection
+onSnapshot(query(collection(dK,'dana_belanja'),orderBy('createdAt','desc')),s=>{
+  window._belanja=s.docs.map(d=>({id:d.id,...d.data()}));
+  refreshAll();
+},()=>{});
+
 window._saveKas=async(type,idx,obj)=>{const col=type==='masuk'?'kas_masuk':'kas_keluar';if(idx!==''){const arr=type==='masuk'?window._km:window._kk;await updateDoc(doc(dK,col,arr[+idx].id),obj);}else await addDoc(collection(dK,col),obj);};
 window._delKas=async(type,id)=>await deleteDoc(doc(dK,type==='masuk'?'kas_masuk':'kas_keluar',id));
+
+// DANA BELANJA CRUD
+window._saveBelanja=async(idx,obj)=>{
+  if(idx!==''&&idx!=null){
+    await updateDoc(doc(dK,'dana_belanja',window._belanja[+idx].id),obj);
+  } else {
+    await addDoc(collection(dK,'dana_belanja'),obj);
+  }
+};
+window._delBelanja=async(id)=>await deleteDoc(doc(dK,'dana_belanja',id));
+window._lunasPinjam=async(id)=>{
+  await updateDoc(doc(dK,'dana_belanja',id),{statusPinjam:'lunas',tglLunas:new Date().toISOString().slice(0,10)});
+  showNotif('Pinjaman dilunasi');
+};
 
 window._saveRes=async(obj)=>{
   showLoad(true);
   try{
     const omzet=hitOmzet(obj),hpp=hitHpp(obj),dp=obj.dp||0,now=new Date().toISOString();
-    const ts=Date.now(); 
+    const ts=Date.now();
     if(obj._docId){
       const k1=await getDocs(query(collection(dK,'kas_masuk'),where('resId','==',obj._docId)));
       for(const d of k1.docs)await deleteDoc(doc(dK,'kas_masuk',d.id));
@@ -491,14 +631,9 @@ window._saveRes=async(obj)=>{
       for(const d of k2.docs)await deleteDoc(doc(dK,'kas_keluar',d.id));
     }
     let docId=obj._docId;
-    const dataToSave = { ...obj };
-    delete dataToSave._docId;
-    if(docId){
-        await updateDoc(doc(dR,'reservasi',docId),{...dataToSave,updatedAt:now});
-    }else{
-        const ref=await addDoc(collection(dR,'reservasi'),{...dataToSave,createdAt:now});
-        docId=ref.id;
-    }
+    const dataToSave={...obj};delete dataToSave._docId;
+    if(docId){await updateDoc(doc(dR,'reservasi',docId),{...dataToSave,updatedAt:now});}
+    else{const ref=await addDoc(collection(dR,'reservasi'),{...dataToSave,createdAt:now});docId=ref.id;}
     if(obj.status==='Lunas'&&omzet>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglLunas||obj.tanggal,deskripsi:`[Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:omzet,resId:docId,autoSync:true,createdAt:ts});
     else if(obj.status==='DP'&&dp>0)await addDoc(collection(dK,'kas_masuk'),{tanggal:obj.tglDp||obj.tanggal,deskripsi:`[DP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Penjualan',jenis:obj.metode||'Tunai',status:'Lunas',nominal:dp,resId:docId,autoSync:true,createdAt:ts});
     if(hpp>0)await addDoc(collection(dK,'kas_keluar'),{tanggal:obj.tanggal,deskripsi:`[HPP Reservasi] ${obj.nama} - ${obj.acara}`,kategori:'Bahan Baku / Stok',jenis:'Tunai',status:'Lunas',nominal:hpp,resId:docId,autoSync:true,createdAt:ts});
@@ -529,30 +664,18 @@ window.exportCSV=()=>{
 </script>
 
 <script>
-window._km=[];window._kk=[];window._res=[];
+window._km=[];window._kk=[];window._res=[];window._belanja=[];
 const KM=['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uang Belanja'];
 const KK=['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
 let _ch={};
-
-// [PERBAIKAN 4] Default sub-alokasi: Bapak 36%, Dani 34%, Dias 30%
 let subAlloc=[{nama:'Bapak',pct:36},{nama:'Dani',pct:34},{nama:'Dias',pct:30}];
-
 let rMenuR=[],rHppR=[],editResId=null,resF='';
 let fabOpen=false;
+let belanjaF='';
+let currentBelanjaMode='belanja';
 
-// [PERBAIKAN 1] Format uang lengkap, tidak disingkat
 const IDR=v=>'Rp '+Math.round(v||0).toLocaleString('id-ID');
-
-
-// Haptic feedback helper (iPhone-style)
-function haptic(type='light'){
-  if(!navigator.vibrate)return;
-  if(type==='light')navigator.vibrate(8);
-  else if(type==='medium')navigator.vibrate(15);
-  else if(type==='heavy')navigator.vibrate([20,10,20]);
-  else if(type==='success')navigator.vibrate([8,50,8]);
-  else if(type==='error')navigator.vibrate([20,30,20,30,20]);
-}
+function haptic(type='light'){if(!navigator.vibrate)return;if(type==='light')navigator.vibrate(8);else if(type==='medium')navigator.vibrate(15);else if(type==='heavy')navigator.vibrate([20,10,20]);else if(type==='success')navigator.vibrate([8,50,8]);else if(type==='error')navigator.vibrate([20,30,20,30,20]);}
 const fmtD=s=>{if(!s)return'-';const m=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],d=new Date(s+'T00:00:00');return d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();};
 const fmtDH=s=>{if(!s)return'-';const dy=['Min','Sen','Sel','Rab','Kam','Jum','Sab'],m=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],d=new Date(s+'T00:00:00');return dy[d.getDay()]+', '+d.getDate()+' '+m[d.getMonth()];};
 function hitOmzet(r){return(r.menu||[]).reduce((s,m)=>s+(m.tipe==='Free'?0:(m.harga||0)*(m.qty!=null?m.qty:r.jumlah||0)),0);}
@@ -561,28 +684,22 @@ function showLoad(v){document.getElementById('loading').classList.toggle('show',
 function showNotif(msg){const el=document.getElementById('notif');document.getElementById('notifTxt').textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2600);}
 function updC(id,cfg){if(_ch[id])_ch[id].destroy();const c=document.getElementById(id);if(!c)return;_ch[id]=new Chart(c,cfg);}
 
+/* TAB LAPORAN */
+window.switchTab=function(tab){
+  ['labarugi','alokasi','belanja'].forEach(t=>{
+    document.getElementById('tabcontent-'+t).style.display=t===tab?'block':'none';
+    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
+  });
+  if(tab==='alokasi')renderAlloc();
+  if(tab==='belanja')renderBelanjaSaldo();
+};
+
 /* FAB */
 window.toggleFab=function(){haptic('medium');fabOpen?closeFab():openFab();};
-function openFab(){
-  fabOpen=true;
-  document.getElementById('fabMenu').classList.add('show');
-  document.getElementById('fabBackdrop').classList.add('show');
-  document.getElementById('navFab').classList.add('open');
-}
-function closeFab(){
-  fabOpen=false;
-  document.getElementById('fabMenu').classList.remove('show');
-  document.getElementById('fabBackdrop').classList.remove('show');
-  document.getElementById('navFab').classList.remove('open');
-}
+function openFab(){fabOpen=true;document.getElementById('fabMenu').classList.add('show');document.getElementById('fabBackdrop').classList.add('show');document.getElementById('navFab').classList.add('open');}
+function closeFab(){fabOpen=false;document.getElementById('fabMenu').classList.remove('show');document.getElementById('fabBackdrop').classList.remove('show');document.getElementById('navFab').classList.remove('open');}
 window.closeFab=closeFab;
-window.fabAction=function(type){haptic('medium');
-  closeFab();
-  setTimeout(()=>{
-    if(type==='reservasi')openResM(null);
-    else openKasM(null,type);
-  },120);
-};
+window.fabAction=function(type){haptic('medium');closeFab();setTimeout(()=>{if(type==='reservasi')openResM(null);else openKasM(null,type);},120);};
 
 window.showPage=function(id,btn){haptic('light');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -595,14 +712,12 @@ window.showPage=function(id,btn){haptic('light');
   if(id==='reservasi')renderRes();
   if(id==='laporan'){renderLaba();renderAlloc();}
 };
-function refreshAll(){const pg=document.querySelector('.page.active')?.id;refreshDash();if(pg==='keuangan')renderKas();if(pg==='reservasi')renderRes();if(pg==='laporan'){renderLaba();renderAlloc();}}
+function refreshAll(){const pg=document.querySelector('.page.active')?.id;refreshDash();if(pg==='page-keuangan')renderKas();if(pg==='page-reservasi')renderRes();if(pg==='page-laporan'){renderLaba();renderAlloc();renderBelanjaSaldo();};}
 
 /* DASHBOARD */
 function refreshDash(){
   const km=window._km||[],kk=window._kk||[],res=window._res||[];
   const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0),lb=tM-tK;
-
-  // [PERBAIKAN 1] Gunakan IDR (lengkap) bukan IDRs (singkat) di hero dan stats
   document.getElementById('d-laba').textContent=IDR(lb);
   document.getElementById('d-laba').style.color=lb>=0?'var(--text)':'var(--red)';
   document.getElementById('d-masuk').textContent=IDR(tM);
@@ -612,7 +727,6 @@ function refreshDash(){
   document.getElementById('d-belum').textContent=res.filter(r=>r.status!=='Lunas').length;
   document.getElementById('d-omzet').textContent=IDR(res.reduce((s,r)=>s+hitOmzet(r),0));
   document.getElementById('d-tamu').textContent=res.reduce((s,r)=>s+(r.jumlah||0),0);
-  
   const MS=['01','02','03','04','05','06','07','08','09','10','11','12'];
   const ms={},ks={};MS.forEach(m=>{ms[m]=0;ks[m]=0;});
   km.forEach(r=>{const m=r.tanggal?.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
@@ -621,46 +735,19 @@ function refreshDash(){
     {label:'Masuk',data:MS.map(m=>ms[m]),backgroundColor:'rgba(52,199,89,0.72)',borderRadius:5,borderSkipped:false},
     {label:'Keluar',data:MS.map(m=>ks[m]),backgroundColor:'rgba(255,59,48,0.62)',borderRadius:5,borderSkipped:false}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,borderRadius:4,useBorderRadius:true,padding:12,font:{size:10},color:'#8e8e93'}}},scales:{x:{grid:{display:false},ticks:{color:'#aeaeb2',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.05)'},border:{display:false},ticks:{color:'#aeaeb2',font:{size:9},callback:v=>IDR(v)}}}}});
-  
-  // [PERBAIKAN 2] Reservasi mendatang: hanya tampil hari ini ke depan (sudah lewat = tidak muncul)
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const upcomingRes = res
-    .filter(r => (r.tanggal || '') >= todayStr)
-    .sort((a,b) => new Date(a.tanggal) - new Date(b.tanggal))
-    .slice(0, 5);
-    
-  document.getElementById('upcomingList').innerHTML = upcomingRes.length ? upcomingRes.map(r => {
-    const bc = r.status==='Lunas'?'badge-lunas':r.status==='DP'?'badge-dp':'badge-belum';
-    const bl = r.status==='Lunas'?'Lunas':r.status==='DP'?'Sudah DP':'Belum Bayar';
-    return `<div class="trxitem" onclick="editRes('${r._docId}')" style="cursor:pointer; transition:background .15s;" onmouseover="this.style.background='rgba(0,0,0,0.03)'" onmouseout="this.style.background='rgba(255,255,255,0.72)'">
-      <div class="trxleft">
-        <div class="trxicon" style="background:rgba(0,122,255,0.1);color:var(--blue)">
-          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-        </div>
-        <div>
-          <div class="trxtitle">${r.nama || ''} <span style="font-size:10px;font-weight:500;color:var(--text3)">(${r.acara || ''})</span></div>
-          <div class="trxmeta">${fmtDH(r.tanggal)} · Pukul ${r.waktu||'-'} · ${r.jumlah||0} Pax</div>
-        </div>
-      </div>
-      <div class="trxright" style="display:flex;align-items:center;">
-        <span class="badge ${bc}" style="position:static;">${bl}</span>
-        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:var(--text4);stroke-width:2;stroke-linecap:round;margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-    </div>`;
-  }).join('') : '<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>Tidak ada reservasi mendatang</p></div>';
-
-  // TRANSAKSI TERAKHIR
-  const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>{
-    const dA = new Date(a.tanggal).getTime(), dB = new Date(b.tanggal).getTime();
-    if(dA !== dB) return dB - dA;
-    return (b.createdAt||0) - (a.createdAt||0);
-  }).slice(0,5);
-  
+  const todayStr=new Date().toISOString().slice(0,10);
+  const upcomingRes=res.filter(r=>(r.tanggal||'')>=todayStr).sort((a,b)=>new Date(a.tanggal)-new Date(b.tanggal)).slice(0,5);
+  document.getElementById('upcomingList').innerHTML=upcomingRes.length?upcomingRes.map(r=>{
+    const bc=r.status==='Lunas'?'badge-lunas':r.status==='DP'?'badge-dp':'badge-belum';
+    const bl=r.status==='Lunas'?'Lunas':r.status==='DP'?'Sudah DP':'Belum Bayar';
+    return`<div class="trxitem" onclick="editRes('${r._docId}')" style="cursor:pointer;"><div class="trxleft"><div class="trxicon" style="background:rgba(0,122,255,0.1);color:var(--blue)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><div class="trxtitle">${r.nama||''} <span style="font-size:10px;font-weight:500;color:var(--text3)">(${r.acara||''})</span></div><div class="trxmeta">${fmtDH(r.tanggal)} · Pukul ${r.waktu||'-'} · ${r.jumlah||0} Pax</div></div></div><div class="trxright" style="display:flex;align-items:center;"><span class="badge ${bc}">${bl}</span><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:var(--text4);stroke-width:2;stroke-linecap:round;margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg></div></div>`;
+  }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>Tidak ada reservasi mendatang</p></div>';
+  const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>{const dA=new Date(a.tanggal).getTime(),dB=new Date(b.tanggal).getTime();if(dA!==dB)return dB-dA;return(b.createdAt||0)-(a.createdAt||0);}).slice(0,5);
   document.getElementById('recentList').innerHTML=all.length?all.map(r=>{
     const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
     const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi</span>`:'';
     return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div></div></div>`;
-  }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg><p>Belum ada transaksi</p></div>';
+  }).join(''):'<div class="empty"><p>Belum ada transaksi</p></div>';
 }
 
 /* KAS MODAL */
@@ -684,10 +771,9 @@ window.setKasType=function(type){
 };
 window.closeKasM=()=>document.getElementById('kasOv').classList.remove('show');
 window.fmtNom=function(el){let v=el.value.replace(/[^0-9]/g,'');el.value=v?parseInt(v).toLocaleString('id-ID'):'';};
-
 window.saveKas=async function(){
   const type=document.getElementById('kasTypeVal').value,idx=document.getElementById('kasIdxVal').value;
-  const obj={tanggal:document.getElementById('kTgl').value,deskripsi:document.getElementById('kDes').value.trim(),kategori:document.getElementById('kKat').value,jenis:document.getElementById('kJen').value,status:document.getElementById('kSts').value,nominal:parseFloat(document.getElementById('kNom').value.replace(/\./g,'')), createdAt: Date.now()};
+  const obj={tanggal:document.getElementById('kTgl').value,deskripsi:document.getElementById('kDes').value.trim(),kategori:document.getElementById('kKat').value,jenis:document.getElementById('kJen').value,status:document.getElementById('kSts').value,nominal:parseFloat(document.getElementById('kNom').value.replace(/\./g,'')),createdAt:Date.now()};
   if(!obj.tanggal||!obj.deskripsi||isNaN(obj.nominal)){showNotif('Lengkapi data');return;}
   await window._saveKas(type,idx,obj);haptic('success');closeKasM();showNotif('Tersimpan');
 };
@@ -705,43 +791,29 @@ window.renderKas=function(){
   let items=[];
   if(type!=='keluar')items.push(...(window._km||[]).map(x=>({...x,_t:'masuk'})));
   if(type!=='masuk')items.push(...(window._kk||[]).map(x=>({...x,_t:'keluar'})));
-  
-  items=items.filter(r=>
-    (!bln||r.tanggal?.slice(5,7)===bln)&&
-    (!thn||r.tanggal?.slice(0,4)===thn)&&
-    (!kat||r.kategori===kat)
-  ).sort((a,b)=>{
-    const dA = new Date(a.tanggal).getTime(), dB = new Date(b.tanggal).getTime();
-    if(dA !== dB) return dB - dA;
-    return (b.createdAt||0) - (a.createdAt||0);
-  });
-  
+  items=items.filter(r=>(!bln||r.tanggal?.slice(5,7)===bln)&&(!thn||r.tanggal?.slice(0,4)===thn)&&(!kat||r.kategori===kat)).sort((a,b)=>{const dA=new Date(a.tanggal).getTime(),dB=new Date(b.tanggal).getTime();if(dA!==dB)return dB-dA;return(b.createdAt||0)-(a.createdAt||0);});
   document.getElementById('kasList').innerHTML=items.length?items.map(r=>{
     const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
     const arr=isM?window._km:window._kk,idx=arr.findIndex(x=>x.id===r.id);
     const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi</span>`:'';
     const actions=!r.autoSync?`<div class="trxactions"><button class="btnico" onclick="editKas('${isM?'masuk':'keluar'}',${idx})"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="btnico del" onclick="delKas('${isM?'masuk':'keluar'}','${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div>`:`<div style="font-size:10px;color:var(--text4);margin-top:3px;">Auto sync</div>`;
     return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div>${actions}</div></div>`;
-  }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/></svg><p>Tidak ada transaksi</p></div>';
+  }).join(''):'<div class="empty"><p>Tidak ada transaksi</p></div>';
 };
 
 /* RESERVASI */
 window.setResF=function(el){haptic('light');document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));el.classList.add('active');resF=el.dataset.val;renderRes();};
-
-// [PERBAIKAN 3] Reservasi diurutkan dari yang terbaru (createdAt desc)
 window.renderRes=function(){
   const q=(document.getElementById('resSearch')?.value||'').toLowerCase();
   const data=window._res||[];
-  const f=data
-    .filter(r=>((r.nama||'').toLowerCase().includes(q))&&(!resF||r.status===resF))
-    .sort((a,b)=>{const tA=new Date(a.tanggal||'1970-01-01').getTime(),tB=new Date(b.tanggal||'1970-01-01').getTime();if(tB!==tA)return tB-tA;return(b.createdAt||0)-(a.createdAt||0);});
+  const f=data.filter(r=>((r.nama||'').toLowerCase().includes(q))&&(!resF||r.status===resF)).sort((a,b)=>{const tA=new Date(a.tanggal||'1970-01-01').getTime(),tB=new Date(b.tanggal||'1970-01-01').getTime();if(tB!==tA)return tB-tA;return(b.createdAt||0)-(a.createdAt||0);});
   document.getElementById('resList').innerHTML=f.length?f.map(r=>{
     const omzet=hitOmzet(r),kurang=omzet-(r.dp||0);
     const bc=r.status==='Lunas'?'badge-lunas':r.status==='DP'?'badge-dp':'badge-belum';
     const bl=r.status==='Lunas'?'Lunas':r.status==='DP'?'Sudah DP':'Belum Bayar';
     const sn=(r.nama||'').replace(/'/g,"\\'");
     return`<div class="rescard"><div class="rctop"><div><div class="rcname">${r.nama||''}</div><div class="rctype">${r.acara||''}</div></div><span class="badge ${bc}">${bl}</span></div><div class="rcchips"><div class="rcchip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${fmtDH(r.tanggal)}</div><div class="rcchip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${r.waktu||''}</div><div class="rcchip"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>${r.jumlah||0} orang</div></div><div class="rcbottom"><div><div class="rcmoney">${IDR(omzet)}</div><div class="rcsub">${r.status!=='Lunas'?'Kurang: '+IDR(kurang>0?kurang:0):'Lunas '+fmtD(r.tglLunas)}</div></div><div class="rcactions"><button class="btnico2" onclick="lihatNota('${r._docId}')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button><button class="btnico2" onclick="editRes('${r._docId}')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="btnico2 del" onclick="window._delRes('${r._docId}','${sn}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div></div></div>`;
-  }).join(''):`<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>${data.length?'Tidak ada hasil':'Belum ada reservasi'}</p></div>`;
+  }).join(''):`<div class="empty"><p>${data.length?'Tidak ada hasil':'Belum ada reservasi'}</p></div>`;
 };
 window.openResM=function(data=null){
   editResId=null;rMenuR=[];rHppR=[];
@@ -798,7 +870,6 @@ window.simpanRes=function(){const obj=getResData();if(!obj.nama)return showNotif
 window.cetakNota=function(){haptic('light');const obj=getResData();if(!obj.nama)return showNotif('Isi data dulu');obj.omzet=hitOmzet(obj);obj.profit=obj.omzet-hitHpp(obj);obj.kurang=obj.omzet-(obj.dp||0);buatNota(obj);};
 window.lihatNota=function(docId){const r=(window._res||[]).find(x=>x._docId===docId);if(!r)return;r.omzet=hitOmzet(r);r.profit=r.omzet-hitHpp(r);r.kurang=r.omzet-(r.dp||0);buatNota(r);};
 window.closeNota=()=>document.getElementById('notaOv').classList.remove('show');
-
 function buatNota(r){
   const mH=(r.menu||[]).map(m=>{const q=m.qty!=null?m.qty:r.jumlah,tot=m.tipe==='Free'?0:m.harga*q;return`<div class="notarow"><span>${m.nama} (${m.tipe}) x${q}</span><span>${m.tipe==='Free'?'Free':IDR(tot)}</span></div>`;}).join('');
   document.getElementById('notaContent').innerHTML=`<div class="nota"><div class="notahdr"><div class="notaname">OMAJI</div><div class="notasub">NOTA RESERVASI - ${r.acara||''}</div><div class="notasub" style="font-size:10px;margin-top:2px;">Dicetak: ${fmtD(new Date().toISOString().split('T')[0])}</div></div><div class="notarow"><span>Nama</span><span><b>${r.nama}</b></span></div><div class="notarow"><span>Jumlah</span><span><b>${r.jumlah} Orang</b></span></div><div class="notarow"><span>Tanggal</span><span>${fmtDH(r.tanggal)}</span></div><div class="notarow"><span>Pukul</span><span>${r.waktu||''}-Selesai</span></div>${r.hp?`<div class="notarow"><span>WA</span><span>${r.hp}</span></div>`:''}<hr class="notadiv"><div class="notasec">PESANAN</div>${mH}<hr class="notadiv"><div class="notatotal"><span>TOTAL</span><span>${IDR(r.omzet)}</span></div><div class="notarow" style="margin-top:4px;"><span>DP${r.tglDp?' ('+fmtD(r.tglDp)+')':''}</span><span>${IDR(r.dp||0)}</span></div><div class="notarow"><span>Kekurangan</span><span><b>${IDR(r.kurang>0?r.kurang:0)}</b></span></div>${r.status==='Lunas'?`<div class="notarow" style="color:var(--green);font-weight:600;"><span>LUNAS${r.tglLunas?' ('+fmtD(r.tglLunas)+')':''}</span><span>&#10003;</span></div>`:''}${r.catatan?`<hr class="notadiv"><div class="notarow"><span>Catatan</span><span>${r.catatan}</span></div>`:''}<hr class="notadiv"><div style="text-align:center;font-size:10px;color:var(--text3);">Terima kasih atas kunjungan Anda</div></div>`;
@@ -819,7 +890,6 @@ function renderLaba(){
 function renderAlloc(){
   const km=window._km||[],kk=window._kk||[];
   const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0),lb=tM-tK,gaji=lb*0.5;
-  // [PERBAIKAN 1] Gunakan IDR lengkap di laporan alokasi
   document.getElementById('al-laba').textContent=IDR(Math.abs(lb));
   document.getElementById('al-margin').textContent=tM?(lb/tM*100).toFixed(1)+'% Margin':'0%';
   document.getElementById('al-omaji').textContent=IDR(lb*0.2);
@@ -836,9 +906,167 @@ function renderAlloc(){
 window.livePct=function(){let t=0;subAlloc.forEach((_,i)=>t+=parseFloat(document.getElementById('sP'+i)?.value)||0);document.getElementById('subPct').innerHTML=`<span style="color:${t===100?'var(--green)':'var(--red)'}">${t}%</span>`;};
 window.applySubAlloc=function(){let t=0;const n=subAlloc.map((_,i)=>{const p=parseFloat(document.getElementById('sP'+i)?.value)||0;t+=p;return{nama:document.getElementById('sN'+i)?.value,pct:p};});if(t!==100){haptic('error');showNotif('Total harus 100%');return;}haptic('success');subAlloc=n;renderAlloc();showNotif('Alokasi disimpan');};
 
+/* ========================
+   DANA BELANJA 30%
+======================== */
+function hitungLabaBersih(){
+  const km=window._km||[],kk=window._kk||[];
+  const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0);
+  return Math.max(0, tM-tK);
+}
+
+function renderBelanjaSaldo(){
+  const lb=hitungLabaBersih();
+  const alokasi=lb*0.3;
+  const bl=window._belanja||[];
+  
+  // Hitung terpakai (belanja aktual) & dipinjam (belum lunas)
+  const terpakai=bl.filter(x=>x.tipe==='belanja').reduce((s,x)=>s+x.nominal,0);
+  const dipinjam=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas').reduce((s,x)=>s+x.nominal,0);
+  const pinjamanLunas=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam==='lunas').reduce((s,x)=>s+x.nominal,0);
+  
+  const saldo=alokasi-terpakai-dipinjam;
+  
+  document.getElementById('bl-alokasi').textContent=IDR(alokasi);
+  document.getElementById('bl-terpakai').textContent=IDR(terpakai);
+  document.getElementById('bl-dipinjam').textContent=IDR(dipinjam);
+  document.getElementById('bl-saldo').textContent=IDR(Math.max(0,saldo));
+  document.getElementById('bl-saldo').style.color=saldo<0?'var(--red)':'var(--orange)';
+
+  renderBelanjaList();
+}
+
+window.setBelanjaF=function(el){
+  document.querySelectorAll('[data-blf]').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  belanjaF=el.dataset.blf;
+  renderBelanjaList();
+};
+
+function renderBelanjaList(){
+  const bl=window._belanja||[];
+  let f=bl;
+  if(belanjaF==='belanja') f=bl.filter(x=>x.tipe==='belanja');
+  else if(belanjaF==='pinjam') f=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas');
+  else if(belanjaF==='pinjam-lunas') f=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam==='lunas');
+  
+  document.getElementById('belanjaList').innerHTML=f.length?f.map(r=>{
+    const isPinjam=r.tipe==='pinjam';
+    const isLunas=r.statusPinjam==='lunas';
+    const ic=isPinjam?'rgba(175,82,222,0.1)':'rgba(255,149,0,0.1)';
+    const c=isPinjam?'var(--purple)':'var(--orange)';
+    const badge=isPinjam?(isLunas?`<span class="trxtag badge-lunas-pinjam">Lunas</span>`:`<span class="trxtag badge-pinjam">Pinjam</span>`):`<span class="trxtag" style="background:rgba(255,149,0,0.1);color:var(--orange)">Belanja</span>`;
+    const lunasbtn=isPinjam&&!isLunas?`<button class="btnico" onclick="lunasPinjam('${r.id}')" title="Tandai Lunas" style="color:var(--green)"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>`:'';
+    return`<div class="trxitem">
+      <div class="trxleft">
+        <div class="trxicon" style="background:${ic};color:${c}">
+          <svg viewBox="0 0 24 24">${isPinjam?'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>':'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>'}</svg>
+        </div>
+        <div>
+          <div class="trxtitle">${r.deskripsi}</div>
+          <div class="trxmeta">${r.tanggal||''} · ${r.kategori||''}</div>
+          ${badge}
+          ${r.catatan?`<div style="font-size:10px;color:var(--text3);margin-top:2px;">${r.catatan}</div>`:''}
+          ${isLunas&&r.tglLunas?`<div style="font-size:10px;color:var(--green);margin-top:1px;">Dilunasi ${fmtD(r.tglLunas)}</div>`:''}
+        </div>
+      </div>
+      <div class="trxright">
+        <div class="trxamt" style="color:${c}">– ${IDR(r.nominal)}</div>
+        <div class="trxactions">
+          ${lunasbtn}
+          <button class="btnico del" onclick="delBelanjaItem('${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+        </div>
+      </div>
+    </div>`;
+  }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p>Belum ada catatan</p></div>';
+}
+
+window.openBelanjaM=function(mode='belanja'){
+  currentBelanjaMode=mode;
+  const isPinjam=mode==='pinjam';
+  document.getElementById('belanjaTitle').textContent=isPinjam?'Pinjam Dana Belanja':'Catat Belanja';
+  document.getElementById('belanjaTypeVal').value=mode;
+  document.getElementById('pinjamStatusRow').style.display=isPinjam?'block':'none';
+  document.getElementById('bTgl').value=new Date().toISOString().slice(0,10);
+  document.getElementById('bDes').value='';
+  document.getElementById('bNom').value='';
+  document.getElementById('bCatatan').value='';
+  document.getElementById('pinjamStatus').value='belum';
+  document.getElementById('btnPinjamBelum').classList.add('active');
+  document.getElementById('btnPinjamLunas').classList.remove('active');
+  
+  const saveBtn=document.getElementById('btnBelanjaSave');
+  if(isPinjam){saveBtn.style.background='var(--purple)';saveBtn.style.boxShadow='0 4px 14px rgba(175,82,222,.28)';}
+  else{saveBtn.style.background='var(--orange)';saveBtn.style.boxShadow='0 4px 14px rgba(255,149,0,.28)';}
+  
+  document.getElementById('belanjaOv').classList.add('show');
+};
+window.closeBelanjaM=()=>document.getElementById('belanjaOv').classList.remove('show');
+
+window.setPinjamStatus=function(s){
+  document.getElementById('pinjamStatus').value=s;
+  document.getElementById('btnPinjamBelum').classList.toggle('active',s==='belum');
+  document.getElementById('btnPinjamLunas').classList.toggle('active',s==='lunas');
+};
+
+window.saveBelanja=async function(){
+  const mode=document.getElementById('belanjaTypeVal').value;
+  const nom=parseFloat((document.getElementById('bNom').value||'').replace(/\./g,''));
+  const tgl=document.getElementById('bTgl').value;
+  const des=document.getElementById('bDes').value.trim();
+  if(!tgl||!des||isNaN(nom)||nom<=0){showNotif('Lengkapi data');return;}
+  
+  // Cek saldo cukup
+  const lb=hitungLabaBersih();
+  const alokasi=lb*0.3;
+  const bl=window._belanja||[];
+  const terpakai=bl.filter(x=>x.tipe==='belanja').reduce((s,x)=>s+x.nominal,0);
+  const dipinjam=bl.filter(x=>x.tipe==='pinjam'&&x.statusPinjam!=='lunas').reduce((s,x)=>s+x.nominal,0);
+  const saldo=alokasi-terpakai-dipinjam;
+  
+  if(nom>saldo){
+    if(!confirm(`Saldo dana belanja hanya ${IDR(saldo)}. Tetap simpan?`))return;
+  }
+  
+  const obj={
+    tipe:mode,
+    tanggal:tgl,
+    deskripsi:des,
+    kategori:document.getElementById('bKat').value,
+    nominal:nom,
+    catatan:document.getElementById('bCatatan').value.trim(),
+    createdAt:Date.now()
+  };
+  if(mode==='pinjam'){
+    obj.statusPinjam=document.getElementById('pinjamStatus').value;
+    if(obj.statusPinjam==='lunas')obj.tglLunas=tgl;
+  }
+  
+  showLoad(true);
+  try{
+    await window._saveBelanja('',obj);
+    haptic('success');closeBelanjaM();showNotif('Tersimpan');
+  }catch(e){showNotif('Error: '+e.message);}
+  finally{showLoad(false);}
+};
+
+window.lunasPinjam=async function(id){
+  if(!confirm('Tandai pinjaman ini sebagai lunas?'))return;
+  haptic('success');
+  await window._lunasPinjam(id);
+};
+
+window.delBelanjaItem=async function(id){
+  if(!confirm('Hapus catatan ini?'))return;
+  haptic('heavy');
+  await window._delBelanja(id);
+  showNotif('Dihapus');
+};
+
 document.getElementById('resOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeResM();});
 document.getElementById('notaOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeNota();});
 document.getElementById('kasOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeKasM();});
+document.getElementById('belanjaOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeBelanjaM();});
 </script>
 </body>
 </html>
