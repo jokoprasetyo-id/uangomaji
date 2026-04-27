@@ -63,7 +63,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .container{max-width:600px;margin:0 auto;padding:16px;}
 .card{border-radius:var(--r-xl);padding:18px;margin-bottom:12px;}
-.sec-label{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.4px;text-transform:uppercase;margin:16px 0 8px;padding-left:2px;}
+
+/* DASHBOARD MODS */
+.sec-header { display:flex; justify-content:space-between; align-items:center; margin:16px 0 8px; }
+.sec-label{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.4px;text-transform:uppercase;padding-left:2px; margin:0;}
+.sec-header .sec-label { margin: 0; }
+.chart-filter { padding:5px 24px 5px 10px; font-size:11px; font-weight:600; color:var(--text2); background:rgba(255,255,255,0.72); border:1px solid var(--border); border-radius:10px; outline:none; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 8px center; cursor:pointer;}
+.dash-grid { display:block; } /* default mobile */
 
 /* HERO */
 .hero{border-radius:var(--r-xl);padding:22px 20px 18px;margin-bottom:12px;background:linear-gradient(145deg,rgba(0,122,255,.1) 0%,rgba(52,199,89,.07) 100%);border:1px solid rgba(0,122,255,.14);box-shadow:0 4px 24px rgba(0,122,255,.07);}
@@ -160,8 +166,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .belanja-mini{background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.9);border-radius:12px;padding:10px;text-align:center;}
 .belanja-mini-lbl{font-size:9px;color:var(--text3);font-weight:500;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;}
 .belanja-mini-val{font-size:13px;font-weight:700;}
-
-/* PINJAM BADGE */
 .badge-pinjam{background:rgba(175,82,222,.1);color:var(--purple);}
 .badge-lunas-pinjam{background:rgba(52,199,89,.12);color:var(--green);}
 
@@ -256,10 +260,53 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .empty svg{width:32px;height:32px;margin-bottom:10px;opacity:.4;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;display:block;margin-left:auto;margin-right:auto;}
 .empty p{font-size:12px;}
 
+/* ==================================
+   DESKTOP / LAPTOP RESPONSIVE MODE 
+   ================================== */
+@media (min-width: 768px) {
+  body { padding-bottom: 24px; padding-left: 90px; } /* Ruang untuk navbar kiri */
+  .topbar { padding: 18px 32px; }
+  .topbar-brand { font-size: 22px; }
+  
+  /* Navbar jadi Sidebar di Kiri */
+  .navbar {
+    top: 50%; bottom: auto; left: 16px; transform: translateY(-50%);
+    width: 64px; height: auto; flex-direction: column; padding: 24px 8px;
+    gap: 20px; border-radius: 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  }
+  .navbtn { padding: 10px; }
+  .navbtn span { display: none; } /* Label teks di-hide agar sangat minimalis */
+  .navbtn svg { width: 24px; height: 24px; }
+  .navfab { width: 48px; height: 48px; margin: 8px 0; }
+  
+  /* FAB Menu disesuaikan ke samping */
+  .fab-menu { left: 95px; bottom: auto; top: 50%; transform: translateY(-50%); align-items: flex-start; }
+  .fab-option { transform: translateX(-15px); }
+  .fab-menu.show .fab-option { transform: translateX(0); }
+  
+  .container { max-width: 1050px; padding: 24px 32px; margin: 0 auto; }
+  
+  /* Dasbor: Bagi jadi 2 Kolom Kiri & Kanan */
+  .dash-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 32px; align-items: start; }
+  .dash-col-side { position: sticky; top: 90px; } /* Sidebar nempel saat scroll */
+  
+  .grid2 { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .hero { padding: 32px; }
+  .hero-val { font-size: 38px; }
+  .statbox { padding: 20px; }
+  
+  /* Overlay & Modal Form untuk Desktop */
+  .sheet { min-height: auto; height: auto; max-height: 90vh; margin-top: auto; border-radius: 26px; padding-bottom: 24px; overflow-y: auto; width: 100%; max-width: 650px;}
+  .kassheet { max-height: 90vh; border-radius: 26px; }
+  .overlay { align-items: center; justify-content: center; display: none; }
+  .overlay.show { display: flex; }
+  @keyframes sheetUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+}
+
 @media print {
   body > *:not(#notaOv) { display: none !important; }
-  #notaOv { display: block !important; position: static !important; background: transparent !important; }
-  .sheet { position: static !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; animation: none !important; min-height: auto !important; }
+  #notaOv { display: flex !important; align-items: center; justify-content: center; background: transparent !important; }
+  .sheet { position: static !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; background: transparent !important; animation: none !important; min-height: auto !important; max-width: none !important; }
   .sheethandle, .sheethead, .actrow, .btnclose { display: none !important; }
   .sheetbody { padding: 0 !important; }
   .nota { border: none !important; padding: 0 !important; color: black; font-size: 11px; }
@@ -326,21 +373,35 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="hero-pill"><div class="hero-pill-lbl">Pengeluaran</div><div class="hero-pill-val" id="d-keluar" style="color:var(--red)">Rp 0</div></div>
     </div>
   </div>
-  <div class="grid2">
-    <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--blue)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><div class="statval" id="d-rescount">0</div><div class="statlbl">Reservasi</div></div>
-    <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--orange)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="statval" id="d-belum">0</div><div class="statlbl">Belum Lunas</div></div>
-    <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--green)"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg><div class="statval" id="d-omzet">Rp 0</div><div class="statlbl">Omzet Reservasi</div></div>
-    <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--purple)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div class="statval" id="d-tamu">0</div><div class="statlbl">Total Tamu</div></div>
+
+  <div class="dash-grid">
+    <div class="dash-col-main">
+      <div class="sec-header">
+        <div class="sec-label">Arus Kas</div>
+        <select id="chartFilter" class="chart-filter" onchange="refreshDash()">
+          <option value="bulanan">Bulanan</option>
+          <option value="harian">7 Hari Terakhir</option>
+        </select>
+      </div>
+      <div class="card glass"><div class="chartwrap"><canvas id="cB"></canvas></div></div>
+      
+      <div class="sec-label" style="margin-top:20px; margin-bottom:8px;">Transaksi Terakhir</div>
+      <div class="trxlist" id="recentList"></div>
+    </div>
+
+    <div class="dash-col-side">
+      <div class="sec-label" style="margin-top:20px; margin-bottom:8px;">Statistik Reservasi</div>
+      <div class="grid2">
+        <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--blue)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><div class="statval" id="d-rescount">0</div><div class="statlbl">Reservasi</div></div>
+        <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--orange)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="statval" id="d-belum">0</div><div class="statlbl">Belum Lunas</div></div>
+        <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--green)"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg><div class="statval" id="d-omzet">Rp 0</div><div class="statlbl">Omzet Reservasi</div></div>
+        <div class="statbox glass-sm"><svg viewBox="0 0 24 24" style="color:var(--purple)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div class="statval" id="d-tamu">0</div><div class="statlbl">Total Tamu</div></div>
+      </div>
+      
+      <div class="sec-label" style="margin-top:20px; margin-bottom:8px;">Reservasi Mendatang</div>
+      <div class="trxlist" id="upcomingList"></div>
+    </div>
   </div>
-  
-  <div class="sec-label">Arus Kas Bulanan</div>
-  <div class="card glass"><div class="chartwrap"><canvas id="cB"></canvas></div></div>
-  
-  <div class="sec-label">Reservasi Mendatang</div>
-  <div class="trxlist" id="upcomingList"></div>
-  
-  <div class="sec-label">Transaksi Terakhir</div>
-  <div class="trxlist" id="recentList"></div>
 </div>
 </div>
 
@@ -705,12 +766,12 @@ window.showPage=function(id,btn){haptic('light');
   if(id==='dashboard')refreshDash();
   if(id==='keuangan')renderKas();
   if(id==='reservasi')renderRes();
-  if(id==='laporan'){renderLaba();renderAlloc();}
+  if(id==='laporan'){renderLaba();renderAlloc();renderBelanjaSaldo();}
 };
 function refreshAll(){const pg=document.querySelector('.page.active')?.id;refreshDash();if(pg==='page-keuangan')renderKas();if(pg==='page-reservasi')renderRes();if(pg==='page-laporan'){renderLaba();renderAlloc();renderBelanjaSaldo();};}
 
 /* DASHBOARD */
-function refreshDash(){
+window.refreshDash=function(){
   const km=window._km||[],kk=window._kk||[],res=window._res||[];
   const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0),lb=tM-tK;
   document.getElementById('d-laba').textContent=IDR(lb);
@@ -722,14 +783,43 @@ function refreshDash(){
   document.getElementById('d-belum').textContent=res.filter(r=>r.status!=='Lunas').length;
   document.getElementById('d-omzet').textContent=IDR(res.reduce((s,r)=>s+hitOmzet(r),0));
   document.getElementById('d-tamu').textContent=res.reduce((s,r)=>s+(r.jumlah||0),0);
-  const MS=['01','02','03','04','05','06','07','08','09','10','11','12'];
-  const ms={},ks={};MS.forEach(m=>{ms[m]=0;ks[m]=0;});
-  km.forEach(r=>{const m=r.tanggal?.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
-  kk.forEach(r=>{const m=r.tanggal?.slice(5,7);if(ks[m]!==undefined)ks[m]+=r.nominal;});
-  updC('cB',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],datasets:[
-    {label:'Masuk',data:MS.map(m=>ms[m]),backgroundColor:'rgba(52,199,89,0.72)',borderRadius:5,borderSkipped:false},
-    {label:'Keluar',data:MS.map(m=>ks[m]),backgroundColor:'rgba(255,59,48,0.62)',borderRadius:5,borderSkipped:false}
+  
+  // CHART FILTER LOGIC
+  const filter = document.getElementById('chartFilter')?.value || 'bulanan';
+  let chartLabels = [], dataM = [], dataK = [];
+  
+  if (filter === 'bulanan') {
+      chartLabels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      const MS=['01','02','03','04','05','06','07','08','09','10','11','12'];
+      const ms={},ks={};MS.forEach(m=>{ms[m]=0;ks[m]=0;});
+      km.forEach(r=>{const m=r.tanggal?.slice(5,7);if(ms[m]!==undefined)ms[m]+=r.nominal;});
+      kk.forEach(r=>{const m=r.tanggal?.slice(5,7);if(ks[m]!==undefined)ks[m]+=r.nominal;});
+      dataM = MS.map(m=>ms[m]);
+      dataK = MS.map(m=>ks[m]);
+  } else {
+      // 7 Hari Terakhir
+      for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const iso = d.toISOString().slice(0,10);
+          chartLabels.push(d.getDate() + '/' + (d.getMonth()+1));
+          dataM.push(km.filter(r => r.tanggal === iso).reduce((s,r)=>s+r.nominal, 0));
+          dataK.push(kk.filter(r => r.tanggal === iso).reduce((s,r)=>s+r.nominal, 0));
+      }
+  }
+
+  updC('cB',{type:'bar',data:{labels:chartLabels,datasets:[
+    {label:'Masuk',data:dataM,backgroundColor:'rgba(52,199,89,0.72)',borderRadius:5,borderSkipped:false},
+    {label:'Keluar',data:dataK,backgroundColor:'rgba(255,59,48,0.62)',borderRadius:5,borderSkipped:false}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,borderRadius:4,useBorderRadius:true,padding:12,font:{size:10},color:'#8e8e93'}}},scales:{x:{grid:{display:false},ticks:{color:'#aeaeb2',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.05)'},border:{display:false},ticks:{color:'#aeaeb2',font:{size:9},callback:v=>IDR(v)}}}}});
+  
+  const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>{const dA=new Date(a.tanggal).getTime(),dB=new Date(b.tanggal).getTime();if(dA!==dB)return dB-dA;return(b.createdAt||0)-(a.createdAt||0);}).slice(0,5);
+  document.getElementById('recentList').innerHTML=all.length?all.map(r=>{
+    const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
+    const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi/Auto</span>`:'';
+    return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div></div></div>`;
+  }).join(''):'<div class="empty"><p>Belum ada transaksi</p></div>';
+
   const todayStr=new Date().toISOString().slice(0,10);
   const upcomingRes=res.filter(r=>(r.tanggal||'')>=todayStr).sort((a,b)=>new Date(a.tanggal)-new Date(b.tanggal)).slice(0,5);
   document.getElementById('upcomingList').innerHTML=upcomingRes.length?upcomingRes.map(r=>{
@@ -737,12 +827,6 @@ function refreshDash(){
     const bl=r.status==='Lunas'?'Lunas':r.status==='DP'?'Sudah DP':'Belum Bayar';
     return`<div class="trxitem" onclick="editRes('${r._docId}')" style="cursor:pointer;"><div class="trxleft"><div class="trxicon" style="background:rgba(0,122,255,0.1);color:var(--blue)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><div class="trxtitle">${r.nama||''} <span style="font-size:10px;font-weight:500;color:var(--text3)">(${r.acara||''})</span></div><div class="trxmeta">${fmtDH(r.tanggal)} · Pukul ${r.waktu||'-'} · ${r.jumlah||0} Pax</div></div></div><div class="trxright" style="display:flex;align-items:center;"><span class="badge ${bc}">${bl}</span><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:var(--text4);stroke-width:2;stroke-linecap:round;margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg></div></div>`;
   }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><p>Tidak ada reservasi mendatang</p></div>';
-  const all=[...km.map(x=>({...x,_t:'masuk'})),...kk.map(x=>({...x,_t:'keluar'}))].sort((a,b)=>{const dA=new Date(a.tanggal).getTime(),dB=new Date(b.tanggal).getTime();if(dA!==dB)return dB-dA;return(b.createdAt||0)-(a.createdAt||0);}).slice(0,5);
-  document.getElementById('recentList').innerHTML=all.length?all.map(r=>{
-    const isM=r._t==='masuk',c=isM?'var(--green)':'var(--red)',ic=isM?'rgba(52,199,89,0.1)':'rgba(255,59,48,0.08)';
-    const tag=r.autoSync?`<span class="trxtag" style="background:rgba(0,122,255,0.08);color:var(--blue)">Reservasi/Auto</span>`:'';
-    return`<div class="trxitem"><div class="trxleft"><div class="trxicon" style="background:${ic};color:${c}"><svg viewBox="0 0 24 24">${isM?'<polyline points="17 11 12 6 7 11"/><line x1="12" y1="6" x2="12" y2="18"/>':'<polyline points="17 13 12 18 7 13"/><line x1="12" y1="18" x2="12" y2="6"/>'}</svg></div><div><div class="trxtitle">${r.deskripsi}</div><div class="trxmeta">${r.tanggal?.slice(5)||''} · ${r.kategori}</div>${tag}</div></div><div class="trxright"><div class="trxamt" style="color:${c}">${isM?'+':'–'} ${IDR(r.nominal)}</div></div></div>`;
-  }).join(''):'<div class="empty"><p>Belum ada transaksi</p></div>';
 }
 
 /* KAS MODAL */
@@ -901,9 +985,7 @@ function renderAlloc(){
 window.livePct=function(){let t=0;subAlloc.forEach((_,i)=>t+=parseFloat(document.getElementById('sP'+i)?.value)||0);document.getElementById('subPct').innerHTML=`<span style="color:${t===100?'var(--green)':'var(--red)'}">${t}%</span>`;};
 window.applySubAlloc=function(){let t=0;const n=subAlloc.map((_,i)=>{const p=parseFloat(document.getElementById('sP'+i)?.value)||0;t+=p;return{nama:document.getElementById('sN'+i)?.value,pct:p};});if(t!==100){haptic('error');showNotif('Total harus 100%');return;}haptic('success');subAlloc=n;renderAlloc();showNotif('Alokasi disimpan');};
 
-/* ========================
-   DANA BELANJA (HYBRID) + FITUR EDIT + SINKRONISASI
-======================== */
+/* DANA BELANJA */
 function hitungLabaBersih(){
   const km=window._km||[],kk=window._kk||[];
   const tM=km.reduce((s,r)=>s+r.nominal,0),tK=kk.reduce((s,r)=>s+r.nominal,0);
@@ -989,7 +1071,6 @@ function renderBelanjaList(){
   }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p>Belum ada catatan</p></div>';
 }
 
-// TOGGLE STATUS PINJAM
 window.setPinjamStatus = function(sts){
   document.getElementById('pinjamStatus').value = sts;
   if(sts === 'belum') {
@@ -1001,7 +1082,6 @@ window.setPinjamStatus = function(sts){
   }
 };
 
-// TANDAI LUNAS PINJAM & OTOMATIS KAS KELUAR
 window.lunasPinjam = async function(id){
   if(!confirm('Tandai pinjaman sebagai lunas? Sistem akan otomatis membuat Kas Keluar (Pelunasan Uang Belanja) di Kas Utama.')) return;
   showLoad(true);
@@ -1009,7 +1089,6 @@ window.lunasPinjam = async function(id){
     const r = window._belanja.find(x => x.id === id);
     await window._lunasPinjam(id);
     
-    // Otomatis Kas Keluar untuk sinkronisasi
     if(r) {
         await window._saveKas('keluar', '', {
             tanggal: new Date().toISOString().slice(0,10),
@@ -1028,7 +1107,6 @@ window.lunasPinjam = async function(id){
   finally { showLoad(false); }
 };
 
-// HAPUS BELANJA
 window.delBelanjaItem = async function(id){
   if(!confirm('Hapus catatan ini?')) return;
   haptic('heavy');
@@ -1040,7 +1118,6 @@ window.delBelanjaItem = async function(id){
   finally { showLoad(false); }
 };
 
-// FUNGSI BUKA MODAL
 window.openBelanjaM=function(mode='belanja', isEdit=false){
   currentBelanjaMode=mode;
   const isPinjam=mode==='pinjam';
@@ -1076,7 +1153,6 @@ window.closeBelanjaM = function() {
   document.getElementById('belanjaOv').classList.remove('show');
 };
 
-// PANGGIL EDIT
 window.editBelanjaItem = function(id) {
   const r = window._belanja.find(x => x.id === id);
   if(!r) return;
@@ -1097,7 +1173,6 @@ window.editBelanjaItem = function(id) {
   openBelanjaM(r.tipe, true);
 };
 
-// SAVE + OTOMATIS KAS MASUK (PINJAM)
 window.saveBelanja=async function(){
   const mode=document.getElementById('belanjaTypeVal').value;
   const id=document.getElementById('belanjaIdVal').value;
@@ -1141,7 +1216,6 @@ window.saveBelanja=async function(){
   try{
     await window._saveBelanja(id, obj);
     
-    // OTOMATIS CATAT KAS MASUK UNTUK PINJAMAN BARU
     if(mode === 'pinjam' && !id && obj.statusPinjam !== 'lunas') {
         await window._saveKas('masuk', '', {
             tanggal: tgl,
