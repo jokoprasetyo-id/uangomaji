@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <title>OMAJI</title>
 
-  <!-- PWA Meta Tags -->
-<link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="OMAJI">
@@ -282,25 +281,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
    DESKTOP / LAPTOP RESPONSIVE MODE 
    ================================== */
 @media (min-width: 768px) {
-  body { padding-bottom: 24px; padding-left: 90px; } /* Ruang untuk navbar kiri */
   .topbar { padding: 18px 32px; }
   .topbar-brand { font-size: 22px; }
-  
-  /* Navbar jadi Sidebar di Kiri */
-  .navbar {
-    top: 50%; bottom: auto; left: 16px; transform: translateY(-50%);
-    width: 64px; height: auto; flex-direction: column; padding: 24px 8px;
-    gap: 20px; border-radius: 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-  }
-  .navbtn { padding: 10px; }
-  .navbtn span { display: none; } /* Label teks di-hide agar sangat minimalis */
-  .navbtn svg { width: 24px; height: 24px; }
-  .navfab { width: 48px; height: 48px; margin: 8px 0; }
-  
-  /* FAB Menu disesuaikan ke samping */
-  .fab-menu { left: 95px; bottom: auto; top: 50%; transform: translateY(-50%); align-items: flex-start; }
-  .fab-option { transform: translateX(-15px); }
-  .fab-menu.show .fab-option { transform: translateX(0); }
   
   .container { max-width: 1050px; padding: 24px 32px; margin: 0 auto; }
   
@@ -500,7 +482,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="belanja-hero-lbl">Total Saldo Dana Belanja</div>
       <div class="belanja-hero-val" id="bl-saldo">Rp 0</div>
       
-      <div class="belanja-row" style="grid-template-columns: 1fr 1fr; margin-top:14px; gap:8px;">
+      <div class="belanja-row" style="grid-template-columns: 1fr 1fr 1fr; margin-top:14px; gap:8px;">
         <div class="belanja-mini">
           <div class="belanja-mini-lbl">Alokasi (30% Laba)</div>
           <div class="belanja-mini-val" id="bl-alokasi" style="color:var(--blue)">Rp 0</div>
@@ -742,7 +724,10 @@ window._km=[];window._kk=[];window._res=[];window._belanja=[];
 const KM=['Modal Usaha','Penjualan','Bookingan','Pendapatan Lainnya','Hutang Uang Belanja'];
 const KK=['Bahan Baku / Stok','Bahan Pendukung Produksi','Sewa','Marketing / Promosi','Administrasi Umum','Transportasi','Air','Listrik','Internet','Gaji / Upah','Pajak','Perawatan / Maintenance','Tabungan Uang Belanja','Pelunasan Uang Belanja'];
 let _ch={};
-let subAlloc=[{nama:'Bapak',pct:36},{nama:'Dani',pct:34},{nama:'Dias',pct:30}];
+
+/* DI SINI SAYA UBAH MENJADI DUA ORANG (50/50) */
+let subAlloc=[{nama:'Bapak',pct:50},{nama:'Dani',pct:50}];
+
 let rMenuR=[],rHppR=[],editResId=null,resF='';
 let fabOpen=false;
 let belanjaF='';
